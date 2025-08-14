@@ -1,0 +1,13 @@
+.workout{
+    display: grid;
+    justify-content: center;
+}
+
+.nav{
+    display: flex;
+    justify-content: center;
+}
+
+.nav button {
+    margin: 0 10px;
+}

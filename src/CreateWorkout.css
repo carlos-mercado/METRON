@@ -1,0 +1,68 @@
+.workoutName {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.movementInput {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pseudoCard {
+    border: 2px solid #000;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 4px 4px 0 #000;
+    width: 360px;
+    text-align: left;
+    margin: 20px auto;
+    background: #5a81e6;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pseudoCard:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.pseudoCard input{
+    background: #5a81e6;
+    border: 0px;
+    text-align: left;
+    font-family: 'Courier New', Courier, monospace;
+    color: #E6BF5A;
+}
+.pseudoCard input::placeholder{
+    color: #E6BF5A;
+
+}
+
+.pseudoCard h2 {
+    font-size: 1.8rem;
+    color: #E6BF5A;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.pseudoCard p {
+    font-size: 1.1rem;
+    color: #E6BF5A;
+    margin: 8px 0;
+    line-height: 1.4;
+    display: inline;
+}
+
+.pseudoCard p:nth-child(even) {
+    color: #E6BF5A;
+}

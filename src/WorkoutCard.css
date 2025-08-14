@@ -1,0 +1,38 @@
+.workoutCard {
+    border: 2px solid #000;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 4px 4px 0 #000;
+    width: 260px;
+    text-align: left;
+    margin: 20px auto;
+    background: #5a81e6;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workoutCard:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.workoutCard h2 {
+    font-size: 1.8rem;
+    color: #E6BF5A;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.workoutCard p {
+    font-size: 1.1rem;
+    color: #E6BF5A;
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.workoutCard p:nth-child(even) {
+    color: #E6BF5A;
+}
