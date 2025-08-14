@@ -14,28 +14,28 @@ function App() {
 
   return (
     <>
-      <Link to="/">
+      <Link to="/METRON">
         <header className='mainHeader'>
             <img id="logo" src={logo} alt="Logo"></img>
         </header>
       </Link>
       <Routes>
-        <Route path="/" element={
+        <Route path="/METRON" element={
           <div className='mainContent'>
             <button onClick={() => {
               setView(true);
-              navigate('/create-workout');
+              navigate('/METRON/create-workout');
             }}>Create a workout</button>
             <button onClick={() => {
               setView(true);
-              navigate('/start-workout'); 
+              navigate('/METRON/start-workout'); 
             }}>Start a workout</button>
 
             {view && <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>}
           </div>
         } />
-        <Route path="/create-workout" element={<CreateWorkout />} />
-        <Route path="/start-workout" element={<StartWorkout dbKey={workoutKey}/>} />
+        <Route path="/METRON/create-workout" element={<CreateWorkout />} />
+        <Route path="/METRON/start-workout" element={<StartWorkout dbKey={workoutKey}/>} />
       </Routes>
     </>
   )
