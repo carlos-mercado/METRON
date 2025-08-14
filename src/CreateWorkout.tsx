@@ -48,7 +48,7 @@ function CreateWorkout() {
       {/* Workout Name */}
       {!mode && (
         <div className='workoutName'>
-          <h1>Workout Name:</h1>
+          <h1>workout key:</h1>
           <input 
             placeholder='name'
             value={inputValue}
