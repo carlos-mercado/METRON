@@ -20,7 +20,8 @@ function App() {
         </header>
       </Link>
       <Routes>
-        <Route path="/METRON" element={
+        <Route path="/METRON" element=
+        {
           <div className='mainContent'>
             <button onClick={() => {
               setView(true);
@@ -33,7 +34,8 @@ function App() {
 
             {view && <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>}
           </div>
-        } />
+        } 
+        />
         <Route path="/METRON/create-workout" element={<CreateWorkout />} />
         <Route path="/METRON/start-workout" element={<StartWorkout dbKey={workoutKey}/>} />
       </Routes>

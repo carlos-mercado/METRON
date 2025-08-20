@@ -48,7 +48,7 @@ function CreateWorkout() {
       {/* Workout Name */}
       {!mode && (
         <div className='workoutName'>
-          <h1>workout key:</h1>
+          <h1>create a key for your workout...</h1>
           <input 
             placeholder='name'
             value={inputValue}
@@ -60,7 +60,7 @@ function CreateWorkout() {
           <button onClick={() =>{
             setWorkoutName(inputValue)
             setMode(true);
-          }}>Submit</button>
+          }}>Submit key</button>
         </div>
       )}
 

@@ -1,6 +1,6 @@
 #logo {
-  width: 25%;
-  height: 25%;
+  width: 15%;
+  height: 15%;
 
 }
 .mainHeader {
@@ -11,12 +11,15 @@
 }
 
 .mainContent{
-  display: grid;
-  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  width: 60%;
+  height: 50vh;
   text-align: center;
-  margin: 0 auto;
-  gap: 40%
+  gap: 40%;
+  margin: 100px auto;
 }
 
 input{
