@@ -3,7 +3,6 @@
     border-radius: 4px;
     padding: 16px;
     box-shadow: 4px 4px 0 #000;
-    width: 260px;
     text-align: left;
     margin: 20px auto;
     background: #5a81e6;
@@ -11,6 +10,8 @@
     font-family: 'Courier New', Courier, monospace;
     transform: rotate(-1deg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 300px;
+    width: 300px;
 }
 
 .workoutCard:hover {

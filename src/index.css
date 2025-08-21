@@ -16,6 +16,7 @@ button {
   transition: border-color 0.25s;
   color: #e9bb43;
   box-shadow: 3px 3px 0 #000;
+    border: 2px solid #000;
 }
 
 button:hover {

@@ -28,11 +28,12 @@
     font-family: 'Courier New', Courier, monospace;
     transform: rotate(-1deg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 80vw;
 }
 
 .pseudoCard:hover {
     transform: rotate(0deg) scale(1.05);
-    box-shadow: 6px 6px 0 #000;
+    box-shadow: 3px 3px 0 #000;
 }
 
 .pseudoCard input{
@@ -65,4 +66,21 @@
 
 .pseudoCard p:nth-child(even) {
     color: #E6BF5A;
+}
+
+
+
+.move-button{
+    background-color: yellow;
+    margin-right: 20px;
+}
+.remove-button{
+    background-color: #bf2828;
+    margin-left: 20px;
+}
+.movement-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80vw;
 }

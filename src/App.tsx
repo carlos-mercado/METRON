@@ -9,16 +9,16 @@ import {useState} from 'react';
 function App() {
   const navigate = useNavigate();
 
-  const [workoutKey, setWorkoutKey] = useState('-OXVeHjca32Img76Ac5g');
+  const [workoutKey, setWorkoutKey] = useState('back');
   const [view, setView] = useState(true);
 
   return (
     <>
-      <Link to="/METRON">
         <header className='mainHeader'>
+          <Link to="/METRON" className='logoLink'>
             <img id="logo" src={logo} alt="Logo"></img>
+          </Link>
         </header>
-      </Link>
       <Routes>
         <Route path="/METRON" element=
         {
@@ -27,12 +27,12 @@ function App() {
               setView(true);
               navigate('/METRON/create-workout');
             }}>Create a workout</button>
+            {view && <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>}
             <button onClick={() => {
               setView(true);
               navigate('/METRON/start-workout'); 
             }}>Start a workout</button>
 
-            {view && <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>}
           </div>
         } 
         />

@@ -43,6 +43,11 @@ function CreateWorkout() {
     alert("Workout uploaded!");
   };
 
+  function removeMovement(index: number) 
+  {
+    setMovements(prev => prev.filter((_, i) => i !== index));
+  }
+
   return (
     <>
       {/* Workout Name */}
@@ -76,7 +81,7 @@ function CreateWorkout() {
             <br></br>
             <p>weight:</p><input value={weight} onChange={e => setWeight(e.target.value)}></input>
             <br></br>
-            <p>rest (in seconds):</p><input value={cooldown} onChange={e => setCooldown(Number(e.target.value))}></input>
+            <p>rest:</p><input value={cooldown} onChange={e => setCooldown(Number(e.target.value))}></input>
             <br></br>
           </div>
         
@@ -106,8 +111,8 @@ function CreateWorkout() {
           </div>
         )}
 
-<br></br>
-<br></br>
+      <br></br>
+      <br></br>
 
         {/* Add Rest Button */}
           <button onClick={() => {
@@ -118,12 +123,14 @@ function CreateWorkout() {
           }}>Add Cooldown</button>
 
 
-      <div>
         {/* Movement Cards */}
         {movements.map((movement, index) => (
-          <WorkoutCard key={index} data={movement} />
+          <div className='movement-card'>
+            {/* <button className='move-button'>☰</button>*/}
+              <WorkoutCard key={index} data={movement} />
+            <button className='remove-button' onClick={() => removeMovement(index)}>X</button>
+          </div>
         ))}
-      </div>
       
       <br>
       </br>
