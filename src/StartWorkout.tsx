@@ -56,7 +56,7 @@ function encodeMovement(data: Movement | Rest): Movement | Rest {
 function Workout({ dbKey }: WorkoutProps) {
     const [movements, setMovements] = useState<(Movement | Rest)[]>([]);
     const [idx, setIDX] = useState<number>(0);
-    const [encoded, setEncoded] = useState(false);
+    const [_, setEncoded] = useState(false);
     const [displayData, setDisplayData] = useState<Movement | Rest | null>(null);
 
     useEffect(() => {
