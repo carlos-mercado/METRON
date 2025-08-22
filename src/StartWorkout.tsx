@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import './StartWorkout.css'
-import { getDatabase, ref, get } from 'firebase/database';
+import { getDatabase, ref, get, set } from 'firebase/database';
 import app from './firebaseConfig';
-import WorkoutCard from './WorkoutCard';
 
 type WorkoutProps = {
     dbKey: string;
@@ -58,6 +57,8 @@ function Workout({ dbKey }: WorkoutProps) {
     const [idx, setIDX] = useState<number>(0);
     const [_, setEncoded] = useState(false);
     const [displayData, setDisplayData] = useState<Movement | Rest | null>(null);
+    const [pageTurned, setPageTurned] = useState(false); //flag used to make sure that the decode/encode opeations don't fire when editing workout
+    const [isUpdated, setIsUpdated] = useState(false);
 
     useEffect(() => {
         fetchWorkout(dbKey).then((data) => {
@@ -71,6 +72,8 @@ function Workout({ dbKey }: WorkoutProps) {
 
     useEffect(() => {
         if (!movements.length) return;
+        if (!pageTurned) return;
+
         setEncoded(true);
         // Show encoded for 400ms, then decode
         const interval = setInterval(() => {
@@ -85,7 +88,7 @@ function Workout({ dbKey }: WorkoutProps) {
             clearInterval(interval);
             clearTimeout(timeout);
         };
-    }, [idx, movements]);
+    }, [idx, movements, pageTurned]);
 
     useEffect(() => {
         if (movements.length) setDisplayData(movements[idx]);
@@ -95,9 +98,68 @@ function Workout({ dbKey }: WorkoutProps) {
         return <div className='workout'>Loading workout...</div>;
     }
 
+    const updateMovements = (userMovement: Movement | Rest) => {
+        setMovements((prev) => {
+            const newMovements = [...prev];
+            newMovements[idx] = userMovement;
+            return newMovements;
+        });
+    };
+
+  const updateWorkout = async () => {
+    const db = getDatabase(app);
+    const workoutsRef = ref(db, 'workouts/' + dbKey);
+
+    await set(workoutsRef, {
+      name: dbKey,
+      movements: movements,
+      createdAt: Date.now()
+    });
+    alert("Workout uploaded!");
+  };
+
     return (
         <div className='workout'>
-            <WorkoutCard data={displayData} />
+            {'name' in displayData &&
+                <div className='pseudoCard'>
+                    <input className="mainIn" value={displayData.name} onChange={e => {
+                        updateMovements({...displayData, name: e.target.value});
+                        setPageTurned(false);
+                        setIsUpdated(true);
+                    }}></input>
+                    <br></br>
+                    <p>sets:</p><input value={displayData.sets} onChange={e => {
+                        updateMovements({...displayData, sets: Number(e.target.value)})
+                        setPageTurned(false)
+                        setIsUpdated(true);
+                    }}></input>
+                    <br></br>
+                    <p>reps:</p><input value={displayData.reps} onChange={e => {
+                        updateMovements({...displayData, reps: Number(e.target.value)})
+                        setPageTurned(false);
+                        setIsUpdated(true);
+                    }}></input>
+                    <br></br>
+                    <p>weight:</p><input value={displayData.weight} onChange={e => {
+                        updateMovements({...displayData, weight: Number(e.target.value)})
+                        setPageTurned(false);
+                        setIsUpdated(true);
+                    }}></input>
+                    <br></br>
+                    <p>rest:</p><input value={displayData.rest.time} onChange={e => {
+                        updateMovements({...displayData, rest: { time: Number(e.target.value) }})
+                        setPageTurned(false);
+                        setIsUpdated(true);
+                    }}></input>
+                    <br></br>
+                </div>
+            }
+            {!('name' in displayData) &&
+                <div className='pseudoCard'>
+                    <h2>Rest</h2>
+                    <p>rest:</p><input value={displayData.time} onChange={e => setDisplayData({...displayData, time: Number(e.target.value) })}></input>
+                </div>
+            }
 
             <br />
             <br />
@@ -106,15 +168,24 @@ function Workout({ dbKey }: WorkoutProps) {
             <div className='nav'>
                 <button
                     className='prev'
-                    onClick={() => setIDX((prev) => Math.max(prev - 1, 0))}
+                    onClick={() => {
+                        setIDX((prev) => Math.max(prev - 1, 0))
+                        setPageTurned(true);
+                    }}
                     disabled={idx === 0}
                 >←</button>
                 <button
                     className='next'
-                    onClick={() => setIDX((prev) => Math.min(prev + 1, movements.length - 1))}
+                    onClick={() => {
+                        setIDX((prev) => Math.min(prev + 1, movements.length - 1))
+                        setPageTurned(true);
+                    }}
                     disabled={idx === movements.length - 1}
                 >→</button>
             </div>
+            <br></br>
+            
+            {isUpdated && <button onClick={updateWorkout}>update workout...</button>}
         </div>
     );
 }
