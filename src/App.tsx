@@ -10,28 +10,36 @@ function App() {
   const navigate = useNavigate();
 
   const [workoutKey, setWorkoutKey] = useState('back');
-  const [view, setView] = useState(true);
+  const [view, setView] = useState(false);
 
   return (
     <>
         <header className='mainHeader'>
-          <Link to="/METRON" className='logoLink'>
+          <Link to="/METRON/" className='logoLink'>
             <img id="logo" src={logo} alt="Logo"></img>
           </Link>
         </header>
       <Routes>
-        <Route path="/METRON" element=
+        <Route path="/METRON/" element=
         {
           <div className='mainContent'>
-            <button onClick={() => {
-              setView(true);
+            <button className="mainButtons" onClick={() => {
               navigate('/METRON/create-workout');
-            }}>Create a workout</button>
-            {view && <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>}
-            <button onClick={() => {
-              setView(true);
-              navigate('/METRON/start-workout'); 
-            }}>Start a workout</button>
+            }}>✚</button>
+            <button className="mainButtons" onClick={() => {
+              setView(!view);
+            }}>▶</button>
+            <br></br>
+            <br></br>
+            <br></br>
+            {view &&
+              <>
+                <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
+                <button onClick={() => {
+                  navigate('/METRON/start-workout'); 
+                }}>GO</button>
+              </>
+            }
 
           </div>
         } 

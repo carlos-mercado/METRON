@@ -19,15 +19,13 @@
 }
 
 .mainContent{
-  display: flex;
-  flex-direction: column;
+  display: inline-block;
   align-items: center;
   justify-content: center;
-  width: 60%;
+  width: 100%;
   height: 50vh;
   text-align: center;
-  gap: 40%;
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 input{
@@ -35,6 +33,7 @@ input{
   height: 35px;
   text-align: center;
   margin: 0 auto;
+  width: 200px;
 
 }
 .keyInput{
@@ -45,8 +44,17 @@ input{
   color: #E6BF5A;
   box-shadow: 3px 3px 0 #000;
   transform: rotate(-1deg);
-  padding: 10px;
+  margin-right: 20px;
+
 }
 .keyInput::placeholder{
   color:#E6BF5A;
+}
+
+.mainButtons {
+  justify-content: center;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 70px;
+  width:70px;
 }
