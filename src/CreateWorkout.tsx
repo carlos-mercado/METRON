@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './CreateWorkout.css'
-import { getDatabase, ref, set } from 'firebase/database'
+import { getDatabase, ref, set, get } from 'firebase/database'
 import app from "./firebaseConfig"
 import WorkoutCard from './WorkoutCard'
 
@@ -19,8 +19,9 @@ function CreateWorkout() {
   }
 
   const [workoutName, setWorkoutName] = useState("");
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("enter a unique workout name");
   const [mode, setMode] = useState(false);
+  const [available, setAvailable] = useState(true);
 
 
   const [movements, setMovements] = useState<Array<Movement | Rest>>([]);
@@ -35,6 +36,14 @@ function CreateWorkout() {
     const db = getDatabase(app);
     const workoutsRef = ref(db, 'workouts/' + workoutName);
 
+
+    const snapshot = await get(workoutsRef);
+    if (snapshot.exists())
+    {
+      setAvailable(false);
+      return;
+    }
+
     await set(workoutsRef, {
       name: workoutName,
       movements: movements,
@@ -42,6 +51,7 @@ function CreateWorkout() {
     });
     alert("Workout uploaded!");
   };
+
 
   function removeMovement(index: number) 
   {
@@ -53,11 +63,9 @@ function CreateWorkout() {
       {/* Workout Name */}
       {!mode && (
         <div className='workoutName'>
-          <h1>create a key for your workout...</h1>
           <input 
-            placeholder='name'
             value={inputValue}
-            id={"workout-name"}
+            className="workoutKeyInput"
             onChange={e => setInputValue(e.target.value)}
           />
           <br></br>
@@ -65,7 +73,9 @@ function CreateWorkout() {
           <button onClick={() =>{
             setWorkoutName(inputValue)
             setMode(true);
-          }}>Submit key</button>
+          }}>submit</button>
+
+          {!available && <p>Key already exists try again</p>}
         </div>
       )}
 

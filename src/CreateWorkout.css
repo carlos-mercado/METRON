@@ -1,16 +1,26 @@
 .workoutName {
+    height: 100%;
     display: block;
     text-align: center;
-    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 50px;
 }
 
-.movementInput {
-    display: block;
-    text-align: center;
-    margin: 0 auto;
+.workoutKeyInput {
+    background: #5a81e6;
+    font-family: 'Courier New', Courier, monospace;
+    color: #E6BF5A;
+    box-shadow: 3px 3px 0 #000;
+    width: 300px;
 }
 
-.form{
+.workoutKeyInput::placeholder {
+    color:#E6BF5A;
+}
+
+.form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -83,4 +93,10 @@
     justify-content: space-between;
     align-items: center;
     max-width: 80vw;
+}
+
+.keyPrompt{
+    font-family:Impact;
+    font-style: oblique;
+    color: #4b8349;
 }
