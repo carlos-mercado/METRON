@@ -36,7 +36,7 @@ function App() {
               <>
                 <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
                 <button onClick={() => {
-                  navigate('/METRON/start-workout'); 
+                  navigate(`/METRON/start-workout/${workoutKey}`); 
                 }}>GO</button>
               </>
             }
@@ -44,8 +44,8 @@ function App() {
           </div>
         } 
         />
-        <Route path="/METRON/create-workout" element={<CreateWorkout />} />
-        <Route path="/METRON/start-workout" element={<StartWorkout dbKey={workoutKey}/>} />
+        <Route path="/METRON/create-workout/" element={<CreateWorkout/>} />
+        <Route path="/METRON/start-workout/:workoutKey" element={<StartWorkout/>} />
       </Routes>
     </>
   )

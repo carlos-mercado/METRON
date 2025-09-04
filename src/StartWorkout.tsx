@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import './StartWorkout.css'
+import { useParams } from 'react-router-dom';
 import { getDatabase, ref, get, set } from 'firebase/database';
 import app from './firebaseConfig';
 
-type WorkoutProps = {
-    dbKey: string;
-};
 
 async function fetchWorkout(workoutKey : string) {
   const db = getDatabase(app);
@@ -52,7 +50,9 @@ function encodeMovement(data: Movement | Rest): Movement | Rest {
     }
 }
 
-function Workout({ dbKey }: WorkoutProps) {
+function Workout() {
+    const { workoutKey = '' } = useParams();
+    const dbKey = workoutKey;
     const [movements, setMovements] = useState<(Movement | Rest)[]>([]);
     const [idx, setIDX] = useState<number>(0);
     const [_, setEncoded] = useState(false);
