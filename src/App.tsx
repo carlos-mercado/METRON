@@ -15,16 +15,16 @@ function App() {
   return (
     <>
         <header className='mainHeader'>
-          <Link to="/METRON/" className='logoLink'>
+          <Link to="/" className='logoLink'>
             <img id="logo" src={logo} alt="Logo"></img>
           </Link>
         </header>
       <Routes>
-        <Route path="/METRON/" element=
+        <Route path="/" element=
         {
           <div className='mainContent'>
             <button className="mainButtons" onClick={() => {
-              navigate('/METRON/create-workout');
+              navigate('/create-workout');
             }}>✚</button>
             <button className="mainButtons" onClick={() => {
               setView(!view);
@@ -36,7 +36,7 @@ function App() {
               <>
                 <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
                 <button onClick={() => {
-                  navigate(`/METRON/start-workout/${workoutKey}`); 
+                  navigate(`/start-workout/${workoutKey}`); 
                 }}>GO</button>
               </>
             }
@@ -44,8 +44,8 @@ function App() {
           </div>
         } 
         />
-        <Route path="/METRON/create-workout/" element={<CreateWorkout/>} />
-        <Route path="/METRON/start-workout/:workoutKey" element={<StartWorkout/>} />
+        <Route path="/create-workout/" element={<CreateWorkout/>} />
+        <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
       </Routes>
     </>
   )
