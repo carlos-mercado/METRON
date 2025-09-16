@@ -3,11 +3,12 @@ import './StartWorkout.css'
 import { useParams } from 'react-router-dom';
 import { getDatabase, ref, get, set } from 'firebase/database';
 import app from './firebaseConfig';
+import {useAuth} from './Auth'
 
 
-async function fetchWorkout(workoutKey : string) {
+async function fetchWorkout(workoutKey : string, userId : string) {
   const db = getDatabase(app);
-  const workoutRef = ref(db, `workouts/${workoutKey}`);
+  const workoutRef = ref(db, `${userId}/workouts/${workoutKey}`);
   const snapshot = await get(workoutRef);
   if (snapshot.exists()) {
     return snapshot.val();
@@ -59,15 +60,24 @@ function Workout() {
     const [displayData, setDisplayData] = useState<Movement | Rest | null>(null);
     const [pageTurned, setPageTurned] = useState(false); //flag used to make sure that the decode/encode opeations don't fire when editing workout
     const [isUpdated, setIsUpdated] = useState(false);
+    const { userId } = useAuth();
 
     useEffect(() => {
-        fetchWorkout(dbKey).then((data) => {
-            if (data && Array.isArray(data.movements)) {
-                setMovements(data.movements);
-            } else {
-                setMovements([]);
-            }
-        });
+        if (!userId) 
+        {
+            alert('Please sign in first')
+            return;
+        }
+        else
+        {
+            fetchWorkout(dbKey, userId).then((data) => {
+                if (data && Array.isArray(data.movements)) {
+                    setMovements(data.movements);
+                } else {
+                    setMovements([]);
+                }
+            });
+        }
     }, [dbKey]);
 
     useEffect(() => {

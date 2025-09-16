@@ -8,7 +8,6 @@ import {useState} from 'react';
 
 function App() {
   const navigate = useNavigate();
-
   const [workoutKey, setWorkoutKey] = useState('back');
   const [view, setView] = useState(false);
 

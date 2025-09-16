@@ -3,6 +3,7 @@ import './CreateWorkout.css'
 import { getDatabase, ref, set, get } from 'firebase/database'
 import app from "./firebaseConfig"
 import WorkoutCard from './WorkoutCard'
+import {useAuth} from './Auth'
 
 
 
@@ -18,12 +19,11 @@ function CreateWorkout() {
     time : number
   }
 
+  const { userId } = useAuth();
   const [workoutName, setWorkoutName] = useState("");
   const [inputValue, setInputValue] = useState("enter a unique workout name");
   const [mode, setMode] = useState(false);
   const [available, setAvailable] = useState(true);
-
-
   const [movements, setMovements] = useState<Array<Movement | Rest>>([]);
   const [movementName, setMovementName] = useState("movement name..");
   const [sets, setSets] = useState(0);
@@ -33,17 +33,20 @@ function CreateWorkout() {
   const [cooldown, setCooldown] = useState(0);
 
   const uploadWorkout = async () => {
+    if (!userId) 
+    {
+      alert('Please sign in first')
+      return;
+    }
+
     const db = getDatabase(app);
-    const workoutsRef = ref(db, 'workouts/' + workoutName);
-
-
+    const workoutsRef = ref(db, `${userId}/workouts/` + workoutName);
     const snapshot = await get(workoutsRef);
     if (snapshot.exists())
     {
       setAvailable(false);
       return;
     }
-
     await set(workoutsRef, {
       name: workoutName,
       movements: movements,
@@ -82,18 +85,18 @@ function CreateWorkout() {
       {/* Form */}
       {mode && (
       <div className='form'>
-          <div className='pseudoCard'>
-            <input value={movementName} onChange={e => setMovementName(e.target.value)}></input>
-            <br></br>
-            <p>sets:</p><input value={sets} onChange={e => setSets(Number(e.target.value))}></input>
-            <br></br>
-            <p>reps:</p><input value={reps} onChange={e => setReps(Number(e.target.value))}></input>
-            <br></br>
-            <p>weight:</p><input value={weight} onChange={e => setWeight(e.target.value)}></input>
-            <br></br>
-            <p>rest:</p><input value={cooldown} onChange={e => setCooldown(Number(e.target.value))}></input>
-            <br></br>
-          </div>
+        <div className='pseudoCard'>
+          <input value={movementName} onChange={e => setMovementName(e.target.value)}></input>
+          <br></br>
+          <p>sets:</p><input value={sets} onChange={e => setSets(Number(e.target.value))}></input>
+          <br></br>
+          <p>reps:</p><input value={reps} onChange={e => setReps(Number(e.target.value))}></input>
+          <br></br>
+          <p>weight:</p><input value={weight} onChange={e => setWeight(e.target.value)}></input>
+          <br></br>
+          <p>rest:</p><input value={cooldown} onChange={e => setCooldown(Number(e.target.value))}></input>
+          <br></br>
+        </div>
         
 
 
