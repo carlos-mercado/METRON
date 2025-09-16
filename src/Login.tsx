@@ -1,7 +1,7 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
 import { Link } from 'react-router-dom'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import './login.css'
+import './Login.css'
 import logo from './assets/logo.png'
 
 interface LoginProps
