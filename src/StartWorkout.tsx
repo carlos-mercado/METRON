@@ -118,13 +118,15 @@ function Workout() {
 
   const updateWorkout = async () => {
     const db = getDatabase(app);
-    const workoutsRef = ref(db, 'workouts/' + dbKey);
+    const workoutsRef = ref(db, `${userId}/workouts/${workoutKey}`);
+
 
     await set(workoutsRef, {
       name: dbKey,
       movements: movements,
       createdAt: Date.now()
     });
+
     alert("Workout uploaded!");
   };
 
