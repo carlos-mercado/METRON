@@ -1,6 +1,6 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
 import { Link } from 'react-router-dom'
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './Login.css'
 import logo from './assets/logo.png'
 
@@ -15,8 +15,14 @@ function Login(props : LoginProps)
     const handleGoogle = async () => {
         const provider = await new GoogleAuthProvider();
         const auth = getAuth();
-        await signInWithPopup(auth, provider);
-        props.callback();
+        try {
+            await setPersistence(auth, browserLocalPersistence); // ensure local persistence
+            await signInWithPopup(auth, provider);
+            props.callback(true);
+        } catch (err) {
+            console.error('Login failed', err);
+            alert('Login failed: ' + (err as Error).message);
+        }
     }
 
     return (
