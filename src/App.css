@@ -11,15 +11,15 @@ body {
 
 #logo {
   max-width: 30vw;
-  max-height: 15vh;
+  max-height: 10vh;
   width: auto;
   height: auto;
   display: block;
 }
 .mainHeader {
+  padding-top:10px;
   width: 100%;
   display: flex;
-  margin: 10px 0;
   flex-direction: column;
   height: 5vh;
 
@@ -36,13 +36,42 @@ body {
   flex: 1 0 auto;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;          /* allow children to wrap to next line */
   align-items: center;
   justify-content: center;
   height: 75vh;
   text-align: center;
   width: 100%;
   margin: 0;
+}
+
+/* ensure the buttons stay compact and centered in their row */
+.mainButtons {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 70px;
+  width: 70px;
+}
+
+/* force the form onto its own row and center its contents */
+.startWorkoutForm{
+  flex-basis: 100%;
+  justify-content: center;
+  align-items: center;    /* vertically center input + button */
+}
+
+
+/* make the button size match the input height */
+.startWorkoutForm button {
+  padding: 8px 12px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 input{
@@ -102,18 +131,16 @@ input{
 }
 
 .appFooter {
-  max-width: 100%;
-  overflow: hidden;
-  justify-content: center;
-  text-align: center;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 10vh;
+  /* make footer part of the normal flow so flex layout places it */
+  position: static;        /* remove fixed positioning */
+  width: 100%;
+  height: 10vh;            /* keep bottom 10% of viewport height */
   display: flex;
   align-items: center;
+  justify-content: center;
   z-index: 50;
+  flex-shrink: 0;          /* prevent it from shrinking when content is small */
+  margin-top: auto;        /* push footer to bottom when container is taller than content */
 }
 
 

@@ -53,16 +53,13 @@ function App(props: AppProps) {
               setView(!view);
               handleLogout();
             }}>▶</button>
-            <br></br>
-            <br></br>
-            <br></br>
             {view &&
-              <>
+              <div className='startWorkoutForm'>
                 <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
                 <button onClick={() => {
                   navigate(`/start-workout/${workoutKey}`); 
                 }}>GO</button>
-              </>
+              </div>
             }
 
           </div>
