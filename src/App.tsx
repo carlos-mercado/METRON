@@ -5,6 +5,7 @@ import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
+import footerImage from './assets/footer.png';
 
 interface AppProps
 {
@@ -71,7 +72,8 @@ function App(props: AppProps) {
         <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
       </Routes>
 
-      <footer className='logout'>
+      <footer className='appFooter'>
+        <img src={footerImage}></img>
       </footer>
     </>
   )

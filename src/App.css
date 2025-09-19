@@ -1,3 +1,14 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 #logo {
   max-width: 30vw;
   max-height: 15vh;
@@ -8,24 +19,30 @@
 .mainHeader {
   width: 100%;
   display: flex;
-  margin: 0 auto;
+  margin: 10px 0;
   flex-direction: column;
+  height: 5vh;
+
 }
 
 .logoLink {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 0;
 }
 
 .mainContent{
-  display: inline-block;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 50vh;
+  height: 75vh;
   text-align: center;
-  margin: 50px auto;
+  width: 100%;
+  margin: 0;
+  align-items: center;
 }
 
 input{
@@ -83,3 +100,27 @@ input{
   height: 30px;
   width: 30px;
 }
+
+.appFooter {
+  max-width: 100%;
+  overflow: hidden;
+  justify-content: center;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  z-index: 50;
+}
+
+
+.appFooter img{
+  justify-content: center;
+  max-width: 80%;
+  height: auto;
+  object-fit: cover;
+}
+

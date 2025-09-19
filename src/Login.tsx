@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './Login.css'
 import logo from './assets/logo.png'
+import footerImage from './assets/footer.png';
 
 interface LoginProps
 {
@@ -48,6 +49,9 @@ function Login(props : LoginProps)
                 </div>
             </button>
             </header>
+            <footer className='appFooter'>
+                <img src={footerImage}></img>
+            </footer>
         </div>
     );
 }
