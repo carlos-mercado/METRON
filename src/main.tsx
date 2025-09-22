@@ -22,8 +22,8 @@ function Root() {
 
   return (
     <BrowserRouter>
-      {!loggedIn && <Login callback={callback} />}
-      {loggedIn && <App callback={callback} />}
+      {!loggedIn && <Login callback={callback}/>}
+      {loggedIn && <App callback={callback}/>}
     </BrowserRouter>
   )
 }

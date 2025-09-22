@@ -1,11 +1,9 @@
-import { Routes, Route, useNavigate, Link } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
-import logo from './assets/logo.png'
 import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
-import footerImage from './assets/footer.png';
 
 interface AppProps
 {
@@ -34,10 +32,10 @@ function App(props: AppProps) {
 
   return (
     <>
-      <header className='mainHeader'>
-        <Link to="/" className='logoLink'>
-          <img id="logo" src={logo} alt="Logo"></img>
-        </Link>
+      <header className="mainHeader">
+        <a href="/">
+          <img id='logo' src={"./src/assets/logo.png"} alt="Logo"/>
+        </a>
       </header>
       <Routes>
         <Route path="/" element=
@@ -69,9 +67,10 @@ function App(props: AppProps) {
         <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
       </Routes>
 
-      <footer className='appFooter'>
-        <img src={footerImage}></img>
+      <footer className="appFooter">
+        <img src="./src/assets/footer.png" alt="footer" />
       </footer>
+
     </>
   )
 }

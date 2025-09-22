@@ -1,9 +1,6 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
-import { Link } from 'react-router-dom'
 import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './Login.css'
-import logo from './assets/logo.png'
-import footerImage from './assets/footer.png';
 
 interface LoginProps
 {
@@ -27,11 +24,12 @@ function Login(props : LoginProps)
     }
 
     return (
-        <div>
-            <header className='mainHeader'>
-            <Link to="/" className='logoLink'>
-                <img id="logo" src={logo} alt="Logo"></img>
-            </Link>
+        <div className="loginContent">
+            <header className="mainHeader">
+                <a href="/">
+                <img id='logo' src={"./src/assets/logo.png"} alt="Logo"/>
+                </a>
+            </header>
             <button className="gsi-material-button" onClick={handleGoogle}>
                 <div className="gsi-material-button-state"></div>
                 <div className="gsi-material-button-content-wrapper">
@@ -48,13 +46,8 @@ function Login(props : LoginProps)
                     <span style={{ display: "none" }}>Sign in with Google</span>
                 </div>
             </button>
-            </header>
-            <footer className='appFooter'>
-                <img src={footerImage}></img>
-            </footer>
         </div>
     );
 }
-
 
 export default Login;
