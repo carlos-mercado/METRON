@@ -5,6 +5,7 @@ import StartWorkout from './StartWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
 import logo from './assets/logo.png';
+import footer from './assets/footer.png';
 
 interface AppProps
 {
@@ -69,7 +70,7 @@ function App(props: AppProps) {
       </Routes>
 
       <footer className="appFooter">
-        <img src="./src/assets/footer.png" alt="footer" />
+        <img src={footer} alt="footer" />
       </footer>
 
     </>
