@@ -4,6 +4,7 @@ import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
+import logo from './assets/logo.png';
 
 interface AppProps
 {
@@ -34,7 +35,7 @@ function App(props: AppProps) {
     <>
       <header className="mainHeader">
         <a href="/">
-          <img id='logo' src={"./src/assets/logo.png"} alt="Logo"/>
+          <img id='logo' src={logo} alt="Logo"/>
         </a>
       </header>
       <Routes>

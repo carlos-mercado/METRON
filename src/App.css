@@ -6,7 +6,6 @@ html, body, #root {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 
@@ -17,7 +16,6 @@ body {
   flex-wrap: wrap;          /* allow children to wrap to next line */
   align-items: center;
   justify-content: center;
-  height: 75vh;
   text-align: center;
   width: 100%;
   margin: 0;
@@ -32,13 +30,6 @@ body {
   margin-right: 20px;
   height: 70px;
   width: 70px;
-}
-
-/* force the form onto its own row and center its contents */
-.startWorkoutForm{
-  flex-basis: 100%;
-  justify-content: center;
-  align-items: center;    /* vertically center input + button */
 }
 
 
@@ -58,8 +49,8 @@ input{
   text-align: center;
   margin: 0 auto;
   width: 200px;
-
 }
+
 .keyInput{
   background: #5a81e6;
   border: 2px solid black;
@@ -116,7 +107,7 @@ input{
 }
 
 #logo {
-  height:100%;
+  max-height:100%;
   width: auto;
-
+  display: block;
 }

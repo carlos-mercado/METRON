@@ -31,7 +31,7 @@ button:focus-visible {
   /* make footer part of the normal flow so flex layout places it */
   position: static;        /* remove fixed positioning */
   width: 100%;
-  height: 10vh;            /* keep bottom 10% of viewport height */
+  height: 5vh;            /* keep bottom 10% of viewport height */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,8 +43,7 @@ button:focus-visible {
 .appFooter img{
   justify-content: center;
   max-width: 80%;
-  height: auto;
-  object-fit: cover;
+  height: 5vh;            /* keep bottom 10% of viewport height */
 }
 
 .loginAppPage {

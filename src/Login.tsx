@@ -1,6 +1,7 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
 import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './Login.css'
+import logo from './assets/logo.png';
 
 interface LoginProps
 {
@@ -27,7 +28,7 @@ function Login(props : LoginProps)
         <div className="loginContent">
             <header className="mainHeader">
                 <a href="/">
-                <img id='logo' src={"./src/assets/logo.png"} alt="Logo"/>
+                    <img id='logo' src={logo} alt="Logo"/>
                 </a>
             </header>
             <button className="gsi-material-button" onClick={handleGoogle}>
