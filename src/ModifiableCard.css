@@ -1,0 +1,53 @@
+.modCard {
+    border: 2px solid white;
+    border-radius: 4px;
+    padding: 16px;
+    box-shadow: 4px 4px 0 grey;
+    width: 360px;
+    text-align: left;
+    margin: 20px auto;
+    background: #5a81e6;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 70vw;
+}
+
+.modCard:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 3px 3px 0 grey;
+}
+
+.modCard input{
+    background: #5a81e6;
+    border: 0px;
+    text-align: left;
+    font-family: 'Courier New', Courier, monospace;
+    color: #E6BF5A;
+    text-transform: uppercase;
+}
+
+.modCard input::placeholder{
+    color: #E6BF5A;
+}
+
+
+.modCard h2 {
+    font-size: 1.8rem;
+    color: #E6BF5A;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+}
+
+.modCard p {
+    font-size: 1.1rem;
+    color: #E6BF5A;
+    margin: 8px 0;
+    line-height: 1.4;
+    display: inline;
+}
+
+.modCard p:nth-child(even) {
+    color: #E6BF5A;
+}

@@ -48,7 +48,6 @@ function CreateWorkout() {
       return;
     }
     await set(workoutsRef, {
-      name: workoutName,
       movements: movements,
       createdAt: Date.now()
     });

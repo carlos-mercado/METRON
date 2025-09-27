@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
 import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
+import EditWorkout from './EditWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
 import logo from './assets/logo.png';
@@ -42,17 +43,24 @@ function App(props: AppProps) {
       <Routes>
         <Route path="/" element=
         {
-          <div className='mainContent'>
-            <button className="mainButtons" onClick={() => {
-              navigate('/create-workout');
-            }}>✚</button>
-            <button className="mainButtons" onClick={() => {
-              setView(!view);
-            }}>▶</button>
-            <button className="logoutButton" onClick={() => {
-              setView(!view);
-              handleLogout();
-            }}>▶</button>
+          <>
+            <div className='mainContent'>
+              <button className="mainButtons" onClick={() => {
+                navigate('/create-workout');
+              }}>✚</button>
+              <button className="mainButtons" onClick={() => {
+                setView(!view);
+              }}>▶</button>
+              <button className="logoutButton" onClick={() => {
+                setView(!view);
+                handleLogout();
+              }}>▶</button>
+              <button className="editButton" onClick={() => {
+                navigate('/edit-workout');
+                setView(false);
+              }}>▶</button>
+
+            </div>
             {view &&
               <div className='startWorkoutForm'>
                 <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
@@ -61,12 +69,12 @@ function App(props: AppProps) {
                 }}>GO</button>
               </div>
             }
-
-          </div>
+          </>
         } 
         />
         <Route path="/create-workout/" element={<CreateWorkout/>} />
         <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
+        <Route path="/edit-workout/" element={<EditWorkout/>} />
       </Routes>
 
       <footer className="appFooter">

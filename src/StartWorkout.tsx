@@ -185,7 +185,7 @@ function Workout() {
                         setPageTurned(true);
                     }}
                     disabled={idx === 0}
-                >←</button>
+                ></button>
                 <button
                     className='next'
                     onClick={() => {
@@ -193,7 +193,7 @@ function Workout() {
                         setPageTurned(true);
                     }}
                     disabled={idx === movements.length - 1}
-                >→</button>
+                ></button>
             </div>
             <br></br>
             
