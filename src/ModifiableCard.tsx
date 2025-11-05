@@ -20,7 +20,7 @@ interface Props {
 
 
 function ModifiableCard({data, callback} : Props) 
-{ 
+{
     const [currMovement, setCurrMovement] = useState<Movement | Rest>();
 
     useEffect(() => {

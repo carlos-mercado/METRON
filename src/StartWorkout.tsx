@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import './StartWorkout.css'
-import { useParams } from 'react-router-dom';
 import { getDatabase, ref, get, set } from 'firebase/database';
 import app from './firebaseConfig';
 import {useAuth} from './Auth'
+import FakeCard from './FakeCard.tsx'
+import { useParams } from 'react-router-dom';
 
 
 async function fetchWorkout(workoutKey : string, userId : string) {
-  const db = getDatabase(app);
-  const workoutRef = ref(db, `${userId}/workouts/${workoutKey}`);
-  const snapshot = await get(workoutRef);
-  if (snapshot.exists()) {
-    return snapshot.val();
-  } else {
-    return null;
-  }
+    const db = getDatabase(app);
+    const workoutRef = ref(db, `${userId}/workouts/${workoutKey}`); const snapshot = await get(workoutRef);
+
+    console.log(`${userId}/workouts/${workoutKey}`);
+    if (snapshot.exists())
+        return snapshot.val();
+    else
+        return null;
 }
 
 type Movement = {
@@ -29,40 +30,18 @@ type Rest = {
     time: number;
 };
 
-function randomizeText(text: string) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return text.split('').map(c => (c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)])).join('');
-}
+type Workout = Array<Movement | Rest>;
 
-function encodeMovement(data: Movement | Rest): Movement | Rest {
-    if ('name' in data) {
-        return {
-            ...data,
-            name: randomizeText(data.name),
-            sets: Math.floor(Math.random() * 10),
-            reps: Math.floor(Math.random() * 15),
-            weight: Math.floor(Math.random() * 100),
-            rest: { time: Math.floor(Math.random() * 200) }
-        };
-    } else {
-        return {
-            time: Math.floor(Math.random() * 200)
-        };
-    }
-}
 
-function Workout() {
-    const { workoutKey = '' } = useParams();
-    const dbKey = workoutKey;
-    const [movements, setMovements] = useState<(Movement | Rest)[]>([]);
-    const [idx, setIDX] = useState<number>(0);
-    const [_, setEncoded] = useState(false);
-    const [displayData, setDisplayData] = useState<Movement | Rest | null>(null);
-    const [pageTurned, setPageTurned] = useState(false); //flag used to make sure that the decode/encode opeations don't fire when editing workout
-    const [isUpdated, setIsUpdated] = useState(false);
+function Workout()
+{
+    const { workoutKey = ''} = useParams();
     const { userId } = useAuth();
+    const workoutName = workoutKey;
+    const [movements, setMovements] = useState<(Movement | Rest)[]>([]); 
+    const [movementIdx, setMovementIdx] = useState<number>(0);
 
-    useEffect(() => {
+    useEffect(() => { 
         if (!userId) 
         {
             alert('Please sign in first')
@@ -70,136 +49,73 @@ function Workout() {
         }
         else
         {
-            fetchWorkout(dbKey, userId).then((data) => {
-                if (data && Array.isArray(data.movements)) {
+            //console.log(userId);
+            fetchWorkout(workoutKey, userId).then((data) => {
+                if (data)
+                {
+                    //console.log(data.movements);
+                    console.log(data)
                     setMovements(data.movements);
-                } else {
-                    setMovements([]);
                 }
+                else
+                    setMovements([]);
             });
         }
-    }, [dbKey]);
+    }, [workoutName]);
 
-    useEffect(() => {
-        if (!movements.length) return;
-        if (!pageTurned) return;
+    async function update(newCardData: Movement | Rest) {
+        console.log(newCardData);
 
-        setEncoded(true);
-        // Show encoded for 400ms, then decode
-        const interval = setInterval(() => {
-            setDisplayData(encodeMovement(movements[idx]));
-        }, 40);
-        const timeout = setTimeout(() => {
-            clearInterval(interval);
-            setEncoded(false);
-            setDisplayData(movements[idx]);
-        }, 400);
-        return () => {
-            clearInterval(interval);
-            clearTimeout(timeout);
-        };
-    }, [idx, movements, pageTurned]);
+        if(!("name" in newCardData))
+        {
+            return;
+        }
 
-    useEffect(() => {
-        if (movements.length) setDisplayData(movements[idx]);
-    }, [movements, idx]);
+        const db = getDatabase(app);
+        const workoutsRef = ref(db, `${userId}/workouts/${workoutName}/movements`);
 
-    if (!movements.length || !displayData) {
-        return <div className='workout'>Loading workout...</div>;
+        if(movements != null)
+        {
+            const newMovements = [...movements];
+            newMovements[movementIdx] = newCardData;
+            await set(workoutsRef, newMovements);
+            setMovements(newMovements);
+        }
     }
 
-    const updateMovements = (userMovement: Movement | Rest) => {
-        setMovements((prev) => {
-            const newMovements = [...prev];
-            newMovements[idx] = userMovement;
-            return newMovements;
-        });
-    };
+    if (movements === null) { return <p>loading...</p>; }
+    if (movements.length === 0) { return <p>loading...</p>; }
 
-  const updateWorkout = async () => {
-    const db = getDatabase(app);
-    const workoutsRef = ref(db, `${userId}/workouts/${workoutKey}`);
-
-
-    await set(workoutsRef, {
-      name: dbKey,
-      movements: movements,
-      createdAt: Date.now()
-    });
-
-    alert("Workout uploaded!");
-  };
+    console.log(movements[movementIdx]);
 
     return (
         <div className='workout'>
-            {'name' in displayData &&
-                <div className='pseudoCard'>
-                    <input className="mainIn" value={displayData.name} onChange={e => {
-                        updateMovements({...displayData, name: e.target.value});
-                        setPageTurned(false);
-                        setIsUpdated(true);
-                    }}></input>
-                    <br></br>
-                    <p>sets:</p><input value={displayData.sets} onChange={e => {
-                        updateMovements({...displayData, sets: Number(e.target.value)})
-                        setPageTurned(false)
-                        setIsUpdated(true);
-                    }}></input>
-                    <br></br>
-                    <p>reps:</p><input value={displayData.reps} onChange={e => {
-                        updateMovements({...displayData, reps: Number(e.target.value)})
-                        setPageTurned(false);
-                        setIsUpdated(true);
-                    }}></input>
-                    <br></br>
-                    <p>weight:</p><input value={displayData.weight} onChange={e => {
-                        updateMovements({...displayData, weight: Number(e.target.value)})
-                        setPageTurned(false);
-                        setIsUpdated(true);
-                    }}></input>
-                    <br></br>
-                    <p>rest:</p><input value={displayData.rest.time} onChange={e => {
-                        updateMovements({...displayData, rest: { time: Number(e.target.value) }})
-                        setPageTurned(false);
-                        setIsUpdated(true);
-                    }}></input>
-                    <br></br>
-                </div>
-            }
-            {!('name' in displayData) &&
-                <div className='pseudoCard'>
-                    <h2>Rest</h2>
-                    <p>rest:</p><input value={displayData.time} onChange={e => setDisplayData({...displayData, time: Number(e.target.value) })}></input>
-                </div>
-            }
 
-            <br />
-            <br />
-            <br />
+            <FakeCard 
+                data={movements[movementIdx]}
+                callback={update}
+            />
 
             <div className='nav'>
                 <button
                     className='prev'
                     onClick={() => {
-                        setIDX((prev) => Math.max(prev - 1, 0))
-                        setPageTurned(true);
+                        setMovementIdx((prev) => Math.max(prev - 1, 0))
+                        console.log(movementIdx - 1);
                     }}
-                    disabled={idx === 0}
+                    disabled={movementIdx === 0}
                 ></button>
                 <button
                     className='next'
                     onClick={() => {
-                        setIDX((prev) => Math.min(prev + 1, movements.length - 1))
-                        setPageTurned(true);
+                        setMovementIdx((prev) => Math.min(prev + 1, movements.length - 1))
+                        console.log(movementIdx + 1);
                     }}
-                    disabled={idx === movements.length - 1}
+                    disabled={movementIdx === movements.length - 1}
                 ></button>
             </div>
             <br></br>
-            
-            {isUpdated && <button onClick={updateWorkout}>update workout...</button>}
         </div>
     );
 }
-
 export default Workout;

@@ -3,6 +3,7 @@ import './App.css'
 import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
 import EditWorkout from './EditWorkout'
+//import FakeCard from './FakeCard'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
 import logo from './assets/logo.png';
@@ -16,7 +17,7 @@ interface AppProps
 
 function App(props: AppProps) {
   const navigate = useNavigate();
-  const [workoutKey, setWorkoutKey] = useState('back');
+  const [workoutKey, setWorkoutKey] = useState("");
   const [view, setView] = useState(false);
 
   let handleLogout = async () =>
@@ -25,7 +26,6 @@ function App(props: AppProps) {
       await signOut(getAuth());
       // optional: reset UI state
       setView(false);
-      setWorkoutKey('back');
       props.callback(false);
     } catch (err) {
       console.error('Logout failed', err);
@@ -51,20 +51,20 @@ function App(props: AppProps) {
               <button className="mainButtons" onClick={() => {
                 setView(!view);
               }}>▶</button>
-              <button className="logoutButton" onClick={() => {
-                setView(!view);
-                handleLogout();
-              }}>▶</button>
               <button className="editButton" onClick={() => {
                 navigate('/edit-workout');
                 setView(false);
+              }}>▶</button>
+              <button className="logoutButton" onClick={() => {
+                setView(!view);
+                handleLogout();
               }}>▶</button>
 
             </div>
             {view &&
               <div className='startWorkoutForm'>
                 <input className='keyInput' placeholder='Enter workout key...' onChange={(e) => setWorkoutKey(e.target.value)}></input>
-                <button onClick={() => {
+                <button className="goButton" onClick={() => {
                   navigate(`/start-workout/${workoutKey}`); 
                 }}>GO</button>
               </div>

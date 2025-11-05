@@ -10,7 +10,18 @@
 }
 
 .nav button {
-    margin: 0 10px;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width: 70px;
+    border: 0px;
+    border-radius: 10px;
+    background-color: #4a8248;
+    color:#e9bb43 ;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    border-top: 3px solid white;
 }
 
 .pseudoCard {
@@ -31,7 +42,7 @@
 
 .pseudoCard:hover {
     transform: rotate(0deg) scale(1.05);
-    box-shadow: 3px 3px 0 #000;
+    box-shadow: 3px 3px 0 #fff;
 }
 
 .pseudoCard input{
