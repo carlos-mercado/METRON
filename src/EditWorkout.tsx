@@ -8,14 +8,14 @@ import ModifiableCard from './ModifiableCard'
 
 type Movement = {
     name: string;
-    sets: string;
-    reps: string;
-    weight: string;
-    rest: { time: string };
+    sets: number;
+    reps: number;
+    weight: number;
+    rest: { time: number };
 };
 
 type Rest = {
-    time: string;
+    time: number;
 };
 
 type Workout = Array<Movement | Rest>;
@@ -106,10 +106,10 @@ function EditWorkout() {
 
             const newMov: Movement = {
                 name: 'Enter movement name.',
-                sets: 'Sets',
-                reps: 'Reps',
-                weight: 'Weight',
-                rest: { time: 'Rest' }
+                sets: 0,
+                reps: 0,
+                weight: 0,
+                rest: { time: 0 }
             };
 
             newMovements.splice(movementIdx + 1, 0, newMov);

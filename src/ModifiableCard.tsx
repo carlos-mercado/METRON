@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react'
 
 type Movement = {
     name: string;
-    sets: string;
-    reps: string;
-    weight: string;
-    rest: { time: string };
+    sets: number;
+    reps: number;
+    weight: number;
+    rest: { time: number };
 };
 
 type Rest = {
-    time: string;
+    time: number;
 };
 
 interface Props {
@@ -46,29 +46,30 @@ function ModifiableCard({data, callback} : Props)
                     setCurrMovement({ ...currMovement, name: e.target.value });
                 }}/>
                 <br/>
-                <p>sets: </p><input value={currMovement.sets} onChange={e => {
-                    setCurrMovement({ ...currMovement, sets: e.target.value });
+                <p>sets: </p>
+                <input value={currMovement.sets} onChange={e => {
+                    setCurrMovement({ ...currMovement, sets: Number(e.target.value) });
                 }} />
                 <br/>
                 <p>reps: </p><input value={currMovement.reps} onChange={e => {
-                    setCurrMovement({ ...currMovement, reps: e.target.value });
+                    setCurrMovement({ ...currMovement, reps: Number(e.target.value) });
                 }} />
                 <br/>
                 <p>weight: </p><input value={currMovement.weight} onChange={e => {
-                    setCurrMovement({ ...currMovement, weight: e.target.value });
+                    setCurrMovement({ ...currMovement, weight: Number(e.target.value) });
                 }} />
                 <br/>
                 <p>rest: </p><input value={currMovement.rest.time} onChange={e => {
                     setCurrMovement({
                         ...currMovement,
-                        rest: { ...currMovement.rest, time: e.target.value }
+                        rest: { ...currMovement.rest, time: Number(e.target.value) }
                     });
                 }} />
             </>
             ) : (
             <>
                 <h1 style={{ color: "#e9bb43" }}>REST</h1>
-                <input value={currMovement.time} onChange={e => setCurrMovement({...currMovement, time: e.target.value})} />
+                <input value={currMovement.time} onChange={e => setCurrMovement({...currMovement, time: Number(e.target.value)})} />
             </>
             )}
         </div>
