@@ -1,158 +1,120 @@
+//MOVEMENTS COMPOSE WORKOUTS NOT THE OTHER WAY AROUND
+
 import { useState } from 'react'
 import './CreateWorkout.css'
-import { getDatabase, ref, set, get } from 'firebase/database'
-import app from "./firebaseConfig"
-import WorkoutCard from './WorkoutCard'
 import {useAuth} from './Auth'
 
 
-
 function CreateWorkout() {
-  type Movement = {
-    name: string,
-    sets: number,
-    reps: number,
-    weight: number,
-    rest: Rest,
-  }
-  type Rest = {
-    time : number
-  }
+    class Movement {
+        name: string;
+        sets: number;
+        reps: number;
+        weight: number;
+        rest: number;
 
-  const { userId } = useAuth();
-  const [workoutName, setWorkoutName] = useState("");
-  const [inputValue, setInputValue] = useState("enter a unique workout name");
-  const [mode, setMode] = useState(false);
-  const [available, setAvailable] = useState(true);
-  const [movements, setMovements] = useState<Array<Movement | Rest>>([]);
-  const [movementName, setMovementName] = useState("movement name..");
-  const [sets, setSets] = useState(0);
-  const [reps, setReps] = useState(0);
-  const [weight, setWeight] = useState("0.0");
-  const [intersetCooldown, setIntersetCooldown] = useState(0);
-  const [cooldown, setCooldown] = useState(0);
-
-  const uploadWorkout = async () => {
-    if (!userId) 
-    {
-      alert('Please sign in first')
-      return;
+        constructor(name: string, sets: number, reps: number, weight: number, rest: number) {
+            this.name = name;
+            this.sets = sets;
+            this.reps = reps;
+            this.weight = weight;
+            this.rest = rest;
+        }
     }
 
-    const db = getDatabase(app);
-    const workoutsRef = ref(db, `${userId}/workouts/` + workoutName);
-    const snapshot = await get(workoutsRef);
-    if (snapshot.exists())
+    const [workoutName, setWorkoutName] = useState<string>("");
+    const [movementName, setMovementName] = useState<string>("");
+    const [movementSets, setMovementSets] = useState<number>(0);
+    const [movementWeight, setMovementWeight] = useState<number>(0);
+    const [movementRest, setMovementRest] = useState<number>(0);
+    const [movementReps, setMovementReps] = useState<number>(0);
+
+    const { userId } = useAuth();
+    const [movements, setMovements] = useState<Movement[]>([]);
+
+    function appendToWorkout()
     {
-      setAvailable(false);
-      return;
+        const newMov = new Movement(movementName, movementSets, movementReps, movementWeight, movementRest)
+
+        setMovements(prevMovements => [...prevMovements, newMov]);
     }
-    await set(workoutsRef, {
-      movements: movements,
-      createdAt: Date.now()
-    });
-    alert("Workout uploaded!");
-  };
 
+    function build_json_data()
+    {
+        const retJSON = {
+            id: userId,
+            [workoutName] : movements
+        };
 
-  function removeMovement(index: number) 
-  {
-    setMovements(prev => prev.filter((_, i) => i !== index));
-  }
+        console.log(JSON.stringify(retJSON, null, 2));
+        return JSON.stringify(retJSON);
+    }
 
-  return (
-    <>
-      {/* Workout Name */}
-      {!mode && (
-        <div className='workoutName'>
-          <input 
-            value={inputValue}
-            className="workoutKeyInput"
-            onChange={e => setInputValue(e.target.value)}
-          />
-          <br></br>
-          <br></br>
-          <button onClick={() =>{
-            setWorkoutName(inputValue)
-            setMode(true);
-          }}>submit</button>
+    function postWorkout() 
+    {
 
-          {!available && <p>Key already exists try again</p>}
-        </div>
-      )}
+        fetch('https://metron-backend.onrender.com/workouts/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: build_json_data(), // replace retJSON with your data object
+        })
+        .then(response => response.json())
+        .then(data => { console.log('Success:', data); })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 
-      {/* Form */}
-      {mode && (
-      <div className='form'>
-        <div className='pseudoCard'>
-          <input value={movementName} onChange={e => setMovementName(e.target.value)}></input>
-          <br></br>
-          <p>sets:</p><input value={sets} onChange={e => setSets(Number(e.target.value))}></input>
-          <br></br>
-          <p>reps:</p><input value={reps} onChange={e => setReps(Number(e.target.value))}></input>
-          <br></br>
-          <p>weight:</p><input value={weight} onChange={e => setWeight(e.target.value)}></input>
-          <br></br>
-          <p>rest:</p><input value={cooldown} onChange={e => setCooldown(Number(e.target.value))}></input>
-          <br></br>
-        </div>
-        
+    return (
+        <>
+            <p className='tag'>Workout name: </p>
+            <input className='workoutNameInput' onChange={e => setWorkoutName(e.target.value)} />
 
+            <div>
+                <p className='tag'>Movement Name:</p>
+                <input className='nameInput' onChange={e => setMovementName(e.target.value)} />
 
-        {/* Add Movement Button */}
-        <button onClick={() =>{
-          const newRest : Rest = {time: cooldown};
-          const newMovement: Movement = {
-            name: movementName,
-            sets: sets,
-            reps: reps,
-            weight: parseFloat(weight) || 0,
-            rest: newRest
-          };
-          setMovements(prev => [...prev, newMovement]);
-          //setMovementName("movement name...");
-          //setSets(0);
-          //setReps(0);
-          //setWeight("");
-        }}>Add Movement</button>
+                <p className='tag'>Movement Sets:</p>
+                <input className='setsInput' type='number' onChange={e => setMovementSets(Number(e.target.value))} />
 
-        {mode && (
-          <div className='pseudoCard'>
-            <p>rest (in seconds):</p><input value={intersetCooldown} onChange={e => setIntersetCooldown(Number(e.target.value))}></input>
-            <br></br>
-          </div>
-        )}
+                <p className='tag'>Movement Reps:</p>
+                <input className='repsInput' type='number' onChange={e => setMovementReps(Number(e.target.value))} />
+                <p className='tag'>Movement Weight:</p>
+                <input className='weightInput' type='number' onChange={e => setMovementWeight(Number(e.target.value))} />
 
-      <br></br>
-      <br></br>
+                <p className='tag'>Movement Rest:</p>
+                <input className='restInput' type='number' onChange={e => setMovementRest(Number(e.target.value))} />
+            </div>
 
-        {/* Add Rest Button */}
-          <button onClick={() => {
-            const newRest: Rest = {
-              time: intersetCooldown
-            };
-            setMovements(prev => [...prev, newRest]);
-          }}>Add Cooldown</button>
+            <button onClick={appendToWorkout}>Add Movement</button>
 
+            {movements.map(movement => (
+                <>
+                    <p>
+                        {movement.name}
+                    </p>
+                    <p>
+                        {movement.sets}
+                    </p>
+                    <p>
+                        {movement.weight}
+                    </p>
+                    <p>
+                        {movement.reps}
+                    </p>
+                    <p>
+                        {movement.rest}
+                    </p>
+                </>
+            ))}
 
-        {/* Movement Cards */}
-        {movements.map((movement, index) => (
-          <div className='movement-card'>
-            {/* <button className='move-button'>☰</button>*/}
-              <WorkoutCard key={index} data={movement} />
-            <button className='remove-button' onClick={() => removeMovement(index)}>X</button>
-          </div>
-        ))}
-      
-      <br>
-      </br>
-      {/* Upload Button */}
-      <button onClick={uploadWorkout}>UPLOAD!</button>
+            <button onClick={postWorkout}>Upload Workout</button>
 
-    </div>
-    )}
-    </>
-  )
+        </>
+    )
+
 }
 
 export default CreateWorkout

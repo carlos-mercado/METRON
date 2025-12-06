@@ -1,103 +1,63 @@
-.workoutName {
-    height: 100%;
+@font-face{
+    font-family: 'Dazzle Unicase Bold';
+    src: local('Dazzle Unicase Bold'),
+        url('./assets/dazzle-unicase-bold.otf') format('opentype');
+}
+.tag {
+    color: #5c8648;
+}
+
+input {
+    font-family: 'Dazzle Unicase Bold';
+    src: local('Dazzle Unicase Bold'),
+        url('./assets/dazzle-unicase-bold.otf') format('opentype');
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #5a81e6;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    background: #f7f9fc;
+    transition: border 0.2s;
+}
+
+input:focus {
+    border: 2px solid #E6BF5A;
+    outline: none;
+}
+
+.workoutNameInput,
+.nameInput,
+.setsInput,
+.repsInput,
+.weightInput,
+.restInput {
     display: block;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-
-    margin-top: 50px;
+    width: 320px;
+    max-width: 90vw;
+    margin: 0 auto 12px auto;
 }
 
-.workoutKeyInput {
-    background: #5a81e6;
-    font-family: 'Courier New', Courier, monospace;
-    color: #E6BF5A;
-    box-shadow: 3px 3px 0 #000;
-    width: 300px;
-}
-
-.workoutKeyInput::placeholder {
-    color:#E6BF5A;
-}
-
-.form {
-    padding-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.pseudoCard {
-    border: 2px solid #000;
-    border-radius: 4px;
-    padding: 16px;
-    box-shadow: 4px 4px 0 #000;
-    width: 360px;
-    text-align: left;
-    margin: 20px auto;
-    background: #5a81e6;
-    color: #000;
-    font-family: 'Courier New', Courier, monospace;
-    transform: rotate(-1deg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 80vw;
-}
-
-.pseudoCard:hover {
-    transform: rotate(0deg) scale(1.05);
-    box-shadow: 3px 3px 0 #000;
-}
-
-.pseudoCard input{
-    background: #5a81e6;
-    border: 0px;
-    text-align: left;
-    font-family: 'Courier New', Courier, monospace;
-    color: #E6BF5A;
-}
-.pseudoCard input::placeholder{
-    color: #E6BF5A;
-
-}
-
-.pseudoCard h2 {
-    font-size: 1.8rem;
-    color: #E6BF5A;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.pseudoCard p {
+button {
+    font-family: 'Dazzle Unicase Bold';
+    background: #5c8648;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
     font-size: 1.1rem;
-    color: #E6BF5A;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 16px auto;
+    display: block;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+}
+
+p {
+    font-size: 1.1rem;
+    color: #333;
+    text-align: center;
     margin: 8px 0;
-    line-height: 1.4;
-    display: inline;
-}
-
-.pseudoCard p:nth-child(even) {
-    color: #E6BF5A;
-}
-
-
-
-.move-button{
-    background-color: yellow;
-    margin-right: 20px;
-}
-.remove-button{
-    background-color: #bf2828;
-    margin-left: 20px;
-}
-.movement-card{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 80vw;
-}
-
-.keyPrompt{
-    font-family:Impact;
-    font-style: oblique;
-    color: #4b8349;
 }

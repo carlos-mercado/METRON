@@ -51,10 +51,6 @@ function App(props: AppProps) {
               <button className="mainButtons" onClick={() => {
                 setView(!view);
               }}>▶</button>
-              <button className="editButton" onClick={() => {
-                navigate('/edit-workout');
-                setView(false);
-              }}>▶</button>
               <button className="logoutButton" onClick={() => {
                 setView(!view);
                 handleLogout();
@@ -86,3 +82,10 @@ function App(props: AppProps) {
 }
 
 export default App
+
+/*
+              <button className="editButton" onClick={() => {
+                navigate('/edit-workout');
+                setView(false);
+              }}>▶</button>
+ */

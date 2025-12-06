@@ -1,6 +1,12 @@
+@font-face{
+    font-family: 'Dazzle Unicase Bold';
+    src: local('Dazzle Unicase Bold'),
+        url('./assets/dazzle-unicase-bold.otf') format('opentype');
+}
+
 :root {
-  font-family: 'Courier New', monospace;
-  background-color: #e9bb43;
+    font-family: 'Dazzle Unicase Bold';
+    background-color: #e9bb43;
 }
 
 div button{

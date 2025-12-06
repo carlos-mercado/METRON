@@ -1,5 +1,8 @@
 :root {
-  font-family: 'Courier New', monospace;
+  font-family: 'Dazzle Unicase Bold';
+  src: local('Dazzle Unicase Bold'),
+    url('./assets/dazzle-unicase-bold.otf') format('opentype');
+
   background-color: #e9bb43;
 }
 

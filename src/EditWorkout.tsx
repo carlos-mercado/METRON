@@ -4,7 +4,7 @@ import { getDatabase, ref, set, get } from 'firebase/database'
 import app from "./firebaseConfig"
 import './EditWorkout.css'
 import {useAuth} from './Auth'
-import ModifiableCard from './ModifiableCard'
+//import ModifiableCard from './ModifiableCard'
 
 type Movement = {
     name: string;

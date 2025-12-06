@@ -1,0 +1,38 @@
+.setsInputRow, .repsInputRow, .weightInputRow, .restInputRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #4a8248;
+  width: 300px;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.inc, .dec {
+    background-color: #4a8248;
+    border-radius: 5px;
+    height: 30px;
+
+    color: black;
+}
+
+.card > div {
+  margin-bottom: 16px;
+}
+
+.card > div:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+    color : #4a8248;
+}
+
+.card {
+    display: 'flex';
+    flex-direction: 'column';
+    justify-content: 'center';
+    align-items: 'center';
+    min-height: '100vh';
+    margin: auto 0;
+}

@@ -1,121 +1,137 @@
-import { useEffect, useState } from 'react';
-import './StartWorkout.css'
-import { getDatabase, ref, get, set } from 'firebase/database';
-import app from './firebaseConfig';
+//MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
+
+import { useEffect, useState, useRef } from 'react';
 import {useAuth} from './Auth'
-import FakeCard from './FakeCard.tsx'
 import { useParams } from 'react-router-dom';
+import './StartWorkout.css'
+import MovementCard from './MovementCard'
 
 
-async function fetchWorkout(workoutKey : string, userId : string) {
-    const db = getDatabase(app);
-    const workoutRef = ref(db, `${userId}/workouts/${workoutKey}`); const snapshot = await get(workoutRef);
-
-    console.log(`${userId}/workouts/${workoutKey}`);
-    if (snapshot.exists())
-        return snapshot.val();
-    else
-        return null;
-}
-
-type Movement = {
+class Movement {
     name: string;
     sets: number;
     reps: number;
     weight: number;
-    rest: { time: number };
-};
+    rest: number;
 
-type Rest = {
-    time: number;
-};
+    constructor(name: string, sets: number, reps: number, weight: number, rest: number) {
+        this.name = name;
+        this.sets = sets;
+        this.reps = reps;
+        this.weight = weight;
+        this.rest = rest;
+    }
+}
 
-type Workout = Array<Movement | Rest>;
 
 
 function Workout()
 {
     const { workoutKey = ''} = useParams();
+    const my_workoutKey = workoutKey;
     const { userId } = useAuth();
-    const workoutName = workoutKey;
-    const [movements, setMovements] = useState<(Movement | Rest)[]>([]); 
+    const [movements, setMovements] = useState<(Movement)[]>([]); 
+    const [found, setFound] = useState(true);
     const [movementIdx, setMovementIdx] = useState<number>(0);
+    const isFirstRender = useRef(true);
 
-    useEffect(() => { 
-        if (!userId) 
-        {
-            alert('Please sign in first')
-            return;
+
+    async function getWorkout() {
+        const params = new URLSearchParams({
+            id: userId ? String(userId) : '',
+            workout: String(my_workoutKey),
+        });
+        const response = await fetch(`https://metron-backend.onrender.com/workouts?${params.toString()}`, {
+            method: 'GET',
+        });
+        if (response.status === 404) {
+            return { notFound: true };
         }
-        else
-        {
-            //console.log(userId);
-            fetchWorkout(workoutKey, userId).then((data) => {
-                if (data)
-                {
-                    //console.log(data.movements);
-                    console.log(data)
-                    setMovements(data.movements);
-                }
-                else
-                    setMovements([]);
-            });
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
         }
-    }, [workoutName]);
-
-    async function update(newCardData: Movement | Rest) {
-        console.log(newCardData);
-
-        if(!("name" in newCardData))
-        {
-            return;
-        }
-
-        const db = getDatabase(app);
-        const workoutsRef = ref(db, `${userId}/workouts/${workoutName}/movements`);
-
-        if(movements != null)
-        {
-            const newMovements = [...movements];
-            newMovements[movementIdx] = newCardData;
-            await set(workoutsRef, newMovements);
-            setMovements(newMovements);
-        }
+        return response.json();
     }
 
-    if (movements === null) { return <p>loading...</p>; }
-    if (movements.length === 0) { return <p>loading...</p>; }
+    useEffect(() => {
+        if (!userId) {
+            alert('Please sign in first');
+            return;
+        }
+        async function fetchWorkout() {
+            try {
+                const movementsResponse = await getWorkout();
+                if (movementsResponse.notFound) {
+                    setFound(false);
+                    return;
+                }
+                setMovements(movementsResponse.movements);
+                console.log(movementsResponse.movements);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchWorkout();
+    }, [my_workoutKey]);
 
-    console.log(movements[movementIdx]);
+    useEffect(() => {
+        if (movements.length === 0) return;
+        if (isFirstRender.current) 
+        {
+            isFirstRender.current = false;
+            return;
+        }
+
+        const json_body = {
+            id: userId,
+            [my_workoutKey] : movements
+        };
+
+        fetch('https://metron-backend.onrender.com/workouts/edit', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(json_body), // replace retJSON with your data object
+        })
+        .then(response => response.json())
+        .then(_ => { console.log('Success: updated workout.'); })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }, [movements])
+
+
+    async function update(updatedMovement : Movement) {
+
+        setMovements(prevMovements =>
+            prevMovements.map((movement, idx) =>
+            idx === movementIdx ? updatedMovement : movement
+        ));
+
+        return 0;
+    }
+
+    if(found)
+    {
+        if (movements === null) { return <p>loading...</p>; }
+        if (movements.length === 0) { return <p>loading...</p>; }
+    }
+    else
+    {
+        return <p>Workout Not Found</p>
+    }
 
     return (
-        <div className='workout'>
-
-            <FakeCard 
-                data={movements[movementIdx]}
-                callback={update}
-            />
-
+        <>
+            <MovementCard key={movementIdx} movement={movements[movementIdx]} updateCallback={update} />
             <div className='nav'>
-                <button
-                    className='prev'
-                    onClick={() => {
-                        setMovementIdx((prev) => Math.max(prev - 1, 0))
-                        console.log(movementIdx - 1);
-                    }}
-                    disabled={movementIdx === 0}
-                ></button>
-                <button
-                    className='next'
-                    onClick={() => {
-                        setMovementIdx((prev) => Math.min(prev + 1, movements.length - 1))
-                        console.log(movementIdx + 1);
-                    }}
-                    disabled={movementIdx === movements.length - 1}
-                ></button>
+                <button onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}>{"←"}</button>
+                <button onClick={() => setMovementIdx(Math.min(movementIdx + 1, movements.length - 1))}>{"→"}</button>
             </div>
-            <br></br>
-        </div>
+
+        </>
     );
 }
+
 export default Workout;

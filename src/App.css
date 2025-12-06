@@ -1,3 +1,9 @@
+@font-face{
+    font-family: 'Dazzle Unicase Bold';
+    src: local('Dazzle Unicase Bold'),
+        url('./assets/dazzle-unicase-bold.otf') format('opentype');
+}
+
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -100,7 +106,6 @@ input{
   background: #5a81e6;
   border: 2px solid black;
   text-align: left;
-  font-family: 'Courier New', Courier, monospace;
   color: #E6BF5A;
   box-shadow: 3px 3px 0 #000;
   margin-right: 20px;
