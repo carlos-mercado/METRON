@@ -2,8 +2,6 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
 import CreateWorkout from './CreateWorkout'
 import StartWorkout from './StartWorkout'
-import EditWorkout from './EditWorkout'
-//import FakeCard from './FakeCard'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
 import logo from './assets/logo.png';
