@@ -68,7 +68,6 @@ function App(props: AppProps) {
         />
         <Route path="/create-workout/" element={<CreateWorkout/>} />
         <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
-        <Route path="/edit-workout/" element={<EditWorkout/>} />
       </Routes>
 
       <footer className="appFooter">
@@ -86,4 +85,5 @@ export default App
                 navigate('/edit-workout');
                 setView(false);
               }}>▶</button>
+        <Route path="/edit-workout/" element={<EditWorkout/>} />
  */
