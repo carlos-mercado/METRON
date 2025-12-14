@@ -117,8 +117,7 @@ function Workout()
         if (movements === null) { return <p>loading...</p>; }
         if (movements.length === 0) { return <p>loading...</p>; }
     }
-    else
-    {
+    else {
         return <p>Workout Not Found</p>
     }
 

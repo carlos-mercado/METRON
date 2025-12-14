@@ -1,11 +1,12 @@
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
-import CreateWorkout from './CreateWorkout'
-import StartWorkout from './StartWorkout'
 import { getAuth, signOut } from "firebase/auth";
 import { useState } from 'react';
 import logo from './assets/logo.png';
 import footer from './assets/footer.png';
+import EditWorkouts from './EditWorkouts';
+import CreateWorkout from './CreateWorkout'
+import StartWorkout from './StartWorkout'
 
 interface AppProps
 {
@@ -33,12 +34,12 @@ function App(props: AppProps) {
 
   return (
     <>
-      <header className="mainHeader">
+    <header className="mainHeader">
         <a href="/">
-          <img id='logo' src={logo} alt="Logo"/>
+            <img id='logo' src={logo} alt="Logo"/>
         </a>
-      </header>
-      <Routes>
+    </header>
+    <Routes>
         <Route path="/" element=
         {
           <>
@@ -48,6 +49,10 @@ function App(props: AppProps) {
               }}>✚</button>
               <button className="mainButtons" onClick={() => {
                 setView(!view);
+              }}>▶</button>
+              <button className="editButton" onClick={() => {
+                navigate('/edit-workouts');
+                setView(false);
               }}>▶</button>
               <button className="logoutButton" onClick={() => {
                 setView(!view);
@@ -68,6 +73,7 @@ function App(props: AppProps) {
         />
         <Route path="/create-workout/" element={<CreateWorkout/>} />
         <Route path="/start-workout/:workoutKey" element={<StartWorkout/>} />
+        <Route path="/edit-workouts" element={<EditWorkouts/>} />
       </Routes>
 
       <footer className="appFooter">

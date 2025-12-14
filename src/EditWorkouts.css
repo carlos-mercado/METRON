@@ -1,0 +1,26 @@
+button{
+    margin: 0;
+    padding: 10px;
+    border: 0px
+}
+
+.editWorkout{
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+}
+
+.workouts{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cardContainer{
+    padding-top: 25px;
+}
+
+.nav{
+    padding-top: 20px;
+}
