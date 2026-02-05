@@ -3,9 +3,10 @@ import './App.css'
 import { getAuth, signOut } from "firebase/auth";
 //import { useState } from 'react';
 import alt_logo from './assets/alt_logo.svg';
-import footer from './assets/footer.png';
 import EditWorkouts from './EditWorkouts';
 import CreateWorkout from './CreateWorkout'
+
+import Stats from './Stats';
 
 interface AppProps
 {
@@ -46,6 +47,9 @@ function App(props: AppProps)
                     <button className="editButton" onClick={() => {
                     navigate('/edit-workouts');
                     }}>▶︎</button>
+                    <button className="statsButton" onClick={() => {
+                    navigate('/stats');
+                    }}>📈</button>
                     <button className="logoutButton" onClick={() => {
                     handleLogout();
                     }}>▶</button>
@@ -56,11 +60,9 @@ function App(props: AppProps)
             />
             <Route path="/create-workout/" element={<CreateWorkout/>} />
             <Route path="/edit-workouts" element={<EditWorkouts/>} />
+            <Route path="/stats" element={<Stats/>} />
             </Routes>
 
-            <footer className="appFooter">
-            <img src={footer} alt="footer" />
-            </footer>
 
         </>
     )

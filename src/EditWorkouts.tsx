@@ -4,31 +4,8 @@ import { useEffect, useState } from 'react';
 import {useAuth} from './Auth'
 import './EditWorkouts.css'
 import MovementCard from './MovementCard'
+import { Movement, Workout } from './Structs';
 
-class Movement {
-    name: string;
-    sets: number;
-    reps: number;
-    weight: number;
-    rest: number;
-
-    constructor(name: string, sets: number, reps: number, weight: number, rest: number) {
-        this.name = name;
-        this.sets = sets; this.reps = reps;
-        this.weight = weight;
-        this.rest = rest;
-    }
-}
-
-class Workout {
-    name: string;
-    movements: Movement[];
-
-    constructor(name: string, movements: Movement[]) {
-        this.name = name;
-        this.movements = movements
-    }
-}
 
 function EditWorkouts()
 {
@@ -39,36 +16,44 @@ function EditWorkouts()
 
     async function updateWorkout(updatedMovement : Movement) 
     {
-        const new_workout_movements : Movement[] = getCurrWorkout()
+        // Capture current values to avoid stale closure issues
+        const currentWorkoutId = workoutId;
+        const currentMovementIdx = movementIdx;
 
-        const updatedWorkoutMovements = [
-            ...new_workout_movements.slice(0, movementIdx),
-            updatedMovement,
-            ...new_workout_movements.slice(movementIdx + 1),
-        ];
+        setWorkouts(prevWorkouts => {
+            const currentWorkout = prevWorkouts.find(w => w.name === currentWorkoutId);
+            if (!currentWorkout) return prevWorkouts;
 
-        const filteredWorkouts = workouts.filter(workout => workout.name !== workoutId);
-        const newWorkout = new Workout(workoutId, updatedWorkoutMovements)
-        filteredWorkouts.push(newWorkout)  
+            const updatedWorkoutMovements = [
+                ...currentWorkout.movements.slice(0, currentMovementIdx),
+                updatedMovement,
+                ...currentWorkout.movements.slice(currentMovementIdx + 1),
+            ];
 
-        setWorkouts(filteredWorkouts)
+            const filteredWorkouts = prevWorkouts.filter(workout => workout.name !== currentWorkoutId);
+            const newWorkout = new Workout(currentWorkoutId, updatedWorkoutMovements);
+            filteredWorkouts.push(newWorkout);
 
-        const json_body = {
-            id: userId,
-            [workoutId] : updatedWorkoutMovements
-        };
+            // Send the update to the server
+            const json_body = {
+                id: userId,
+                [currentWorkoutId]: updatedWorkoutMovements
+            };
 
-        fetch('https://metron-backend.onrender.com/workouts/edit', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(json_body), // replace retJSON with your data object
-        })
-        .then(response => response.json())
-        .then(_ => { console.log('Success: updated workout.'); })
-        .catch(error => {
-            console.error('Error:', error);
+            fetch('https://metron-backend.onrender.com/workouts/edit', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(json_body),
+            })
+            .then(response => response.json())
+            .then(_ => { console.log('Success: updated workout.'); })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            return filteredWorkouts;
         });
 
         return 0;
@@ -79,18 +64,17 @@ function EditWorkouts()
         const found  = workouts.find((workout) => workout.name === workoutId);
 
         if (found == null)
-            return [new Movement("", 0, 0, 0, 0)]
+            return [new Movement("", 0, 0, 0, 0, [])]
 
         if (found)
             return found.movements;
 
-        return [new Movement("", 0, 0, 0, 0)]
+        return [new Movement("", 0, 0, 0, 0, [])]
     }
 
     async function getWorkouts() 
     {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-
         const response = await fetch(`https://metron-backend.onrender.com/?${params.toString()}`, {
             method: 'GET',
         });
@@ -137,28 +121,61 @@ function EditWorkouts()
     if (workouts.length == 0) return <p>Loading...</p>
     return (
         <div className='editWorkout'>
-            <div className='workouts'>
-                {workouts.map(workout => 
-                    <button id={workout.name} onClick={() => {
-                        setWorkoutId(workout.name)
-                        setMovementIdx(0)
-                    }}>{workout.name}</button>
-                )}
-            </div>
+
+            {workoutId === "" && (
+                <div className='workouts'>
+                    {workouts.map(workout => 
+                        <button id={workout.name} onClick={() => {
+                            setWorkoutId(workout.name)
+                            setMovementIdx(0)
+                        }}>{workout.name}</button>
+                    )}
+                </div>
+            )}
 
             <div className='cardContainer'>
                 {workoutId === "" ? <></> : 
                     <>
-                        <MovementCard key={`${workoutId}-${movementIdx}`} movement={getCurrWorkout()[movementIdx]} updateCallback={updateWorkout}>
-                        </MovementCard>
+                        <div className='carousel'>
+                            {/* Previous movement preview */}
+                            <div 
+                                className={`previewCard prev ${movementIdx > 0 ? '' : 'hidden'}`}
+                                onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}
+                            >
+                                {movementIdx > 0 && (
+                                    <div className='previewContent'>
+                                        <p className='previewName'>{getCurrWorkout()[movementIdx - 1].name}</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Current movement */}
+                            <div className='currentCard'>
+                                <MovementCard key={`${workoutId}-${movementIdx}`} movement={getCurrWorkout()[movementIdx]} updateCallback={updateWorkout}/>
+                            </div>
+
+                            {/* Next movement preview */}
+                            <div 
+                                className={`previewCard next ${movementIdx < getCurrWorkout().length - 1 ? '' : 'hidden'}`}
+                                onClick={() => setMovementIdx(Math.min(movementIdx + 1, getCurrWorkout().length - 1))}
+                            >
+                                {movementIdx < getCurrWorkout().length - 1 && (
+                                    <div className='previewContent'>
+                                        <p className='previewName'>{getCurrWorkout()[movementIdx + 1].name}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
                         <div className='nav'>
                             <button onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}>{"←"}</button>
+                            <span className='navIndicator'>{movementIdx + 1} / {getCurrWorkout().length}</span>
                             <button onClick={() => setMovementIdx(Math.min(movementIdx + 1, getCurrWorkout().length - 1))}>{"→"}</button>
                         </div>
                     </>
                 }
             </div>
+
         </div>
     )
 }

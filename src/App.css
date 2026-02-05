@@ -74,6 +74,21 @@ background-color: #4a8248;
 
 }
 
+.statsButton{
+justify-content: center;
+height: 70px;
+width:70px;
+margin: 10px;
+background-size: 20px 20px;
+background-repeat: no-repeat;
+background-position: center center;
+background-image: url('./assets/arrow.png');
+color: transparent;
+border: 0px;
+border-radius: 10px;
+background-color: #4a8248;
+}
+
 .startWorkoutForm {
   display: inline-flex;
   align-items: center;

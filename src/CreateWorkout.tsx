@@ -1,26 +1,10 @@
-//MOVEMENTS COMPOSE WORKOUTS NOT THE OTHER WAY AROUND
-
 import { useState } from 'react'
 import './CreateWorkout.css'
 import {useAuth} from './Auth'
+import { PriorMovement, Movement } from './Structs';
 
 
 function CreateWorkout() {
-    class Movement {
-        name: string;
-        sets: number;
-        reps: number;
-        weight: number;
-        rest: number;
-
-        constructor(name: string, sets: number, reps: number, weight: number, rest: number) {
-            this.name = name;
-            this.sets = sets;
-            this.reps = reps;
-            this.weight = weight;
-            this.rest = rest;
-        }
-    }
 
     const [workoutName, setWorkoutName] = useState<string>("");
     const [movementName, setMovementName] = useState<string>("");
@@ -28,13 +12,15 @@ function CreateWorkout() {
     const [movementWeight, setMovementWeight] = useState<number>(0);
     const [movementRest, setMovementRest] = useState<number>(0);
     const [movementReps, setMovementReps] = useState<number>(0);
-
     const { userId } = useAuth();
     const [movements, setMovements] = useState<Movement[]>([]);
+    const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
     function appendToWorkout()
     {
-        const newMov = new Movement(movementName, movementSets, movementReps, movementWeight, movementRest)
+        const dummy_prior_movement = new PriorMovement(Date.now().toString(), 0, 0);
+
+        const newMov = new Movement(movementName, movementSets, movementReps, movementWeight, movementRest, [ dummy_prior_movement ])
 
         setMovements(prevMovements => [...prevMovements, newMov]);
     }
@@ -46,12 +32,15 @@ function CreateWorkout() {
             [workoutName] : movements
         };
 
+
+
         console.log(JSON.stringify(retJSON, null, 2));
         return JSON.stringify(retJSON);
     }
 
     function postWorkout() 
     {
+        setMessage(null);
 
         fetch('https://metron-backend.onrender.com/workouts/add', {
             method: 'POST',
@@ -60,10 +49,19 @@ function CreateWorkout() {
             },
             body: build_json_data(), // replace retJSON with your data object
         })
-        .then(response => response.json())
-        .then(data => { console.log('Success:', data); })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to upload workout');
+            }
+            return response.json();
+        })
+        .then(data => { 
+            console.log('Success:', data);
+            setMessage({ type: 'success', text: 'Workout uploaded successfully!' });
+        })
         .catch(error => {
             console.error('Error:', error);
+            setMessage({ type: 'error', text: 'Failed to upload workout. Please try again.' });
         });
     }
 
@@ -109,6 +107,15 @@ function CreateWorkout() {
                     </p>
                 </>
             ))}
+
+            {message && (
+                <p style={{ 
+                    color: message.type === 'success' ? 'green' : 'red',
+                    fontWeight: 'bold'
+                }}>
+                    {message.text}
+                </p>
+            )}
 
             <button onClick={postWorkout}>Upload Workout</button>
 

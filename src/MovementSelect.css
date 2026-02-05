@@ -1,0 +1,12 @@
+.workoutCard{
+    background-color: #4a8248;
+    border-radius: 4px;
+    color: white;
+    display: flex;
+    align-items: center;      /* vertical alignment */
+    justify-content: center;  /* horizontal alignment (optional) */
+    height: 100px;            /* set a height */
+    width: 200px;
+    margin-bottom: 16px;
+
+}
