@@ -6,7 +6,7 @@
 
 :root {
     font-family: 'Dazzle Unicase Bold';
-    background-color: #e9bb43;
+    background-color: var(--bg-primary);
 }
 
 div button{

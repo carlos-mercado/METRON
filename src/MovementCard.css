@@ -5,14 +5,14 @@
     align-items: center;
     padding: 30px 40px;
     border-radius: 20px;
-    background: #4a8248;
+    background: var(--color-primary);
     min-width: 280px;
 }
 
 .name {
     font-size: 1.4rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--text-on-primary);
     margin: 0 0 24px 0;
     text-align: center;
     letter-spacing: 0.5px;
@@ -25,10 +25,10 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 12px;
-    background: #4a8248;
+    background: var(--color-primary);
     box-shadow: 
-        inset 4px 4px 8px #3a6838,
-        inset -4px -4px 8px #5a9858;
+        inset 4px 4px 8px var(--card-shadow-dark),
+        inset -4px -4px 8px var(--card-shadow-light);
 }
 
 .card > div {
@@ -40,7 +40,7 @@
 }
 
 .label {
-    color: #ffffff;
+    color: var(--text-on-primary);
     font-size: 1rem;
     font-weight: 500;
     margin: 0;
@@ -53,11 +53,11 @@
     height: 36px;
     border: none;
     border-radius: 10px;
-    background: #4a8248;
+    background: var(--color-primary);
     box-shadow: 
-        4px 4px 8px #3a6838,
-        -4px -4px 8px #5a9858;
-    color: #ffffff;
+        4px 4px 8px var(--card-shadow-dark),
+        -4px -4px 8px var(--card-shadow-light);
+    color: var(--text-on-primary);
     font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
@@ -68,11 +68,11 @@
 }
 
 .inc:hover, .dec:hover {
-    background: #5a9858;
+    background: var(--color-primary-hover);
 }
 
 .inc:active, .dec:active {
     box-shadow: 
-        inset 4px 4px 8px #3a6838,
-        inset -4px -4px 8px #5a9858;
+        inset 4px 4px 8px var(--card-shadow-dark),
+        inset -4px -4px 8px var(--card-shadow-light);
 }

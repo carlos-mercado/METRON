@@ -1,12 +1,17 @@
 .workoutCard{
-    background-color: #4a8248;
+    background-color: var(--color-primary);
     border-radius: 4px;
-    color: white;
+    color: var(--text-on-primary);
     display: flex;
     align-items: center;      /* vertical alignment */
     justify-content: center;  /* horizontal alignment (optional) */
     height: 100px;            /* set a height */
     width: 200px;
     margin-bottom: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
+.workoutCard:hover {
+    background-color: var(--color-primary-hover);
 }

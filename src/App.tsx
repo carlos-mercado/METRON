@@ -3,8 +3,10 @@ import './App.css'
 import { getAuth, signOut } from "firebase/auth";
 //import { useState } from 'react';
 import alt_logo from './assets/alt_logo.svg';
+import alt_logo_dark from './assets/alt_logo2.svg';
 import EditWorkouts from './EditWorkouts';
 import CreateWorkout from './CreateWorkout'
+import { useTheme } from './ThemeContext';
 
 import Stats from './Stats';
 
@@ -17,6 +19,7 @@ interface AppProps
 function App(props: AppProps) 
 {
     const navigate = useNavigate();
+    const { theme, toggleTheme } = useTheme();
 
     let handleLogout = async () =>
     {
@@ -33,7 +36,7 @@ function App(props: AppProps)
         <>
         <header className="mainHeader">
             <a href="/">
-                <img id='logo' src={alt_logo} alt="Logo"/>
+                <img id='logo' src={theme === 'light' ? alt_logo : alt_logo_dark} alt="Logo"/>
             </a>
         </header>
         <Routes>
@@ -63,6 +66,9 @@ function App(props: AppProps)
             <Route path="/stats" element={<Stats/>} />
             </Routes>
 
+        <button className="themeToggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+            {theme === 'light' ? '🌙' : '☀️'}
+        </button>
 
         </>
     )

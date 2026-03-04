@@ -48,7 +48,7 @@ button
 {
     width: 80px;
     height: 100px;
-    background: #3a6838;
+    background: var(--color-primary-dark);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -57,14 +57,14 @@ button
     transition: all 0.3s ease;
     opacity: 0.6;
     transform: scale(0.85);
-    border: 1px solid #5a9858;
+    border: 1px solid var(--color-primary-light);
 }
 
 .previewCard:hover
 {
     opacity: 0.9;
     transform: scale(0.9);
-    background: #4a8248;
+    background: var(--color-primary);
 }
 
 .previewCard.hidden
@@ -118,8 +118,8 @@ button
     margin: 0;
     border: none;
     border-radius: 10px;
-    background: #4a8248;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--text-on-primary);
     font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
@@ -131,12 +131,12 @@ button
 
 .nav button:hover
 {
-    background: #5a9858;
+    background: var(--color-primary-hover);
 }
 
 .nav button:active
 {
     box-shadow: 
-        inset 4px 4px 8px #3a6838,
-        inset -4px -4px 8px #5a9858;
+        inset 4px 4px 8px var(--card-shadow-dark),
+        inset -4px -4px 8px var(--card-shadow-light);
 }

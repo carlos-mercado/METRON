@@ -4,7 +4,7 @@
         url('./assets/dazzle-unicase-bold.otf') format('opentype');
 }
 .tag {
-    color: #5c8648;
+    color: var(--text-secondary);
 }
 
 input {
@@ -13,15 +13,16 @@ input {
         url('./assets/dazzle-unicase-bold.otf') format('opentype');
     font-size: 1rem;
     border-radius: 6px;
-    border: 1px solid #5a81e6;
+    border: 1px solid var(--input-border);
     padding: 8px 12px;
     margin-bottom: 10px;
-    background: #f7f9fc;
-    transition: border 0.2s;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: border 0.2s, background 0.3s;
 }
 
 input:focus {
-    border: 2px solid #E6BF5A;
+    border: 2px solid var(--color-accent-light);
     outline: none;
 }
 
@@ -39,8 +40,8 @@ input:focus {
 
 button {
     font-family: 'Dazzle Unicase Bold';
-    background: #5c8648;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--text-on-primary);
     border: none;
     border-radius: 6px;
     padding: 10px 22px;
@@ -49,15 +50,16 @@ button {
     cursor: pointer;
     margin: 16px auto;
     display: block;
-    transition: background 0.2s, box-shadow 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 button:hover {
+    background-color: var(--color-primary-hover);
 }
 
 p {
     font-size: 1.1rem;
-    color: #333;
+    color: var(--text-primary);
     text-align: center;
     margin: 8px 0;
 }

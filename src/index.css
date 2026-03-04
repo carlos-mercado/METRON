@@ -3,7 +3,47 @@
   src: local('Dazzle Unicase Bold'),
     url('./assets/dazzle-unicase-bold.otf') format('opentype');
 
-  background-color: #e9bb43;
+  /* Light theme (default) */
+  --bg-primary: #e9bb43;
+  --bg-secondary: #f7f9fc;
+  --color-primary: #4a8248;
+  --color-primary-hover: #5a9858;
+  --color-primary-dark: #3a6838;
+  --color-primary-light: #5a9858;
+  --color-accent: #5a81e6;
+  --color-accent-light: #E6BF5A;
+  --text-primary: #333;
+  --text-secondary: #5c8648;
+  --text-on-primary: #ffffff;
+  --text-on-bg: #333;
+  --input-bg: #f7f9fc;
+  --input-border: #5a81e6;
+  --card-shadow-dark: #3a6838;
+  --card-shadow-light: #5a9858;
+
+  background-color: var(--bg-primary);
+  color: var(--text-on-bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --color-primary: #01081a;
+  --color-primary-hover: #3d6a3d;
+  --color-primary-dark: #1d4a1d;
+  --color-primary-light: #3d6a3d;
+  --color-accent: #4a71d6;
+  --color-accent-light: #c9a83a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #7ab878;
+  --text-on-primary: #ffffff;
+  --text-on-bg: #e0e0e0;
+  --input-bg: #16213e;
+  --input-border: #4a71d6;
+  --card-shadow-dark: #1d4a1d;
+  --card-shadow-light: #3d6a3d;
 }
 
 

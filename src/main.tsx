@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import Login from './Login.tsx'
 import { AuthProvider, useAuth } from './Auth.tsx'
+import { ThemeProvider } from './ThemeContext.tsx'
 
 function Root() {
   const { userId, ready } = useAuth()
@@ -30,8 +31,10 @@ function Root() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <Root />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Root />
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>,
 )
