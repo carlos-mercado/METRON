@@ -49,8 +49,8 @@ function Stats()
                         }}
                         label={{ value: 'Date', position: 'insideBottomRight', offset: -10 }} 
                         />
-                        <YAxis yAxisId="left" label={{ value: 'Weight', angle: -90, position: 'insideLeft' }} />
-                        <YAxis yAxisId="right" orientation="right" label={{ value: 'Reps', angle: 90, position: 'insideRight' }} />
+                        <YAxis yAxisId="left" label={{ value: 'Reps', angle: -90, position: 'insideLeft' }} />
+                        <YAxis yAxisId="right" orientation="right" label={{ value: 'Weight', angle: 90, position: 'insideRight' }} />
                         <Tooltip />
                         <Legend />
                         <Bar yAxisId="right" dataKey="weight" barSize={20} fill="#413ea0" name="Weight" />
