@@ -1,7 +1,7 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
 import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './Login.css'
-import logo from './assets/logo.png';
+import alt_logo from './assets/alt_logo.svg';
 
 interface LoginProps
 {
@@ -12,7 +12,7 @@ interface LoginProps
 function Login(props : LoginProps)
 {
     const handleGoogle = async () => {
-        const provider = await new GoogleAuthProvider();
+        const provider =  new GoogleAuthProvider();
         const auth = getAuth();
         try {
             await setPersistence(auth, browserLocalPersistence); // ensure local persistence
@@ -28,7 +28,7 @@ function Login(props : LoginProps)
         <div className="loginContent">
             <header className="mainHeader">
                 <a href="/">
-                    <img id='logo' src={logo} alt="Logo"/>
+                    <img id='logo' src={alt_logo} alt="Logo"/>
                 </a>
             </header>
             <button className="gsi-material-button" onClick={handleGoogle}>

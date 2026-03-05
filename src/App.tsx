@@ -1,25 +1,23 @@
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import './App.css'
+import { useTheme } from './Context';
 import { getAuth, signOut } from "firebase/auth";
-//import { useState } from 'react';
+
 import alt_logo from './assets/alt_logo.svg';
 import alt_logo_dark from './assets/alt_logo2.svg';
+import './App.css'
+
+// Componenets
 import EditWorkouts from './EditWorkouts';
 import CreateWorkout from './CreateWorkout'
-import { useTheme } from './ThemeContext';
-
 import Stats from './Stats';
+import Settings from './Settings';
 
-interface AppProps
-{
-  callback: Function;
-}
-
+interface AppProps { callback: Function; }
 
 function App(props: AppProps) 
 {
     const navigate = useNavigate();
-    const { theme, toggleTheme } = useTheme();
+    const { theme } = useTheme();
 
     let handleLogout = async () =>
     {
@@ -43,32 +41,37 @@ function App(props: AppProps)
             <Route path="/" element=
             {
                 <>
-                <div className='mainContent'>
-                    <button className="mainButtons" onClick={() => {
-                    navigate('/create-workout');
-                    }}>✚</button>
-                    <button className="editButton" onClick={() => {
-                    navigate('/edit-workouts');
-                    }}>▶︎</button>
-                    <button className="statsButton" onClick={() => {
-                    navigate('/stats');
-                    }}>📈</button>
-                    <button className="logoutButton" onClick={() => {
-                    handleLogout();
-                    }}>▶</button>
+                    <div className='mainContent'>
+                        <button className="mainButtons" onClick={() => {
+                            navigate('/create-workout');
+                        }}>✚</button>
 
-                </div>
+                        <button className="editButton" onClick={() => {
+                            navigate('/edit-workouts');
+                        }}>▶︎</button>
+
+                        <button className="statsButton" onClick={() => {
+                            navigate('/stats');
+                        }}>📈</button>
+
+                        <button className="logoutButton" onClick={() => {
+                            handleLogout();
+                        }}>▶</button>
+                    </div>
                 </>
             } 
             />
             <Route path="/create-workout/" element={<CreateWorkout/>} />
             <Route path="/edit-workouts" element={<EditWorkouts/>} />
             <Route path="/stats" element={<Stats/>} />
-            </Routes>
+            <Route path="/settings" element={<Settings/>} />
+        </Routes>
 
-        <button className="themeToggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
-            {theme === 'light' ? '🌙' : '☀️'}
+        <button className="settingsButton" onClick={() => navigate('/settings')} title="Settings">
+            ⚙️
         </button>
+
+
 
         </>
     )

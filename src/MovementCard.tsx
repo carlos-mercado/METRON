@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import './MovementCard.css'
 import { PriorMovement, Movement } from './Structs';
+import { useUnits } from './Context';
 
 interface CardProps
 {
@@ -16,6 +17,9 @@ function MovementCard({movement, updateCallback} : CardProps)
     const repsInc = 0.5;
     const weightInc = 2.5;
     const restInc = 15;
+
+
+    const { units } = useUnits();
 
     const [mov, setMovement] = useState<Movement>(movement);
 
@@ -74,7 +78,7 @@ function MovementCard({movement, updateCallback} : CardProps)
             </div>
             <div className="weightInputRow">
                 <button className="dec" onClick={() => step("weight", "dec")}>−</button>
-                <p className='label'>Weight: {mov.weight}</p>
+                <p className='label'>Weight: {mov.weight} {units}</p>
                 <button className="inc" onClick={() => step("weight", "inc")}>+</button>
             </div>
             <div className="restInputRow">

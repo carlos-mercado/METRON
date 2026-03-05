@@ -206,3 +206,101 @@ input{
     border:0px;
     border-radius: 10px;
 }
+
+.settingsButton {
+  position: fixed;
+  top: 33px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  z-index: 100;
+}
+
+.settingsButton:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.settingsContainer {
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.settingsRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.settingsRow label {
+  white-space: nowrap;
+}
+
+.settingsRow select {
+  width: auto;
+  min-width: 100px;
+}
+
+/* iOS-style Toggle Switch */
+.toggleSwitch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggleOption {
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #888);
+  transition: color 0.2s;
+}
+
+.toggleOption.active {
+  color: var(--color-text, #000);
+  font-weight: 600;
+}
+
+.toggleTrack {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  background-color: #e9e9ea;
+  border-radius: 31px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding: 0;
+}
+
+.toggleTrack.toggled {
+  background-color: var(--color-primary, #34c759);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+.toggleTrack.toggled .toggleThumb {
+  transform: translateX(20px);
+}
+
+.settingsLabel {
+  min-width: 60px;
+}
