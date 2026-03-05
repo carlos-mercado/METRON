@@ -7,7 +7,7 @@ import alt_logo_dark from './assets/alt_logo2.svg';
 import './App.css'
 
 // Componenets
-import EditWorkouts from './EditWorkouts';
+import StartWorkout from './StartWorkout';
 import CreateWorkout from './CreateWorkout'
 import Stats from './Stats';
 import Settings from './Settings';
@@ -46,8 +46,8 @@ function App(props: AppProps)
                             navigate('/create-workout');
                         }}>✚</button>
 
-                        <button className="editButton" onClick={() => {
-                            navigate('/edit-workouts');
+                        <button className="startButton" onClick={() => {
+                            navigate('/start-workout');
                         }}>▶︎</button>
 
                         <button className="statsButton" onClick={() => {
@@ -62,7 +62,7 @@ function App(props: AppProps)
             } 
             />
             <Route path="/create-workout/" element={<CreateWorkout/>} />
-            <Route path="/edit-workouts" element={<EditWorkouts/>} />
+            <Route path="/start-workout" element={<StartWorkout/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>} />
         </Routes>
@@ -78,11 +78,3 @@ function App(props: AppProps)
 }
 
 export default App
-
-/*
-              <button className="editButton" onClick={() => {
-                navigate('/edit-workout');
-                setView(false);
-              }}>▶</button>
-        <Route path="/edit-workout/" element={<EditWorkout/>} />
- */

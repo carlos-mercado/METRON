@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import {useAuth} from './Auth'
-import './EditWorkouts.css'
+import './StartWorkout.css'
 import MovementCard from './MovementCard'
 import { Movement, Workout } from './Structs';
 
 
-function EditWorkouts()
+function StartWorkout()
 {
     const { userId } = useAuth();
     const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -120,7 +120,7 @@ function EditWorkouts()
 
     if (workouts.length == 0) return <p>Loading...</p>
     return (
-        <div className='editWorkout'>
+        <div className='startWorkout'>
 
             {workoutId === "" && (
                 <div className='workouts'>
@@ -180,4 +180,4 @@ function EditWorkouts()
     )
 }
 
-export default EditWorkouts;
+export default StartWorkout;
