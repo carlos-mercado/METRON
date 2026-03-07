@@ -40,7 +40,7 @@ function StartWorkout()
                 [currentWorkoutId]: updatedWorkoutMovements
             };
 
-            fetch('http://3.144.196.255/workouts/edit', {
+            fetch('https://metron-api.duckdns.org/workouts/edit', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function StartWorkout()
     async function getWorkouts() 
     {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-        const response = await fetch(`http://3.144.196.255/?${params.toString()}`, {
+        const response = await fetch(`https://metron-api.duckdns.org/?${params.toString()}`, {
             method: 'GET',
         });
         if (response.status === 404) { return { notFound: true }; }

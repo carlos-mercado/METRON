@@ -42,7 +42,7 @@ function CreateWorkout() {
     {
         setMessage(null);
 
-        fetch('http://3.144.196.255/workouts/add', {
+        fetch('https://metron-api.duckdns.org/workouts/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
