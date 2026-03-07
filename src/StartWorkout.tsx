@@ -40,7 +40,7 @@ function StartWorkout()
                 [currentWorkoutId]: updatedWorkoutMovements
             };
 
-            fetch('https://metron-backend.onrender.com/workouts/edit', {
+            fetch('http://3.144.196.255/workouts/edit', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function StartWorkout()
     async function getWorkouts() 
     {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-        const response = await fetch(`https://metron-backend.onrender.com/?${params.toString()}`, {
+        const response = await fetch(`http://3.144.196.255/?${params.toString()}`, {
             method: 'GET',
         });
         if (response.status === 404) { return { notFound: true }; }

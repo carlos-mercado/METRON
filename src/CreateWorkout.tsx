@@ -42,7 +42,7 @@ function CreateWorkout() {
     {
         setMessage(null);
 
-        fetch('https://metron-backend.onrender.com/workouts/add', {
+        fetch('http://3.144.196.255/workouts/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

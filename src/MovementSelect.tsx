@@ -16,7 +16,7 @@ function WorkoutCard({loadCallback} : Props)
     async function getWorkouts() 
     {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-        const response = await fetch(`https://metron-backend.onrender.com/?${params.toString()}`, {
+        const response = await fetch(`http://3.144.196.255/?${params.toString()}`, {
             method: 'GET',
         });
 
