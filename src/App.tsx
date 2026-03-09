@@ -44,7 +44,7 @@ function App(props: AppProps)
                     <div className='mainContent'>
                         <button className="mainButtons" onClick={() => {
                             navigate('/create-workout');
-                        }}>✚</button>
+                        }}>▶︎</button>
 
                         <button className="startButton" onClick={() => {
                             navigate('/start-workout');
