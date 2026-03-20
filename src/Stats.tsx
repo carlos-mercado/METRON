@@ -23,7 +23,6 @@ function Stats()
     function loadCallback(given_data: any)
     {
         setData(given_data)
-
     }
 
     return (

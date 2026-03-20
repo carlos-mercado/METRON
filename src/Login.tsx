@@ -1,6 +1,6 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
 import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
-import './Login.css'
+import './styles/Login.css'
 import alt_logo from './assets/alt_logo2.svg';
 
 interface LoginProps

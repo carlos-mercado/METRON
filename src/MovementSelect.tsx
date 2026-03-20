@@ -1,7 +1,8 @@
 import { Movement, Workout } from './Structs';
 import { useEffect, useState } from 'react';
 import {useAuth} from './Auth'
-import './MovementSelect.css'
+import Loading from './Loading'
+import './styles/MovementSelect.css'
 
 interface Props { loadCallback : any }
 
@@ -79,7 +80,8 @@ function WorkoutCard({loadCallback} : Props)
 
     return (
         <>
-            {!isWorkoutSelected && (
+            {workouts.length === 0 ? <Loading /> : <></>}
+            {workouts.length != 0 && !isWorkoutSelected && (
                 <>
                     <p>Choose a Workout</p>
                     <div className='workouts'>

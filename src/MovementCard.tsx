@@ -1,6 +1,6 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
 import { useState } from 'react';
-import './MovementCard.css'
+import './styles/MovementCard.css'
 import { PriorMovement, Movement } from './Structs';
 import { useUnits } from './Context';
 

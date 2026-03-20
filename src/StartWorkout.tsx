@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import {useAuth} from './Auth'
-import './StartWorkout.css'
+import './styles/StartWorkout.css'
 import MovementCard from './MovementCard'
+import Loading from './Loading'
 import { Movement, Workout } from './Structs';
 
 
@@ -117,10 +118,10 @@ function StartWorkout()
 
 
 
-
-    if (workouts.length == 0) return <p>Loading...</p>
     return (
         <div className='startWorkout'>
+
+            {workouts.length === 0 ? <Loading /> : <></>}
 
             {workoutId === "" && (
                 <div className='workouts'>

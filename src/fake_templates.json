@@ -1,0 +1,52 @@
+{
+    "PPL": {
+        "Push Day": [
+            { "label": "Bench Press", "sets": 2 },
+            { "label": "Shoulder Press", "sets": 2 },
+            { "label": "Chest Fly", "sets": 2 },
+            { "label": "Lateral Raise", "sets": 2 },
+            { "label": "Triceps Extension", "sets": 2 },
+            { "label": "Triceps Pushdown", "sets": 2 },
+            { "label": "Cable Crunch", "sets": 2 }
+        ],
+        "Pull Day": [
+            { "label": "Pull Up", "sets": 3 },
+            { "label": "Barbell Row", "sets": 3 },
+            { "label": "Face Pull", "sets": 2 },
+            { "label": "Bicep Curl", "sets": 2 },
+            { "label": "Hammer Curl", "sets": 2 },
+            { "label": "Rear Delt Fly", "sets": 2 },
+            { "label": "Back Extension", "sets": 2 }
+        ],
+        "Legs Day": [
+            { "label": "Squat", "sets": 3 },
+            { "label": "Leg Press", "sets": 3 },
+            { "label": "Leg Extension", "sets": 2 },
+            { "label": "Leg Curl", "sets": 2 },
+            { "label": "Calf Raise", "sets": 2 },
+            { "label": "Lunge", "sets": 2 },
+            { "label": "Ab Wheel", "sets": 2 }
+        ]
+    },
+    "UPPER LOWER": {
+        "Upper Day": [
+            { "label": "Pull Up", "sets": 3 },
+            { "label": "Bench Press", "sets": 3 },
+            { "label": "Row", "sets": 3 },
+            { "label": "Shoulder Press", "sets": 3 }
+        ],
+        "Lower Day": [
+            { "label": "Squat", "sets": 3 },
+            { "label": "Deadlift", "sets": 2 },
+            { "label": "Leg Press", "sets": 2 },
+            { "label": "Calf Raise", "sets": 2 }
+        ]
+    },
+    "FULL BODY": {
+        "Full Body A": [
+            { "label": "Squat", "sets": 3 },
+            { "label": "Bench Press", "sets": 3 },
+            { "label": "Deadlift", "sets": 2 }
+        ]
+    }
+}

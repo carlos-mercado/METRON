@@ -1,7 +1,7 @@
 @font-face{
     font-family: 'Dazzle Unicase Bold';
     src: local('Dazzle Unicase Bold'),
-        url('./assets/dazzle-unicase-bold.otf') format('opentype');
+        url('../assets/dazzle-unicase-bold.otf') format('opentype');
 }
 
 html, body, #root {
@@ -38,7 +38,7 @@ margin: 10px;
 background-size: 20px 20px;
 background-repeat: no-repeat;
 background-position: center center;
-background-image: url('./assets/plus.svg');
+background-image: url('../assets/plus.svg');
 color: transparent;
 border: 0px;
 border-radius: 10px;
@@ -57,7 +57,7 @@ margin: 10px;
 background-size: 15px 15px;
 background-repeat: no-repeat;
 background-position: center center;
-background-image: url('./assets/play.svg');
+background-image: url('../assets/play.svg');
 color: transparent;
 border: 0px;
 border-radius: 10px;
@@ -75,7 +75,7 @@ margin: 10px;
 background-size: 20px 20px;
 background-repeat: no-repeat;
 background-position: center center;
-background-image: url('./assets/logout.svg');
+background-image: url('../assets/logout.svg');
 color: transparent;
 border: 0px;
 border-radius: 10px;
@@ -93,7 +93,7 @@ margin: 10px;
 background-size: 20px 20px;
 background-repeat: no-repeat;
 background-position: center center;
-background-image: url('./assets/stats.svg');
+background-image: url('../assets/stats.svg');
 color: transparent;
 border: 0px;
 border-radius: 10px;

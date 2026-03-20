@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './CreateWorkout.css'
+import './styles/CreateWorkout.css'
 import {useAuth} from './Auth'
 import { PriorMovement, Movement } from './Structs';
 

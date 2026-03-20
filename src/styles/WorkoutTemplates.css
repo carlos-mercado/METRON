@@ -1,0 +1,94 @@
+.templatesContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.flippableCard {
+    margin: 0;
+    height: 150px;
+    width: 200px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #2c2c38;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flippableCard:hover {
+    background-color: black;
+}
+
+.Templates {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 auto;
+    gap: 20px;
+    width: fit-content;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.PushPullLegs,
+.UpperLower,
+.FullBody {
+    border: 1px solid red;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.workoutTemplate {
+    border: 1px solid red;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.template_nav {
+    display: flex;
+    justify-content: space-between; /* or center */
+    align-items: center;
+    width: 100%; /* or set a fixed width */
+    background-color: blue;
+}
+
+h1 {
+    text-align: center;
+    margin: auto;
+}
+
+.prev_template,
+.next_template {
+    all: unset;
+    padding: 20px;
+    margin: 10px;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 10px;
+}
+
+.prev_template {
+    background-image: url('../assets/arrow_left.svg');
+}
+
+.next_template {
+    background-image: url('../assets/arrow_right.svg');
+}
+
+/* Responsive: stack vertically on smaller screens */
+@media (max-width: 768px) {
+    .Templates {
+        grid-template-columns: 1fr;
+    }
+
+    .PushPullLegs,
+    .UpperLower,
+    .FullBody {
+        min-height: 60vh;
+    }
+}
