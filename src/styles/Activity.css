@@ -19,9 +19,13 @@
   background: var(--bg-secondary);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
   overflow-x: auto;
   max-width: 100%;
+  text-align: center;
+}
+
+.activity-calendar > div {
+  display: inline-block;
 }
 
 .activity-error {
