@@ -12,18 +12,6 @@ type ActivityData = {
 
 const API_BASE = 'https://metron-api.duckdns.org';
 
-function useIsMobile(): boolean {
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
-
-    useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 600);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    return isMobile;
-}
-
 // Generate all dates for the last 365 days
 function generateYearData(activityMap: Record<string, number>): ActivityData[] {
     const data: ActivityData[] = [];
@@ -51,7 +39,6 @@ function generateYearData(activityMap: Record<string, number>): ActivityData[] {
 function Activity() {
     const { userId } = useAuth();
     const { theme } = useTheme();
-    const isMobile = useIsMobile();
     const [data, setData] = useState<ActivityData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -109,9 +96,10 @@ function Activity() {
                     data={data}
                     theme={theme === 'dark' ? darkTheme : lightTheme}
                     colorScheme={theme}
-                    blockSize={isMobile ? 4 : 12}
-                    blockMargin={isMobile ? 4 : 4}
-                    fontSize={isMobile ? 6 : 14}
+                    blockSize={12}
+                    blockMargin={4}
+                    blockRadius={12}
+                    fontSize={14}
                     showWeekdayLabels
                     showColorLegend={false}
                     labels={{
