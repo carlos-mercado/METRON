@@ -1,4 +1,5 @@
 import { useTheme, useUnits } from './Context';
+import Activity from './Activity';
 
 function Settings()
 {
@@ -36,6 +37,8 @@ function Settings()
                     <span className={`toggleOption ${theme === 'dark' ? 'active' : ''}`}>dark</span>
                 </div>
             </div>
+
+            <Activity/>
         </div>
     );
 }

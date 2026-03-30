@@ -1,0 +1,38 @@
+.activity-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.activity-title {
+  color: var(--text-on-bg);
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.activity-calendar {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.activity-error {
+  color: #e74c3c;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .activity-calendar {
+    padding: 10px;
+  }
+}

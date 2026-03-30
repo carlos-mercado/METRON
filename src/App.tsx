@@ -70,7 +70,6 @@ let handleLogout = async () =>
             </Routes>
 
             <button className="settingsButton" onClick={() => navigate('/settings')} title="Settings">
-                ⚙️
             </button>
         </>
     )

@@ -4,7 +4,7 @@ import './styles/Loading.css'
 function Loading() {
     return (
         <>
-            <p>Loading...</p>
+            <p>Loading</p>
             <img src={dumbell}/>
         </>
     );

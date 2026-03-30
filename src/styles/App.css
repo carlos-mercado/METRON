@@ -212,6 +212,10 @@ input{
 }
 
 .settingsButton {
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+  background-position: center center;
+  background-image: url('../assets/gear.svg');
   position: fixed;
   top: 33px;
   right: 20px;
@@ -219,18 +223,16 @@ input{
   height: 44px;
   border: none;
   border-radius: 50%;
-  font-size: 1.3rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
   margin: 0;
   z-index: 100;
 }
 
 .settingsButton:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .settingsContainer {
@@ -242,6 +244,7 @@ input{
 .settingsRow {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 15px;
 }

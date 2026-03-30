@@ -39,18 +39,18 @@ function Templates()
         <div className='templatesContainer'>
             <p>Templates</p>
             <div className='Templates'>
-                <div className='flippableCard'>
-                    <h3>Push Pull Legs</h3>
-                </div>
-                <div className='flippableCard'>
-                    <h3>Upper Lower</h3>
-                </div>
-                <div className='flippableCard'>
-                    <h3>Full Body</h3>
-                </div>
-                <div className='flippableCard'>
-                    <h3>Arnold</h3>
-                </div>
+                <button className='flippableCard'>
+                    Push Pull Legs
+                </button>
+                <button className='flippableCard'>
+                    Upper Lower
+                </button>
+                <button className='flippableCard'>
+                    Full Body
+                </button>
+                <button className='flippableCard'>
+                    Arnold
+                </button>
 
             </div>
         </div>
