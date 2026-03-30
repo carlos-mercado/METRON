@@ -4,15 +4,14 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 900px;
 }
 
 .activity-calendar {
   background: var(--bg-secondary);
   border-radius: 10px;
-  max-width: 80%;
   text-align: center;
   padding: 5px;
+  width: 90%;
 }
 
 

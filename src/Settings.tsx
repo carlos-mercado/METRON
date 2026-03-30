@@ -1,5 +1,6 @@
 import { useTheme, useUnits } from './Context';
 import Activity from './Activity';
+import './styles/Settings.css'
 
 function Settings()
 {
