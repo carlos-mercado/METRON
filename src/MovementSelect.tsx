@@ -48,6 +48,7 @@ function WorkoutCard({loadCallback} : Props)
 
                 for(const [workoutKey, workoutValue] of Object.entries(workoutsResponse.movements))
                 {
+                    if (workoutKey == "activity") { continue; }
                     const currWorkout : Workout = new Workout(workoutKey, workoutValue as Movement[])
                     responseWorkouts.push(currWorkout)
                 }
