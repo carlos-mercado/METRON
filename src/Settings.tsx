@@ -1,11 +1,26 @@
+import { getAuth, signOut } from 'firebase/auth';
 import { useTheme, useUnits } from './Context';
 import Activity from './Activity';
 import './styles/Settings.css'
 
-function Settings()
+interface SettingsProps {
+    callback: Function;
+}
+
+function Settings({ callback }: SettingsProps)
 {
     const { theme, toggleTheme } = useTheme();
     const { units, toggleUnits } = useUnits();
+
+    const handleLogout = async () => {
+        try {
+            await signOut(getAuth());
+            callback(false);
+        } catch (err) {
+            console.error('Logout failed', err);
+            alert('Logout failed');
+        }
+    };
 
     return (
         <div className="settingsContainer">
@@ -39,7 +54,12 @@ function Settings()
                 </div>
             </div>
 
+
             <Activity/>
+
+            <div className="settingsRow">
+                <button className="settingsLogoutButton" onClick={handleLogout}>Logout</button>
+            </div>
         </div>
     );
 }

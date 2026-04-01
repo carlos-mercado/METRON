@@ -1,6 +1,5 @@
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useTheme } from './Context';
-import { getAuth, signOut } from "firebase/auth";
 
 import alt_logo from './assets/alt_logo.svg';
 import alt_logo_dark from './assets/alt_logo2.svg';
@@ -19,16 +18,6 @@ function App(props: AppProps)
 {
     const navigate = useNavigate();
     const { theme } = useTheme();
-let handleLogout = async () =>
-    {
-        try {
-            await signOut(getAuth());
-            props.callback(false);
-        } catch (err) {
-            console.error('Logout failed', err);
-            alert('Logout failed');
-        }
-    }
 
     return (
         <>
@@ -54,10 +43,6 @@ let handleLogout = async () =>
                             <button className="statsButton" onClick={() => {
                                 navigate('/stats');
                             }}>📈</button>
-
-                            <button className="logoutButton" onClick={() => {
-                                handleLogout();
-                            }}>▶</button>
                         </div>
                     </>
                 } 
@@ -65,7 +50,7 @@ let handleLogout = async () =>
                 <Route path="/create-workout/" element={<CreateWorkout/>} />
                 <Route path="/start-workout" element={<StartWorkout/>} />
                 <Route path="/stats" element={<Stats/>} />
-                <Route path="/settings" element={<Settings/>} />
+                <Route path="/settings" element={<Settings callback={props.callback}/>} />
                 <Route path="/templates" element={<WorkoutTemplates/>} />
             </Routes>
 

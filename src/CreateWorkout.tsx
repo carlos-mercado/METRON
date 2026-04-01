@@ -42,6 +42,11 @@ function CreateWorkout() {
     {
         setMessage(null);
 
+        if (workoutName == "activity") {
+            alert("'activity' is a reserved workout / session name, please choose a different name.");
+            return;
+        }
+
         fetch('https://metron-api.duckdns.org/workouts/add', {
             method: 'POST',
             headers: {

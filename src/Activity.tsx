@@ -23,12 +23,8 @@ function generateYearData(activityMap: Record<string, number>): ActivityData[] {
         const dateStr = date.toISOString().split('T')[0];
         const count = activityMap[dateStr] || 0;
 
-        // Map count to level (0-4)
-        let level: 0 | 1 | 2 | 3 | 4 = 0;
-        if (count >= 4) level = 4;
-        else if (count >= 3) level = 3;
-        else if (count >= 2) level = 2;
-        else if (count >= 1) level = 1;
+        // Map count to level: 0 = inactive, 4 = active
+        const level: 0 | 1 | 2 | 3 | 4 = count > 0 ? 4 : 0;
 
         data.push({ date: dateStr, count, level });
     }
