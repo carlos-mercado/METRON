@@ -38,14 +38,14 @@ function MovementCard({movement, updateCallback} : CardProps)
             case "reps":
             {
                 let old_history = mov.history;
-                let new_history = [...old_history, new PriorMovement(Date.now().toString(), mov.reps, mov.weight)];
+                let new_history = [...old_history, new PriorMovement(Date.now().toString(), mov.reps + (repsInc * polarity), mov.weight)];
                 newMovement = new Movement(mov.name, mov.sets, mov.reps + (repsInc * polarity), mov.weight, mov.rest, new_history);
                 break;
             }
             case "weight":
             {
                 let old_history = mov.history;
-                let new_history = [...old_history, new PriorMovement(Date.now().toString(), mov.reps, mov.weight)];
+                let new_history = [...old_history, new PriorMovement(Date.now().toString(), mov.reps, mov.weight + (weightInc * polarity))];
                 newMovement = new Movement(mov.name, mov.sets, mov.reps, mov.weight + (weightInc * polarity), mov.rest, new_history);
                 break;
             }
@@ -58,6 +58,7 @@ function MovementCard({movement, updateCallback} : CardProps)
                 return;
         }
 
+        console.log(newMovement);
         setMovement(newMovement);
         updateCallback(newMovement);
     }
