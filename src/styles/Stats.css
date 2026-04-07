@@ -1,0 +1,41 @@
+.movementSelect-button {
+    margin: 0;
+    height: 100px;
+    width: 150px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #2c2c38;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.workouts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 auto;
+    gap: 20px;
+    width: fit-content;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.sessionSelect-button {
+    margin: 0;
+    height: 100px;
+    width: 150px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #2c2c38;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.statsContainer {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

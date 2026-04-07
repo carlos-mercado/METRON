@@ -88,7 +88,7 @@ function CreateWorkout() {
                             <span className="choiceCard-desc">Pick from a pre-built split</span>
                         </button>
                         <button className="choiceCard" onClick={() => setChoice(true)}>
-                            <span className="choiceCard-icon">&#9998;</span>
+                            <span className="choiceCard-icon">&#128395;</span>
                             <span className="choiceCard-label">From Scratch</span>
                             <span className="choiceCard-desc">Build your own workout</span>
                         </button>

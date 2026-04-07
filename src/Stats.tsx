@@ -1,7 +1,9 @@
 //import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import WorkoutCard from './MovementSelect'
-import { PriorMovement } from './Structs';
+import { useState, useEffect } from 'react';
+import { PriorMovement, Workout, Movement } from './Structs';
+import Loading from './Loading';
+import { useAuth } from './Auth'
+import './styles/Stats.css'
 
 import {
     ComposedChart,
@@ -17,21 +19,79 @@ import {
 
 function Stats() 
 {
-    //const navigate = useNavigate();
+    const { userId } = useAuth();
     const [data, setData] = useState<PriorMovement[]>();
+    const [workouts, setWorkouts] = useState<Workout[]>([]);
+    const [movements, setMovements] = useState<Movement[]>([]);
+    const [workoutId, setWorkoutId] = useState<string>("");
 
-    function loadCallback(given_data: any)
+    async function getWorkouts() 
     {
-        setData(given_data)
+        const params = new URLSearchParams({ id: userId ? String(userId) : '', });
+        const response = await fetch(`https://metron-api.duckdns.org/?${params.toString()}`, {
+            method: 'GET',
+        });
+        if (response.status === 404) { return { notFound: true }; }
+        if (!response.ok) { throw new Error(`Error: ${response.status}`); }
+        return response.json();
     }
 
-    return (
-        <>
-            {!data && (
-                <div className="mainContent" style={{ flexDirection: 'column' }}>
-                    <WorkoutCard loadCallback={loadCallback}/>
-                </div>)
+    useEffect(() => {
+        if (!userId) { alert('Please sign in first'); return; }
+
+        async function fetchWorkout() 
+        {
+            try 
+            {
+                const workoutsResponse = await getWorkouts();
+
+                if (workoutsResponse.notFound) { return; }
+
+                const responseWorkouts : Workout[] = []
+                for (const [workoutKey, workoutValue] of Object.entries(workoutsResponse.movements)) {
+                    if (workoutKey == "activity") { continue; }
+                    const currWorkout : Workout = new Workout(workoutKey, workoutValue as Movement[])
+                    responseWorkouts.push(currWorkout)
+                }
+
+                setWorkouts(responseWorkouts);
+            } 
+            catch (err) 
+            {
+                console.error(err);
             }
+        }
+        fetchWorkout();
+    }, [userId]);
+
+
+    return (
+        <div className='statsContainer'>
+            {workouts.length === 0 ? <Loading /> : <></>}
+            {workoutId === "" && workouts.length != 0 && (
+                <>
+                    <p>Select a session:</p>
+                    <div className='workouts'>
+                        {workouts.map(workout => 
+                            <button className="sessionSelect-button" id={workout.name} onClick={() => {
+                                setWorkoutId(workout.name);
+                                setMovements(workout.movements);
+                            }}>{workout.name}</button>
+                        )}
+                    </div>
+                </>
+            )}
+
+            { movements.length != 0 && !data && (
+                <>
+                    <p>Select a movement:</p>
+                    <div className='workouts'>
+                        { movements.map(movement => <button className='movementSelect-button' id={movement.name} onClick={() => {
+                            setData(movement.history);
+                        }}>{movement.name}</button>)}
+                    </div>
+                </>
+            )}
 
             {data && (
                 <ResponsiveContainer width="100%" height={400}>
@@ -57,8 +117,7 @@ function Stats()
                     </ComposedChart>
                 </ResponsiveContainer>
             )}
-            {/*<button onClick={() => navigate('/')}>Back</button>*/}
-        </>
+        </div>
     );
 }
 
