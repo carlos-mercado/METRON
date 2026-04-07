@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './styles/CreateWorkout.css'
 import {useAuth} from './Auth'
 import { PriorMovement, Movement } from './Structs';
-
 
 function CreateWorkout() {
 
@@ -15,12 +15,19 @@ function CreateWorkout() {
     const { userId } = useAuth();
     const [movements, setMovements] = useState<Movement[]>([]);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [choice, setChoice] = useState<boolean | null>(null);
+    const navigate = useNavigate();
 
     function appendToWorkout()
     {
         const dummy_prior_movement = new PriorMovement(Date.now().toString(), 0, 0);
 
-        const newMov = new Movement(movementName, movementSets, movementReps, movementWeight, movementRest, [ dummy_prior_movement ])
+        const newMov = new Movement(movementName, 
+                                    movementSets, 
+                                    movementReps, 
+                                    movementWeight, 
+                                    movementRest, 
+                                    [ dummy_prior_movement ])
 
         setMovements(prevMovements => [...prevMovements, newMov]);
     }
@@ -31,8 +38,6 @@ function CreateWorkout() {
             id: userId,
             [workoutName] : movements
         };
-
-
 
         console.log(JSON.stringify(retJSON, null, 2));
         return JSON.stringify(retJSON);
@@ -72,57 +77,66 @@ function CreateWorkout() {
 
     return (
         <>
-            <p className='tag'>Workout name: </p>
-            <input className='workoutNameInput' onChange={e => setWorkoutName(e.target.value)} />
+            {choice === null && 
+                <div className="choiceContainer">
+                    <h2 className="choiceTitle">Create a Workout</h2>
+                    <p className="choiceSubtitle">How would you like to get started?</p>
+                    <div className="choiceCards">
+                        <button className="choiceCard" onClick={() => navigate('/templates')}>
+                            <span className="choiceCard-icon">&#128196;</span>
+                            <span className="choiceCard-label">Template</span>
+                            <span className="choiceCard-desc">Pick from a pre-built split</span>
+                        </button>
+                        <button className="choiceCard" onClick={() => setChoice(true)}>
+                            <span className="choiceCard-icon">&#9998;</span>
+                            <span className="choiceCard-label">From Scratch</span>
+                            <span className="choiceCard-desc">Build your own workout</span>
+                        </button>
+                    </div>
+                </div>
+            }
 
-            <div>
-                <p className='tag'>Movement Name:</p>
-                <input className='nameInput' onChange={e => setMovementName(e.target.value)} />
+            {choice != null && <>
+                <p className='tag'>Workout name: </p>
+                <input className='workoutNameInput' onChange={e => setWorkoutName(e.target.value)} />
+                <div>
+                    <p className='tag'>Movement Name:</p>
+                    <input className='nameInput' onChange={e => setMovementName(e.target.value)} />
 
-                <p className='tag'>Movement Sets:</p>
-                <input className='setsInput' type='number' onChange={e => setMovementSets(Number(e.target.value))} />
+                    <p className='tag'>Movement Sets:</p>
+                    <input className='setsInput' type='number' onChange={e => setMovementSets(Number(e.target.value))} />
 
-                <p className='tag'>Movement Reps:</p>
-                <input className='repsInput' type='number' onChange={e => setMovementReps(Number(e.target.value))} />
-                <p className='tag'>Movement Weight:</p>
-                <input className='weightInput' type='number' onChange={e => setMovementWeight(Number(e.target.value))} />
+                    <p className='tag'>Movement Reps:</p>
+                    <input className='repsInput' type='number' onChange={e => setMovementReps(Number(e.target.value))} />
+                    <p className='tag'>Movement Weight:</p>
+                    <input className='weightInput' type='number' onChange={e => setMovementWeight(Number(e.target.value))} />
 
-                <p className='tag'>Movement Rest:</p>
-                <input className='restInput' type='number' onChange={e => setMovementRest(Number(e.target.value))} />
-            </div>
+                    <p className='tag'>Movement Rest:</p>
+                    <input className='restInput' type='number' onChange={e => setMovementRest(Number(e.target.value))} />
+                </div>
+                <button onClick={appendToWorkout}>Add Movement</button>
+                {movements.map(movement => (
+                    <>
+                        <p> {movement.name} </p>
+                        <p> {movement.sets} </p>
+                        <p> {movement.weight} </p>
+                        <p> {movement.reps} </p>
+                        <p> {movement.rest} </p>
+                    </>
+                ))}
 
-            <button onClick={appendToWorkout}>Add Movement</button>
-
-            {movements.map(movement => (
-                <>
-                    <p>
-                        {movement.name}
+                {message && (
+                    <p style={{ 
+                        color: message.type === 'success' ? 'green' : 'red',
+                        fontWeight: 'bold'
+                    }}>
+                        {message.text}
                     </p>
-                    <p>
-                        {movement.sets}
-                    </p>
-                    <p>
-                        {movement.weight}
-                    </p>
-                    <p>
-                        {movement.reps}
-                    </p>
-                    <p>
-                        {movement.rest}
-                    </p>
-                </>
-            ))}
+                )}
 
-            {message && (
-                <p style={{ 
-                    color: message.type === 'success' ? 'green' : 'red',
-                    fontWeight: 'bold'
-                }}>
-                    {message.text}
-                </p>
-            )}
-
-            <button onClick={postWorkout}>Upload Workout</button>
+                <button onClick={postWorkout}>Upload Workout</button>
+            </>
+            }
 
         </>
     )

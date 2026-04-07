@@ -84,10 +84,12 @@ function WorkoutCard({loadCallback} : Props)
             {workouts.length === 0 ? <Loading /> : <></>}
             {workouts.length != 0 && !isWorkoutSelected && (
                 <>
-                    <p>Choose a Workout</p>
+                    <p>Select a session:</p>
                     <div className='workouts'>
                         {workouts.map(workout => 
-                            <div className='workoutCard' id={workout.name} onClick={() => handle_workout_selection(workout.name)}>{workout.name}</div>
+                            <button className="sessionSelect-button" id={workout.name} onClick={() => {
+                                handle_workout_selection(workout.name)
+                            }}>{workout.name}</button>
                         )}
                     </div>
                 </>
@@ -99,7 +101,7 @@ function WorkoutCard({loadCallback} : Props)
                     <p>Choose a Movement</p>
                     <div className='movements'>
                         {movs.map(movement => 
-                            <div className='workoutCard' id={movement.name} onClick={() => handle_movement_selection(movement.name)}>{movement.name}</div>
+                            <button className='workoutCard' id={movement.name} onClick={() => handle_movement_selection(movement.name)}>{movement.name}</button>
                         )}
                     </div>
                 </>

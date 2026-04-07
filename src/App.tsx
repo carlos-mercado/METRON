@@ -10,7 +10,7 @@ import StartWorkout from './StartWorkout';
 import CreateWorkout from './CreateWorkout'
 import Stats from './Stats';
 import Settings from './Settings';
-import WorkoutTemplates from './WorkoutTemplates';
+import WorkoutTemplates from './Templates';
 
 interface AppProps { callback: Function; }
 

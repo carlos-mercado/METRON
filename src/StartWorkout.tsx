@@ -1,5 +1,4 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
-
 import { useEffect, useState } from 'react';
 import {useAuth} from './Auth'
 import './styles/StartWorkout.css'
@@ -62,13 +61,9 @@ function StartWorkout()
 
     function getCurrWorkout(): Movement[] 
     {
-        const found  = workouts.find((workout) => workout.name === workoutId);
-
-        if (found == null)
-            return [new Movement("", 0, 0, 0, 0, [])]
-
-        if (found)
-            return found.movements;
+        const found = workouts.find((workout) => workout.name === workoutId);
+        if (found == null) return [new Movement("", 0, 0, 0, 0, [])]
+        if (found) return found.movements;
 
         return [new Movement("", 0, 0, 0, 0, [])]
     }
@@ -121,18 +116,19 @@ function StartWorkout()
 
     return (
         <div className='startWorkout'>
-
             {workouts.length === 0 ? <Loading /> : <></>}
-
-            {workoutId === "" && (
-                <div className='workouts'>
-                    {workouts.map(workout => 
-                        <button id={workout.name} onClick={() => {
-                            setWorkoutId(workout.name)
-                            setMovementIdx(0)
-                        }}>{workout.name}</button>
-                    )}
-                </div>
+            {workoutId === "" && workouts.length != 0 && (
+                <>
+                    <p>Select a session:</p>
+                    <div className='workouts'>
+                        {workouts.map(workout => 
+                            <button className="sessionSelect-button" id={workout.name} onClick={() => {
+                                setWorkoutId(workout.name)
+                                setMovementIdx(0)
+                            }}>{workout.name}</button>
+                        )}
+                    </div>
+                </>
             )}
 
             <div className='cardContainer'>
@@ -177,7 +173,6 @@ function StartWorkout()
                     </>
                 }
             </div>
-
         </div>
     )
 }

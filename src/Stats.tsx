@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import WorkoutCard from './MovementSelect'
 import { PriorMovement } from './Structs';
@@ -17,7 +17,7 @@ import {
 
 function Stats() 
 {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const [data, setData] = useState<PriorMovement[]>();
 
     function loadCallback(given_data: any)
@@ -57,7 +57,7 @@ function Stats()
                     </ComposedChart>
                 </ResponsiveContainer>
             )}
-            <button onClick={() => navigate('/')}>Back</button>
+            {/*<button onClick={() => navigate('/')}>Back</button>*/}
         </>
     );
 }

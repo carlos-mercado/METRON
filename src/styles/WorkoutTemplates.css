@@ -32,14 +32,6 @@
     box-sizing: border-box;
 }
 
-.PushPullLegs,
-.UpperLower,
-.FullBody {
-    border: 1px solid red;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
 
 .workoutTemplate {
     border: 1px solid red;

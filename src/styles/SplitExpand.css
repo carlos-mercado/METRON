@@ -1,0 +1,87 @@
+.splitExpand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.splitExpand-title {
+  font-size: 1.6rem;
+  color: var(--text-on-bg);
+  margin-bottom: 20px;
+}
+
+.splitExpand-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.splitExpand-card {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  padding: 16px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.splitExpand-card-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-on-bg);
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.splitExpand-movements {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.splitExpand-movement {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+  color: var(--text-on-bg);
+  font-size: 0.95rem;
+}
+
+.splitExpand-movement:last-child {
+  border-bottom: none;
+}
+
+.splitExpand-movementIndex {
+  color: var(--color-primary);
+  font-weight: 600;
+  min-width: 24px;
+  font-size: 0.85rem;
+}
+
+.splitExpand-movementName {
+  flex: 1;
+}
+
+.splitExpand-back {
+  margin-bottom: 16px;
+  margin-top: 16px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-start;
+}
+
+.splitExpand-back:hover {
+  background-color: var(--color-primary-hover);
+}
