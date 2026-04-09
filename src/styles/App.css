@@ -29,22 +29,21 @@ body {
 
 /* ensure the buttons stay compact and centered in their row */
 .mainButtons {
-display: flex;
-align-items: center;
-justify-content: center;
-height: 70px;
-width:70px;
-margin: 10px;
-background-size: 20px 20px;
-background-repeat: no-repeat;
-background-position: center center;
-background-image: url('../assets/plus.svg');
-color: transparent;
-border: 0px;
-border-radius: 10px;
-background-color: var(--color-primary);
-padding: 0;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width:70px;
+    margin: 10px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../assets/plus.svg');
+    color: transparent;
+    border: 0px;
+    border-radius: 10px;
+    background-color: var(--color-primary);
+    padding: 0;
 }
 
 .startButton{
@@ -84,21 +83,21 @@ padding: 0;
 }
 
 .statsButton{
-display: flex;
-align-items: center;
-justify-content: center;
-height: 70px;
-width:70px;
-margin: 10px;
-background-size: 20px 20px;
-background-repeat: no-repeat;
-background-position: center center;
-background-image: url('../assets/stats.svg');
-color: transparent;
-border: 0px;
-border-radius: 10px;
-background-color: var(--color-primary);
-padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width:70px;
+    margin: 10px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url('../assets/stats.svg');
+    color: transparent;
+    border: 0px;
+    border-radius: 10px;
+    background-color: var(--color-primary);
+    padding: 0;
 }
 
 .startWorkoutForm {
@@ -116,98 +115,98 @@ padding: 0;
 
 /* make the button size match the input height */
 .startWorkoutForm button {
-  padding: 8px 12px;
-  height: 40px;
-  cursor: pointer;
+    padding: 8px 12px;
+    height: 40px;
+    cursor: pointer;
 }
 
 input{
-  border-radius: 10px;
-  height: 35px;
-  text-align: center;
-  margin: 0 auto;
-  width: 200px;
+    border-radius: 10px;
+    height: 35px;
+    text-align: center;
+    margin: 0 auto;
+    width: 200px;
 }
 
 .keyInput{
-  background: var(--color-accent);
-  border: 2px solid black;
-  text-align: left;
-  color: var(--color-accent-light);
-  box-shadow: 3px 3px 0 #000;
-  margin-right: 20px;
-  padding: 5px;
+    background: var(--color-accent);
+    border: 2px solid black;
+    text-align: left;
+    color: var(--color-accent-light);
+    box-shadow: 3px 3px 0 #000;
+    margin-right: 20px;
+    padding: 5px;
 
 }
 .keyInput::placeholder{
-  color: var(--color-accent-light);
+    color: var(--color-accent-light);
 }
 
 .mainButtons {
-  justify-content: center;
-  height: 70px;
-  margin: 10px;
-  width:70px;
+    justify-content: center;
+    height: 70px;
+    margin: 10px;
+    width:70px;
 }
 
 .logout{
-  justify-content: center;
-  margin: 10px;
-  text-align: center;
+    justify-content: center;
+    margin: 10px;
+    text-align: center;
 }
 
 
 .logoutIcon{
-  height: 30px;
-  width: 30px;
+    height: 30px;
+    width: 30px;
 }
 
 .mainHeader {
-  height: 10vh;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
+    height: 10vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
 }
 
 #logo {
- padding-top: 10px;
-  max-height:100%;
-  width: auto;
-  display: block;
+    padding-top: 10px;
+    max-height:100%;
+    width: auto;
+    display: block;
 }
 
 .themeToggle {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--text-on-primary);
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-  z-index: 100;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--text-on-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    z-index: 100;
 }
 
 .themeToggle:hover {
-  background: var(--color-primary-hover); 
-  transform: translateX(-50%) scale(1.1);
+    background: var(--color-primary-hover); 
+    transform: translateX(-50%) scale(1.1);
 }
 
 
 .goButton{
     background-color: var(--color-primary);
     color: var(--color-accent-light);
-    border:0px;
+    border:1px;
     border-radius: 10px;
 }
 
@@ -222,6 +221,7 @@ input{
   width: 44px;
   height: 44px;
   border: none;
+  border: 2px solid white;
   border-radius: 50%;
   cursor: pointer;
   display: flex;

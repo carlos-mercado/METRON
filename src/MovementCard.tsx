@@ -63,6 +63,30 @@ function MovementCard({movement, updateCallback} : CardProps)
         updateCallback(newMovement);
     }
 
+    function handleWeightChange(e: React.ChangeEvent<HTMLInputElement>)
+    {
+        const value = e.target.value;
+
+        // Allow empty string so user can clear and retype
+        if (value === '' || value === '-')
+        {
+            const newMovement = new Movement(mov.name, mov.sets, mov.reps, 0, mov.rest, mov.history);
+            setMovement(newMovement);
+            updateCallback(newMovement);
+            return;
+        }
+
+        const parsed = parseFloat(value);
+        if (!isNaN(parsed))
+        {
+            let old_history = mov.history;
+            let new_history = [...old_history, new PriorMovement(Date.now().toString(), mov.reps, parsed)];
+            const newMovement = new Movement(mov.name, mov.sets, mov.reps, parsed, mov.rest, new_history);
+            setMovement(newMovement);
+            updateCallback(newMovement);
+        }
+    }
+
 
     return (
         <div className='card'>
@@ -79,7 +103,17 @@ function MovementCard({movement, updateCallback} : CardProps)
             </div>
             <div className="weightInputRow">
                 <button className="dec" onClick={() => step("weight", "dec")}>−</button>
-                <p className='label'>Weight: {mov.weight} {units}</p>
+                <div className='label weight-label'>
+                    <input
+                        className='weight-input'
+                        type="number"
+                        value={mov.weight}
+                        onChange={handleWeightChange}
+                        step={weightInc}
+                        style={{ width: `${Math.max(String(mov.weight).length, 1) + 1}ch` }}
+                    />
+                    <span className='unitsLabel'>{units}</span>
+                </div>
                 <button className="inc" onClick={() => step("weight", "inc")}>+</button>
             </div>
             <div className="restInputRow">

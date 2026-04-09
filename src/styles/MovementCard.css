@@ -76,3 +76,33 @@
         inset 4px 4px 8px var(--card-shadow-dark),
         inset -4px -4px 8px var(--card-shadow-light);
 }
+
+.weight-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.weight-input {
+    min-width: 2ch;
+    background: transparent;
+    border-radius: 5px;
+    color: var(--text-on-primary);
+    font-size: 1rem;
+    text-align: right;
+    padding: 0px 0px;
+    margin: 0 0;
+    border: 0px solid red;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.unitsLabel {
+    margin-right: 35px;
+}
+
+.weight-input:focus {
+    border-color: var(--text-on-primary);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+}

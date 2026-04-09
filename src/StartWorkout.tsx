@@ -1,6 +1,6 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
 import { useEffect, useState } from 'react';
-import {useAuth} from './Auth'
+import { useAuth } from './Auth'
 import './styles/StartWorkout.css'
 import MovementCard from './MovementCard'
 import Loading from './Loading'
@@ -119,7 +119,7 @@ function StartWorkout()
             {workouts.length === 0 ? <Loading /> : <></>}
             {workoutId === "" && workouts.length != 0 && (
                 <>
-                    <p>Select a session:</p>
+                    <p className='sessionSelect-label'>Select a session:</p>
                     <div className='workouts'>
                         {workouts.map(workout => 
                             <button className="sessionSelect-button" id={workout.name} onClick={() => {
@@ -135,7 +135,7 @@ function StartWorkout()
                 {workoutId === "" ? <></> : 
                     <>
                         <div className='carousel'>
-                            {/* Previous movement preview */}
+                            {/* Previous movement preview 
                             <div 
                                 className={`previewCard prev ${movementIdx > 0 ? '' : 'hidden'}`}
                                 onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}
@@ -145,14 +145,14 @@ function StartWorkout()
                                         <p className='previewName'>{getCurrWorkout()[movementIdx - 1].name}</p>
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
 
                             {/* Current movement */}
                             <div className='currentCard'>
                                 <MovementCard key={`${workoutId}-${movementIdx}`} movement={getCurrWorkout()[movementIdx]} updateCallback={updateWorkout}/>
                             </div>
 
-                            {/* Next movement preview */}
+                            {/* Next movement preview
                             <div 
                                 className={`previewCard next ${movementIdx < getCurrWorkout().length - 1 ? '' : 'hidden'}`}
                                 onClick={() => setMovementIdx(Math.min(movementIdx + 1, getCurrWorkout().length - 1))}
@@ -162,7 +162,8 @@ function StartWorkout()
                                         <p className='previewName'>{getCurrWorkout()[movementIdx + 1].name}</p>
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
+
                         </div>
 
                         <div className='nav'>

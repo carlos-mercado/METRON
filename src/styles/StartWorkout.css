@@ -10,12 +10,15 @@ button {
     width: 150px;
     text-align: center;
     border-radius: 10px;
-    background-color: #2c2c38;
+    background-color: var(--color-primary);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.sessionSelect-label {
+    color: var(--text-on-primary);
+}
 
 .startWorkout
 {
