@@ -1,4 +1,4 @@
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { PriorMovement, Workout, Movement } from './Structs';
 import Loading from './Loading';
@@ -19,11 +19,66 @@ import {
 
 function Stats() 
 {
+    const navigate = useNavigate();
     const { userId } = useAuth();
     const [data, setData] = useState<PriorMovement[]>();
     const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [movements, setMovements] = useState<Movement[]>([]);
     const [workoutId, setWorkoutId] = useState<string>("");
+
+    function handleBack() {
+        // Three States
+        // 1. Choosing Session
+        // 2. Choosing Movement
+        // 3. Viewing History
+
+        // what state are we currently in? 
+        if ( workoutId == "" ) {
+            // 1
+            navigate('/');
+        }
+        else if ( workoutId && !data ) {
+            // 2
+            setWorkoutId("");
+        }
+        else {
+            // 3
+            setData(undefined);
+        }
+
+        return;
+    }
+
+    function mergeDays(data : PriorMovement[]) {
+        let merged : PriorMovement[] = [];
+
+        let last : PriorMovement = data[0];
+        let last_date = new Date(Number(last.date));
+        let last_month = last_date.getMonth() + 1; // getMonth() returns 0-11
+        let last_day = last_date.getDate();
+
+        for (let i = 1; i < data.length; i++) {
+            const date = new Date(Number(data[i].date));
+            const month = date.getMonth() + 1; // getMonth() returns 0-11
+            const day = date.getDate();
+
+            if (month == last_month && last_day == day) {
+                last.weight = data[i].weight;
+                last.reps = data[i].reps;
+            }
+            else {
+                merged.push(last);
+                last = data[i];
+                last_date = new Date(Number(last.date));
+                last_month = last_date.getMonth() + 1;
+                last_day = last_date.getDate();
+            }
+        }
+
+        merged.push(last);
+        console.log(merged);
+        setData(merged);
+    }
 
     async function getWorkouts() 
     {
@@ -39,10 +94,8 @@ function Stats()
     useEffect(() => {
         if (!userId) { alert('Please sign in first'); return; }
 
-        async function fetchWorkout() 
-        {
-            try 
-            {
+        async function fetchWorkout() {
+            try {
                 const workoutsResponse = await getWorkouts();
 
                 if (workoutsResponse.notFound) { return; }
@@ -55,9 +108,8 @@ function Stats()
                 }
 
                 setWorkouts(responseWorkouts);
-            } 
-            catch (err) 
-            {
+            }
+            catch (err) {
                 console.error(err);
             }
         }
@@ -67,8 +119,8 @@ function Stats()
 
     return (
         <div className='statsContainer'>
-            {workouts.length === 0 ? <Loading /> : <></>}
-            {workoutId === "" && workouts.length != 0 && (
+            { workouts.length === 0 ? <Loading /> : <></> }
+            { workoutId === "" && workouts.length != 0 && (
                 <>
                     <p className='sessionSelect-label'>Select a session:</p>
                     <div className='workouts'>
@@ -82,18 +134,18 @@ function Stats()
                 </>
             )}
 
-            { movements.length != 0 && !data && (
+            { workoutId != "" && !data && (
                 <>
                     <p>Select a movement:</p>
                     <div className='workouts'>
                         { movements.map(movement => <button className='movementSelect-button' id={movement.name} onClick={() => {
-                            setData(movement.history);
+                            mergeDays(movement.history);
                         }}>{movement.name}</button>)}
                     </div>
                 </>
             )}
 
-            {data && (
+            { data && (
                 <ResponsiveContainer width="100%" height={400}>
                     <ComposedChart
                         data={data}
@@ -117,6 +169,8 @@ function Stats()
                     </ComposedChart>
                 </ResponsiveContainer>
             )}
+
+            <button onClick={() => handleBack()}>back</button>
         </div>
     );
 }
