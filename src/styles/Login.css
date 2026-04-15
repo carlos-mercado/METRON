@@ -47,10 +47,10 @@ div button{
 
 .gsi-material-button{
   top: 50%;
-  
+  margin-top: 10px;
 }
-.loginContent{
 
+.loginContent{
   text-align: center;
   margin: 0 auto;  
   height: 100%;
@@ -62,12 +62,11 @@ div button{
   align-items: center;     /* vertical centering */
   justify-content: center; /* horizontal centering */
   height: 10vh;            /* adjust if needed */
-  padding: 0 12px;
+  padding: 0 5px;
   box-sizing: border-box;
 }
 
 #logo {
-
   height: 10vh;            /* adjust if needed */
   width: auto;
   margin: 0;
