@@ -1,5 +1,5 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
-import { getAuth, signInWithRedirect, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import './styles/Login.css'
 import alt_logo from './assets/alt_logo2.svg';
 
@@ -9,15 +9,14 @@ interface LoginProps
 }
 
 
-function Login(props : LoginProps)
+function Login(_props : LoginProps)
 {
     const handleGoogle = async () => {
         const provider =  new GoogleAuthProvider();
         const auth = getAuth();
         try {
-            await setPersistence(auth, browserLocalPersistence); // ensure local persistence
-            await signInWithRedirect(auth, provider);
-            props.callback(true);
+            await setPersistence(auth, browserLocalPersistence);
+            await signInWithPopup(auth, provider);
         } catch (err) {
             console.error('Login failed', err);
             alert('Login failed: ' + (err as Error).message);
