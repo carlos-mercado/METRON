@@ -1,27 +1,46 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './styles/MovementCard.css'
 import { PriorMovement, Movement } from './Structs';
 import { useUnits } from './Context';
 
-interface CardProps
-{
+interface CardProps {
     key: any
     movement : Movement
     updateCallback : any
+    appendCallback : any
+    deleteCallback : any
 }
 
-function MovementCard({movement, updateCallback} : CardProps)
-{
-    const setsInc = 1;
+type Mode = "Normal" | "Edit";
+
+function MovementCard({movement, updateCallback, appendCallback, deleteCallback} : CardProps) { const setsInc = 1;
     const repsInc = 0.5;
     const weightInc = 2.5;
     const restInc = 15;
-
-
     const { units } = useUnits();
-
     const [mov, setMovement] = useState<Movement>(movement);
+    const [mode, setMode] = useState<Mode>("Normal");
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    function handleHold() {
+        timerRef.current = setTimeout(() => {
+            setMode(mode === "Normal" ? "Edit" : "Normal");
+        }, 700);
+    }
+
+    function handleRelease() {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    }
+
+    function handleRename(newName : string) {
+        let newMov : Movement = new Movement(newName, mov.sets, mov.reps, mov.weight, mov.reps, mov.history);
+        setMovement(newMov);
+        updateCallback(newMov);
+    }
 
     function step(variableToIncrement : string, incOrDec : string)
     {
@@ -58,7 +77,6 @@ function MovementCard({movement, updateCallback} : CardProps)
                 return;
         }
 
-        console.log(newMovement);
         setMovement(newMovement);
         updateCallback(newMovement);
     }
@@ -89,39 +107,62 @@ function MovementCard({movement, updateCallback} : CardProps)
 
 
     return (
-        <div className='card'>
-            <p className='name'>{mov.name}</p>
-            <div className="setsInputRow">
-                <button className="dec" onClick={() => step("sets", "dec")}>−</button>
-                <p className='label'>Sets: {mov.sets}</p>
-                <button className="inc" onClick={() => step("sets", "inc")}>+</button>
-            </div>
-            <div className="repsInputRow">
-                <button className="dec" onClick={() => step("reps", "dec")}>−</button>
-                <p className='label'>Reps: {mov.reps}</p>
-                <button className="inc" onClick={() => step("reps", "inc")}>+</button>
-            </div>
-            <div className="weightInputRow">
-                <button className="dec" onClick={() => step("weight", "dec")}>−</button>
-                <div className='label weight-label'>
-                    <input
-                        className='weight-input'
-                        type="number"
-                        value={mov.weight}
-                        onChange={handleWeightChange}
-                        step={weightInc}
-                        style={{ width: `${Math.max(String(mov.weight).length, 1) + 1}ch` }}
+        <>
+            <div className='card' 
+                onMouseDown={ handleHold }
+                onTouchStart={ handleHold }
+                onMouseUpCapture={ handleRelease }
+                onTouchEnd={ handleRelease }
+            >
+                {mode == "Normal" && 
+                    <p className='name'>{mov.name}</p>
+                }
+                {mode == "Edit" && 
+                    <input 
+                        type='text' 
+                        value={movement.name}
+                        onChange={(e) => handleRename(e.target.value)}
                     />
-                    <span className='unitsLabel'>{units}</span>
+                }
+                <div className="setsInputRow">
+                    <button className="dec" onClick={() => step("sets", "dec")}>−</button>
+                    <p className='label'>Sets: {mov.sets}</p>
+                    <button className="inc" onClick={() => step("sets", "inc")}>+</button>
                 </div>
-                <button className="inc" onClick={() => step("weight", "inc")}>+</button>
+                <div className="repsInputRow">
+                    <button className="dec" onClick={() => step("reps", "dec")}>−</button>
+                    <p className='label'>Reps: {mov.reps}</p>
+                    <button className="inc" onClick={() => step("reps", "inc")}>+</button>
+                </div>
+                <div className="weightInputRow">
+                    <button className="dec" onClick={() => step("weight", "dec")}>−</button>
+                    <div className='label weight-label'>
+                        <input
+                            className='weight-input'
+                            type="number"
+                            value={mov.weight}
+                            onChange={handleWeightChange}
+                            step={weightInc}
+                            style={{ width: `${Math.max(String(mov.weight).length, 1) + 1}ch` }}
+                        />
+                        <span className='unitsLabel'>{units}</span>
+                    </div>
+                    <button className="inc" onClick={() => step("weight", "inc")}>+</button>
+                </div>
+                <div className="restInputRow">
+                    <button className="dec" onClick={() => step("rest", "dec")}>−</button>
+                    <p className='label'>Rest: {mov.rest} sec</p>
+                    <button className="inc" onClick={() => step("rest", "inc")}>+</button>
+                </div>
             </div>
-            <div className="restInputRow">
-                <button className="dec" onClick={() => step("rest", "dec")}>−</button>
-                <p className='label'>Rest: {mov.rest} sec</p>
-                <button className="inc" onClick={() => step("rest", "inc")}>+</button>
-            </div>
-        </div>
+
+            {mode == "Edit" && 
+                <div className='editButtons'>
+                    <button className='minus' onClick={deleteCallback}></button>
+                    <button className='plus' onClick={appendCallback}></button>
+                </div>
+            }
+        </>
     );
 
 }

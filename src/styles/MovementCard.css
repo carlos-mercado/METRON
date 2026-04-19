@@ -106,3 +106,29 @@
     border-color: var(--text-on-primary);
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 }
+
+.editButtons {
+    justify-content: center;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.editButtons button {
+    display: inline;
+    margin: 0 10px;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 40px;
+    width: 40px;
+}
+
+.plus {
+    background-image: url('../assets/plus-dark.svg');
+    background-color: #4a8248;
+}
+
+.minus {
+    background-image: url('../assets/minus-dark.svg');
+    background-color: red;
+}

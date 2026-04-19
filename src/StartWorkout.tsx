@@ -4,8 +4,7 @@ import { useAuth } from './Auth'
 import './styles/StartWorkout.css'
 import MovementCard from './MovementCard'
 import Loading from './Loading'
-import { Movement, Workout } from './Structs';
-
+import { Movement, PriorMovement, Workout } from './Structs';
 
 function StartWorkout()
 {
@@ -14,62 +13,51 @@ function StartWorkout()
     const [workoutId, setWorkoutId] = useState<string>("");
     const [movementIdx, setMovementIdx] = useState<number>(0);
 
-    async function updateWorkout(updatedMovement : Movement) 
-    {
-        // Capture current values to avoid stale closure issues
+    async function updateWorkoutMovements(updatedMovements: Movement[]) {
         const currentWorkoutId = workoutId;
-        const currentMovementIdx = movementIdx;
 
-        setWorkouts(prevWorkouts => {
-            const currentWorkout = prevWorkouts.find(w => w.name === currentWorkoutId);
-            if (!currentWorkout) return prevWorkouts;
+        setWorkouts(prev => {
+            const currentWorkout = prev.find(w => w.name === currentWorkoutId);
+            if (!currentWorkout) return prev;
 
-            const updatedWorkoutMovements = [
-                ...currentWorkout.movements.slice(0, currentMovementIdx),
-                updatedMovement,
-                ...currentWorkout.movements.slice(currentMovementIdx + 1),
-            ];
-
-            const filteredWorkouts = prevWorkouts.filter(workout => workout.name !== currentWorkoutId);
-            const newWorkout = new Workout(currentWorkoutId, updatedWorkoutMovements);
-            filteredWorkouts.push(newWorkout);
-
-            // Send the update to the server
-            const json_body = {
-                id: userId,
-                [currentWorkoutId]: updatedWorkoutMovements
-            };
+            const filtered : Workout[] = prev.filter(w => w.name !== currentWorkoutId);
+            filtered.push(new Workout(currentWorkoutId, updatedMovements));
 
             fetch('https://metron-api.duckdns.org/workouts/edit', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(json_body),
-            })
-            .then(response => response.json())
-            .then(_ => { console.log('Success: updated workout.'); })
-            .catch(error => {
-                console.error('Error:', error);
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: userId,
+                        [currentWorkoutId]: updatedMovements,
+                }),
             });
 
-            return filteredWorkouts;
+            return filtered;
         });
-
-        return 0;
     }
 
-    function getCurrWorkout(): Movement[] 
-    {
+    async function updateWorkout(updatedMovement: Movement) {
+        const currentWorkout = workouts.find(w => w.name === workoutId);
+        if (!currentWorkout) return;
+
+        const movements : Movement[] = currentWorkout.movements;
+        const replaced : Movement[] = [
+            ...movements.slice(0, movementIdx),
+            updatedMovement,
+            ...movements.slice(movementIdx + 1),
+        ];
+
+        await updateWorkoutMovements(replaced);
+    }
+
+    function getCurrWorkout(): Movement[] {
         const found = workouts.find((workout) => workout.name === workoutId);
         if (found == null) return [new Movement("", 0, 0, 0, 0, [])]
         if (found) return found.movements;
-
         return [new Movement("", 0, 0, 0, 0, [])]
     }
 
-    async function getWorkouts() 
-    {
+    async function getWorkouts() {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
         const response = await fetch(`https://metron-api.duckdns.org/?${params.toString()}`, {
             method: 'GET',
@@ -77,6 +65,44 @@ function StartWorkout()
         if (response.status === 404) { return { notFound: true }; }
         if (!response.ok) { throw new Error(`Error: ${response.status}`); }
         return response.json();
+    }
+
+    async function appendMovement() {
+        const currentWorkout = workouts.find(w => w.name === workoutId);
+        if (!currentWorkout) return;
+
+        const blankMovement = new Movement("New Movement", 0, 0, 0, 0, [
+            new PriorMovement(Date.now().toString(), 0, 0),
+        ]);
+
+        const movements = currentWorkout.movements;
+        const appended = [
+            ...movements.slice(0, movementIdx + 1),
+            blankMovement,
+            ...movements.slice(movementIdx + 1),
+        ];
+
+        await updateWorkoutMovements(appended);
+        setMovementIdx(movementIdx + 1);
+    }
+
+    async function deleteMovement() {
+        const currentWorkout = workouts.find(w => w.name === workoutId);
+        if (!currentWorkout) return;
+
+        if (currentWorkout.movements.length === 1) {
+            alert("Cannot delete from workout with only one movement.");
+            return;
+        }
+
+        const movements = currentWorkout.movements;
+        const updated: Movement[] = [
+            ...movements.slice(0, movementIdx),
+            ...movements.slice(movementIdx + 1),
+        ];
+
+        await updateWorkoutMovements(updated);
+        setMovementIdx(prev => Math.max(0, Math.min(prev - 1, updated.length - 1)));
     }
 
     useEffect(() => {
@@ -117,6 +143,7 @@ function StartWorkout()
     return (
         <div className='startWorkout'>
             {workouts.length === 0 ? <Loading /> : <></>}
+
             {workoutId === "" && workouts.length != 0 && (
                 <>
                     <p className='sessionSelect-label'>Select a session:</p>
@@ -135,35 +162,15 @@ function StartWorkout()
                 {workoutId === "" ? <></> : 
                     <>
                         <div className='carousel'>
-                            {/* Previous movement preview 
-                            <div 
-                                className={`previewCard prev ${movementIdx > 0 ? '' : 'hidden'}`}
-                                onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}
-                            >
-                                {movementIdx > 0 && (
-                                    <div className='previewContent'>
-                                        <p className='previewName'>{getCurrWorkout()[movementIdx - 1].name}</p>
-                                    </div>
-                                )}
-                            </div> */}
-
-                            {/* Current movement */}
                             <div className='currentCard'>
-                                <MovementCard key={`${workoutId}-${movementIdx}`} movement={getCurrWorkout()[movementIdx]} updateCallback={updateWorkout}/>
+                                <MovementCard 
+                                    key={`${workoutId}-${movementIdx}`} 
+                                    movement={getCurrWorkout()[movementIdx]} 
+                                    updateCallback={updateWorkout}
+                                    appendCallback={appendMovement}
+                                    deleteCallback={deleteMovement}
+                                />
                             </div>
-
-                            {/* Next movement preview
-                            <div 
-                                className={`previewCard next ${movementIdx < getCurrWorkout().length - 1 ? '' : 'hidden'}`}
-                                onClick={() => setMovementIdx(Math.min(movementIdx + 1, getCurrWorkout().length - 1))}
-                            >
-                                {movementIdx < getCurrWorkout().length - 1 && (
-                                    <div className='previewContent'>
-                                        <p className='previewName'>{getCurrWorkout()[movementIdx + 1].name}</p>
-                                    </div>
-                                )}
-                            </div> */}
-
                         </div>
 
                         <div className='nav'>
@@ -179,3 +186,4 @@ function StartWorkout()
 }
 
 export default StartWorkout;
+
