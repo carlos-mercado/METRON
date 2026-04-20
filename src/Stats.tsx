@@ -63,8 +63,11 @@ function Stats()
             const day = date.getDate();
 
             if (month == last_month && last_day == day) {
-                last.weight = data[i].weight;
-                last.reps = data[i].reps;
+                last = {
+                    ...last,
+                    weight: data[i].weight,
+                    reps: data[i].reps,
+                };
             }
             else {
                 merged.push(last);

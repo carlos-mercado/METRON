@@ -156,8 +156,6 @@ function StartWorkout()
         fetchWorkout();
     }, [userId]);
 
-
-
     return (
         <div className='startWorkout'>
             {workouts.length === 0 ? <Loading /> : <></>}
@@ -167,7 +165,7 @@ function StartWorkout()
                     <p className='sessionSelect-label'>Select a session:</p>
                     <div className='workouts'>
                         {workouts.map(workout => 
-                            <button className="sessionSelect-button" id={workout.name} onClick={() => {
+                            <button key={workout.name} className="sessionSelect-button" id={workout.name} onClick={() => {
                                 setWorkoutId(workout.name)
                                 setMovementIdx(0)
                             }}>{workout.name}</button>
@@ -199,11 +197,9 @@ function StartWorkout()
                     </>
                 }
             </div>
-
             <button onClick={() => handleBack()}>back</button>
         </div>
     )
 }
 
 export default StartWorkout;
-
