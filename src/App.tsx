@@ -37,7 +37,7 @@ function App(props: AppProps)
                             }}>▶︎</button>
 
                             <button className="startButton" onClick={() => {
-                                navigate('/start-workout');
+                                navigate('/start');
                             }}>▶︎</button>
 
                             <button className="statsButton" onClick={() => {
@@ -48,7 +48,7 @@ function App(props: AppProps)
                 } 
                 />
                 <Route path="/create-workout/" element={<CreateWorkout/>} />
-                <Route path="/start-workout" element={<StartWorkout/>} />
+                <Route path="/start" element={<StartWorkout/>} />
                 <Route path="/stats" element={<Stats/>} />
                 <Route path="/settings" element={<Settings callback={props.callback}/>} />
                 <Route path="/templates" element={<WorkoutTemplates/>} />

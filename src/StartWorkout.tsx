@@ -1,4 +1,5 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from './Auth'
 import './styles/StartWorkout.css'
@@ -12,6 +13,23 @@ function StartWorkout()
     const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [workoutId, setWorkoutId] = useState<string>("");
     const [movementIdx, setMovementIdx] = useState<number>(0);
+    const navigate = useNavigate();
+
+    function handleBack() {
+        // Two States
+        // 1. Choosing Session.
+        // 2. Doing session / workout.
+
+        // what state are we currently in? 
+        if ( workoutId == "" ) {
+            // choosing
+            navigate('/');
+        }
+        else {
+            // working out
+            setWorkoutId("");
+        }
+    }
 
     async function updateWorkoutMovements(updatedMovements: Movement[]) {
         const currentWorkoutId = workoutId;
@@ -181,6 +199,8 @@ function StartWorkout()
                     </>
                 }
             </div>
+
+            <button onClick={() => handleBack()}>back</button>
         </div>
     )
 }
