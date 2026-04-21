@@ -1,0 +1,23 @@
+.horiz-card {
+    justify-content: center;
+    margin: 8px auto;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 50px;
+    width: 300px;
+
+}
+
+.horiz-card p{
+    display: inline;
+    margin-left: 5px;
+    margin-right: 5px;
+    color: black;
+    justify-content: center;
+}
+
+.parkingSpot {
+    margin: 0 auto;
+    height: 200px;
+}

@@ -157,3 +157,7 @@ button {
         inset 4px 4px 8px var(--card-shadow-dark),
         inset -4px -4px 8px var(--card-shadow-light);
 }
+
+.backButton {
+    margin-top: 20px;
+}

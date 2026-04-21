@@ -132,3 +132,7 @@
     background-image: url('../assets/minus-dark.svg');
     background-color: red;
 }
+
+.move {
+    background-image: url('../assets/burger.svg');
+}

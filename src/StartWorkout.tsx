@@ -2,10 +2,15 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from './Auth'
-import './styles/StartWorkout.css'
+
 import MovementCard from './MovementCard'
+import Burger from './Burger'
 import Loading from './Loading'
+import './styles/StartWorkout.css'
+
 import { Movement, PriorMovement, Workout } from './Structs';
+
+type Mode = "choosing_mode" | "working_out" | "burger_mode";
 
 function StartWorkout()
 {
@@ -13,21 +18,29 @@ function StartWorkout()
     const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [workoutId, setWorkoutId] = useState<string>("");
     const [movementIdx, setMovementIdx] = useState<number>(0);
+    const [currMode, setCurrMode] = useState<Mode>("choosing_mode");
     const navigate = useNavigate();
 
+
     function handleBack() {
-        // Two States
+        // Three States
         // 1. Choosing Session.
         // 2. Doing session / workout.
+        // 3. Burger Mode
 
         // what state are we currently in? 
-        if ( workoutId == "" ) {
+        if ( currMode === "choosing_mode" ) {
             // choosing
             navigate('/');
         }
-        else {
+        else if ( currMode === "working_out" ){
             // working out
             setWorkoutId("");
+            setCurrMode("choosing_mode")
+        }
+        else if ( currMode === "burger_mode" ){
+            // working out
+            setCurrMode("working_out");
         }
     }
 
@@ -68,11 +81,12 @@ function StartWorkout()
         await updateWorkoutMovements(replaced);
     }
 
-    function getCurrWorkout(): Movement[] {
+    function getCurrWorkout(): Workout {
         const found = workouts.find((workout) => workout.name === workoutId);
-        if (found == null) return [new Movement("", 0, 0, 0, 0, [])]
-        if (found) return found.movements;
-        return [new Movement("", 0, 0, 0, 0, [])]
+        if (found == null) return new Workout("Workout", []);
+        if (found) return found;
+
+        return new Workout("Workout", []);
     }
 
     async function getWorkouts() {
@@ -123,6 +137,19 @@ function StartWorkout()
         setMovementIdx(prev => Math.max(0, Math.min(prev - 1, updated.length - 1)));
     }
 
+    async function handleReorder(reordered : Movement[]) {
+        let old_movements = getCurrWorkout().movements;
+        if (old_movements === reordered) { return; }
+        else {
+            getCurrWorkout().movements = reordered;
+            updateWorkoutMovements(reordered);
+        }
+    }
+
+    function handleBurger() {
+        setCurrMode("burger_mode");
+    }
+
     useEffect(() => {
         if (!userId) {
             alert('Please sign in first');
@@ -160,7 +187,7 @@ function StartWorkout()
         <div className='startWorkout'>
             {workouts.length === 0 ? <Loading /> : <></>}
 
-            {workoutId === "" && workouts.length != 0 && (
+            { currMode === "choosing_mode" && workoutId === "" && workouts.length != 0 && (
                 <>
                     <p className='sessionSelect-label'>Select a session:</p>
                     <div className='workouts'>
@@ -168,6 +195,7 @@ function StartWorkout()
                             <button key={workout.name} className="sessionSelect-button" id={workout.name} onClick={() => {
                                 setWorkoutId(workout.name)
                                 setMovementIdx(0)
+                                setCurrMode("working_out")
                             }}>{workout.name}</button>
                         )}
                     </div>
@@ -175,29 +203,35 @@ function StartWorkout()
             )}
 
             <div className='cardContainer'>
-                {workoutId === "" ? <></> : 
+                { currMode === "working_out" ?  
                     <>
                         <div className='carousel'>
                             <div className='currentCard'>
                                 <MovementCard 
                                     key={`${workoutId}-${movementIdx}`} 
-                                    movement={getCurrWorkout()[movementIdx]} 
+                                    movement={( getCurrWorkout().movements )[movementIdx]} 
                                     updateCallback={updateWorkout}
                                     appendCallback={appendMovement}
                                     deleteCallback={deleteMovement}
+                                    moveCallback={handleBurger}
                                 />
                             </div>
                         </div>
 
                         <div className='nav'>
                             <button onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}>{"←"}</button>
-                            <span className='navIndicator'>{movementIdx + 1} / {getCurrWorkout().length}</span>
-                            <button onClick={() => setMovementIdx(Math.min(movementIdx + 1, getCurrWorkout().length - 1))}>{"→"}</button>
+                            <span className='navIndicator'>{movementIdx + 1} / {( getCurrWorkout().movements ).length}</span>
+                            <button onClick={() => setMovementIdx(Math.min(movementIdx + 1, ( getCurrWorkout().movements ).length - 1))}>{"→"}</button>
                         </div>
                     </>
+                    : <></>
                 }
             </div>
-            <button onClick={() => handleBack()}>back</button>
+
+            { currMode === "burger_mode" ? 
+                <Burger workout={getCurrWorkout()} updateCallback={handleReorder}></Burger> : <></>
+            }
+            <button className="backButton" onClick={() => handleBack()}>back</button>
         </div>
     )
 }
