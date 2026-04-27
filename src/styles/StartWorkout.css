@@ -40,9 +40,12 @@ button {
     box-sizing: border-box;
 }
 
-.cardContainer
-{
+.cardContainer {
     padding-top: 25px;
+}
+
+.cardContainer:hover {
+    cursor: pointer;
 }
 
 .carousel
@@ -159,5 +162,5 @@ button {
 }
 
 .backButton {
-    margin-top: 20px;
+    margin-top: 15px;
 }

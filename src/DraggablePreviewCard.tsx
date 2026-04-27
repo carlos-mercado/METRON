@@ -7,20 +7,17 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id'> {
 
 function DraggablePreviewCard({ movement, ...dragProps } : CardProps) {
     return (
-        <>
-            <div
-                className='horiz-card'
-                id={movement.name}
-                draggable
-                {...dragProps}
-            >
-                <p>{movement.name}</p>
-                <p>{movement.sets}</p>
-                <p>{movement.reps}</p>
-                <p>{movement.weight}</p>
-            </div>
-        </>
-
+        <div
+            className='horiz-card'
+            id={movement.name}
+            draggable
+            {...dragProps}
+        >
+            <p>{movement.name}</p>
+            <p>{movement.sets} Sets</p>
+            <p>{movement.reps} Reps</p>
+            <p>{movement.weight} lbs</p>
+        </div>
     )
 }
 

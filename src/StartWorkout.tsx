@@ -229,7 +229,7 @@ function StartWorkout()
             </div>
 
             { currMode === "burger_mode" ? 
-                <Burger workout={getCurrWorkout()} updateCallback={handleReorder}></Burger> : <></>
+            <Burger workout={getCurrWorkout()} updateCallback={handleReorder}></Burger> : <></>
             }
             <button className="backButton" onClick={() => handleBack()}>back</button>
         </div>

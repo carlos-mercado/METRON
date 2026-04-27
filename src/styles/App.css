@@ -211,27 +211,26 @@ input{
 }
 
 .settingsButton {
-  background-repeat: no-repeat;
-  background-size: 25px 25px;
-  background-position: center center;
-  background-image: url('../assets/gear.svg');
-  position: fixed;
-  top: 33px;
-  right: 20px;
-  width: 44px;
-  height: 44px;
-  border: none;
-  border: 2px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  z-index: 100;
+    background-repeat: no-repeat;
+    background-size: 25px 25px;
+    background-position: center center;
+    background-image: url('../assets/gear.svg');
+    position: fixed;
+    top: 33px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    z-index: 100;
 }
 
 .settingsButton:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 

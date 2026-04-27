@@ -135,4 +135,5 @@
 
 .move {
     background-image: url('../assets/burger.svg');
+    background-color: transparent;
 }
