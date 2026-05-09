@@ -10,12 +10,11 @@ interface CardProps {
     updateCallback : any
     appendCallback : any
     deleteCallback : any
-    moveCallback : any
 }
 
 type Mode = "Normal" | "Edit";
 
-function MovementCard({movement, updateCallback, appendCallback, deleteCallback, moveCallback} : CardProps) { const setsInc = 1;
+function MovementCard({movement, updateCallback, appendCallback, deleteCallback} : CardProps) { const setsInc = 1;
     const repsInc = 0.5;
     const weightInc = 2.5;
     const restInc = 15;
@@ -160,7 +159,6 @@ function MovementCard({movement, updateCallback, appendCallback, deleteCallback,
             {mode == "Edit" && 
                 <div className='editButtons'>
                     <button className='minus' onClick={deleteCallback}></button>
-                    <button className='move' onClick={moveCallback}></button>
                     <button className='plus' onClick={appendCallback}></button>
                 </div>
             }

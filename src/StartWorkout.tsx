@@ -213,23 +213,25 @@ function StartWorkout()
                                     updateCallback={updateWorkout}
                                     appendCallback={appendMovement}
                                     deleteCallback={deleteMovement}
-                                    moveCallback={handleBurger}
                                 />
                             </div>
                         </div>
 
                         <div className='nav'>
                             <button onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}>{"←"}</button>
-                            <span className='navIndicator'>{movementIdx + 1} / {( getCurrWorkout().movements ).length}</span>
+                            <button className="burgerButton" onClick={handleBurger}></button>
                             <button onClick={() => setMovementIdx(Math.min(movementIdx + 1, ( getCurrWorkout().movements ).length - 1))}>{"→"}</button>
                         </div>
+                        <span className='navIndicator'>{movementIdx + 1} / {( getCurrWorkout().movements ).length}</span>
                     </>
                     : <></>
                 }
             </div>
 
             { currMode === "burger_mode" ? 
-            <Burger workout={getCurrWorkout()} updateCallback={handleReorder}></Burger> : <></>
+                    <Burger workout={getCurrWorkout()} updateCallback={handleReorder}></Burger> 
+                :
+                    <></>
             }
             <button className="backButton" onClick={() => handleBack()}>back</button>
         </div>

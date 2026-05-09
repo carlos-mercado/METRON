@@ -118,7 +118,9 @@ button {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
     min-width: 60px;
+    display: block;
     text-align: center;
+    margin-top: 10px;
 }
 
 .nav
@@ -138,8 +140,6 @@ button {
     margin: 0;
     border: none;
     border-radius: 10px;
-    background: var(--color-primary);
-    color: var(--text-on-primary);
     font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
@@ -163,4 +163,16 @@ button {
 
 .backButton {
     margin-top: 15px;
+}
+
+.burgerButton {
+    display: inline;
+    margin: 0 10px;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 40px;
+    width: 40px;
+    background-image: url('../assets/burger.svg');
+    background-color: transparent;
 }
