@@ -1,5 +1,5 @@
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from './Auth'
 
@@ -16,30 +16,38 @@ function StartWorkout()
 {
     const { userId } = useAuth();
     const [workouts, setWorkouts] = useState<Workout[]>([]);
-    const [workoutId, setWorkoutId] = useState<string>("");
-    const [movementIdx, setMovementIdx] = useState<number>(0);
     const [currMode, setCurrMode] = useState<Mode>("choosing_mode");
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const workoutId = searchParams.get('workout') ?? "";
+    const movementIdx = parseInt(searchParams.get('movement') ?? '0', 10);
+
+    // Restore mode from URL on mount/reload
+    useEffect(() => {
+        if (searchParams.get('workout')) {
+            setCurrMode("working_out");
+        }
+    }, []);
+
+    function setWorkoutId(id: string) {
+        setSearchParams({ workout: id, movement: '0' }, { replace: true });
+    }
+
+    function setMovementIdx(idxOrUpdater: number | ((prev: number) => number)) {
+        const nextIdx = typeof idxOrUpdater === 'function' ? idxOrUpdater(movementIdx) : idxOrUpdater;
+        setSearchParams({ workout: workoutId, movement: String(nextIdx) }, { replace: true });
+    }
 
     function handleBack() {
-        // Three States
-        // 1. Choosing Session.
-        // 2. Doing session / workout.
-        // 3. Burger Mode
-
-        // what state are we currently in? 
         if ( currMode === "choosing_mode" ) {
-            // choosing
             navigate('/');
         }
         else if ( currMode === "working_out" ){
-            // working out
-            setWorkoutId("");
-            setCurrMode("choosing_mode")
+            setSearchParams({}, { replace: true });
+            setCurrMode("choosing_mode");
         }
         else if ( currMode === "burger_mode" ){
-            // working out
             setCurrMode("working_out");
         }
     }
@@ -194,7 +202,6 @@ function StartWorkout()
                         {workouts.map(workout => 
                             <button key={workout.name} className="sessionSelect-button" id={workout.name} onClick={() => {
                                 setWorkoutId(workout.name)
-                                setMovementIdx(0)
                                 setCurrMode("working_out")
                             }}>{workout.name}</button>
                         )}
@@ -203,7 +210,7 @@ function StartWorkout()
             )}
 
             <div className='cardContainer'>
-                { currMode === "working_out" ?  
+                { currMode === "working_out" && workouts.length > 0 ?  
                     <>
                         <div className='carousel'>
                             <div className='currentCard'>
