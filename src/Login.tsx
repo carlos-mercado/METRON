@@ -3,8 +3,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLo
 import './styles/Login.css'
 import alt_logo from './assets/alt_logo2.svg';
 
-interface LoginProps
-{
+interface LoginProps {
     callback: Function;
 }
 

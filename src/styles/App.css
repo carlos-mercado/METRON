@@ -100,6 +100,19 @@ padding: 0;
     padding: 0;
 }
 
+.recordsButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width:70px;
+    margin: 10px;
+    border: 0px;
+    border-radius: 10px;
+    background-color: var(--color-primary);
+    padding: 0;
+}
+
 .startWorkoutForm {
   display: inline-flex;
   align-items: center;

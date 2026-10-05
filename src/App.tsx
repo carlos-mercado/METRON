@@ -6,11 +6,12 @@ import alt_logo_dark from './assets/alt_logo2.svg';
 import './styles/App.css'
 
 // Componenets
-import StartWorkout from './StartWorkout';
 import CreateWorkout from './CreateWorkout'
 import Stats from './Stats';
 import Settings from './Settings';
 import WorkoutTemplates from './Templates';
+import SessionSelect from './SessionSelect';
+import StartWorkout from './StartWorkout';
 
 interface AppProps { callback: Function; }
 
@@ -35,11 +36,9 @@ function App(props: AppProps)
                             <button className="mainButtons" onClick={() => {
                                 navigate('/create-workout');
                             }}>▶︎</button>
-
                             <button className="startButton" onClick={() => {
                                 navigate('/start');
                             }}>▶︎</button>
-
                             <button className="statsButton" onClick={() => {
                                 navigate('/stats');
                             }}>📈</button>
@@ -52,6 +51,7 @@ function App(props: AppProps)
                 <Route path="/stats" element={<Stats/>} />
                 <Route path="/settings" element={<Settings callback={props.callback}/>} />
                 <Route path="/templates" element={<WorkoutTemplates/>} />
+                <Route path="/session-select" element={<SessionSelect/>} />
             </Routes>
 
             <button className="settingsButton" onClick={() => navigate('/settings')} title="Settings">
