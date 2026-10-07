@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { PriorMovement, Workout, Movement } from './Structs';
-import Loading from './Loading';
-import { useAuth } from './Auth'
+import { useState } from 'react';
+import { PriorMovement, Movement } from './Structs';
+import SessionSelect from './SessionSelect';
 import './styles/Stats.css'
 
 import {
@@ -20,9 +19,7 @@ import {
 function Stats() 
 {
     const navigate = useNavigate();
-    const { userId } = useAuth();
     const [data, setData] = useState<PriorMovement[]>();
-    const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [movements, setMovements] = useState<Movement[]>([]);
     const [workoutId, setWorkoutId] = useState<string>("");
 
@@ -83,59 +80,12 @@ function Stats()
         setData(merged);
     }
 
-    async function getWorkouts() 
-    {
-        const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-        const response = await fetch(`https://metron-api.duckdns.org/?${params.toString()}`, {
-            method: 'GET',
-        });
-        if (response.status === 404) { return { notFound: true }; }
-        if (!response.ok) { throw new Error(`Error: ${response.status}`); }
-        return response.json();
-    }
-
-    useEffect(() => {
-        if (!userId) { alert('Please sign in first'); return; }
-
-        async function fetchWorkout() {
-            try {
-                const workoutsResponse = await getWorkouts();
-
-                if (workoutsResponse.notFound) { return; }
-
-                const responseWorkouts : Workout[] = []
-                for (const [workoutKey, workoutValue] of Object.entries(workoutsResponse.movements)) {
-                    if (workoutKey == "activity") { continue; }
-                    const currWorkout : Workout = new Workout(workoutKey, workoutValue as Movement[])
-                    responseWorkouts.push(currWorkout)
-                }
-
-                setWorkouts(responseWorkouts);
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }
-        fetchWorkout();
-    }, [userId]);
-
-
     return (
-        <div className='statsContainer'>
-            { workouts.length === 0 ? <Loading /> : <></> }
-            { workoutId === "" && workouts.length != 0 && (
-                <>
-                    <p className='sessionSelect-label'>Select a session:</p>
-                    <div className='workouts'>
-                        {workouts.map(workout => 
-                            <button className="sessionSelect-button" id={workout.name} onClick={() => {
-                                setWorkoutId(workout.name);
-                                setMovements(workout.movements);
-                            }}>{workout.name}</button>
-                        )}
-                    </div>
-                </>
-            )}
+        <div className={`statsContainer${data ? ' statsContainer--chart' : ''}`}>
+            { workoutId === "" && <SessionSelect onSelectWorkout={workout => {
+                setWorkoutId(workout.name);
+                setMovements(workout.movements);
+            }} /> }
 
             { workoutId != "" && !data && (
                 <>
@@ -173,7 +123,7 @@ function Stats()
                 </ResponsiveContainer>
             )}
 
-            <button onClick={() => handleBack()}>back</button>
+            { workoutId !== "" && <button onClick={handleBack}>back</button> }
         </div>
     );
 }

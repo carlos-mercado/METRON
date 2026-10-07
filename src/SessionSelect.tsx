@@ -8,8 +8,11 @@ import './styles/StartWorkout.css'
 import { Movement, Workout } from './Structs';
 import { groupWorkoutsByWeek } from './Utils';
 
+interface SessionSelectProps {
+    onSelectWorkout?: (workout: Workout) => void;
+}
 
-function SessionSelect()
+function SessionSelect({ onSelectWorkout }: SessionSelectProps)
 {
     const navigate = useNavigate();
     const { userId } = useAuth();
@@ -61,6 +64,11 @@ function SessionSelect()
     }, [userId]);
 
     function handleSelect(w: Workout) {
+        if (onSelectWorkout) {
+            onSelectWorkout(w);
+            return;
+        }
+
         navigate(
             { pathname: '/start', search: `?workout=${encodeURIComponent(w.name)}&movement=0` },
             { state: { workout: w } }
@@ -68,8 +76,8 @@ function SessionSelect()
     }
 
     return (
-        <div className='sessionSelect'>
-            { workouts.length === 0 ? <Loading /> : <></> }
+        <div className={`sessionSelect${workouts.length === 0 ? ' is-loading' : ''}`}>
+            { workouts.length === 0 ? <div className="sessionSelect-loading"><Loading /></div> : <></> }
 
             <div className='workouts'>
                 {prioritizedWorkouts.map(workout => 

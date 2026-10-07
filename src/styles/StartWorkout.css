@@ -20,6 +20,32 @@ button {
     color: var(--text-on-primary);
 }
 
+.sessionSelect-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 90vh;
+}
+
+.sessionSelect:not(.is-loading) {
+    position: fixed;
+    inset: 10vh 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sessionSelect:not(.is-loading) .workouts {
+    margin: 0;
+}
+
+.sessionSelect:not(.is-loading) .backButton {
+    margin: 15px 0 0;
+}
+
 .startWorkout
 {
     margin-top: 10px;
