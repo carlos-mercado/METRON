@@ -1,3 +1,4 @@
+import { apiFetch } from './api';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './styles/CreateWorkout.css'
@@ -52,7 +53,7 @@ function CreateWorkout() {
             return;
         }
 
-        fetch('https://metron-api.duckdns.org/workouts/add', {
+        apiFetch('/workouts/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

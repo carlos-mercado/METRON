@@ -1,3 +1,4 @@
+import { apiFetch } from './api';
 import { useEffect, useState } from 'react';
 import { ActivityCalendar, type ThemeInput } from 'react-activity-calendar';
 import { useAuth } from './Auth';
@@ -10,7 +11,6 @@ type ActivityData = {
     level: 0 | 1 | 2 | 3 | 4;
 };
 
-const API_BASE = 'https://metron-api.duckdns.org';
 
 // Generate all dates for the last 365 days
 function generateYearData(activityMap: Record<string, number>): ActivityData[] {
@@ -45,7 +45,7 @@ function Activity() {
         const fetchActivity = async () => {
             try {
                 const params = new URLSearchParams({ id: userId });
-                const response = await fetch(`${API_BASE}/activity?${params.toString()}`, {
+                const response = await apiFetch(`/activity?${params.toString()}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });

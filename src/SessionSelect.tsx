@@ -1,3 +1,4 @@
+import { apiFetch } from './api';
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -21,7 +22,7 @@ function SessionSelect({ onSelectWorkout }: SessionSelectProps)
 
     async function getWorkouts() {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
-        const response = await fetch(`https://metron-api.duckdns.org/?${params.toString()}`, {
+        const response = await apiFetch(`/?${params.toString()}`, {
             method: 'GET',
         });
         if (response.status === 404) { return { notFound: true }; }

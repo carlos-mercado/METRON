@@ -1,3 +1,4 @@
+import { apiFetch } from './api';
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
 import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -36,7 +37,7 @@ function StartWorkout(props: StartWorkoutProps) {
 
         async function load() {
             const params = new URLSearchParams({ id: String(userId), workout: workoutId });
-            const response = await fetch(`https://metron-api.duckdns.org/workouts?${params}`);
+            const response = await apiFetch(`/workouts?${params}`);
             if (!response.ok) return;
             const data = await response.json();
             if (data.movements) {
@@ -56,7 +57,7 @@ function StartWorkout(props: StartWorkoutProps) {
         if (!workout) return false;
 
         try {
-            const response = await fetch('https://metron-api.duckdns.org/workouts/edit', {
+            const response = await apiFetch('/workouts/edit', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

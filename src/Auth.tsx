@@ -1,8 +1,8 @@
+import { apiFetch } from './api';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import app from './firebaseConfig'
 
-const API_BASE = 'https://metron-api.duckdns.org'
 
 type AuthContextType = {
   userId: string | null
@@ -21,11 +21,12 @@ async function logActivityIfNewDay(userId: string): Promise<void> {
   if (lastLogged === today) return
 
   try {
-    await fetch(`${API_BASE}/activity/login`, {
+    const response = await apiFetch('/activity/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId }),
     })
+    if (!response.ok) throw new Error('Failed to log activity')
     localStorage.setItem(storageKey, today)
   } catch (error) {
     console.error('Failed to log activity:', error)

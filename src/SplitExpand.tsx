@@ -1,3 +1,4 @@
+import { apiFetch } from './api';
 import { Split, Movement } from './Structs';
 import { useAuth } from './Auth'
 import './styles/SplitExpand.css';
@@ -20,7 +21,7 @@ function SplitExpand({ split, onBack }: SplitExpandProps) {
         const body_ready = JSON.stringify(request_body);
         console.log(body_ready)
 
-        fetch('https://metron-api.duckdns.org/workouts/add', {
+        apiFetch('/workouts/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

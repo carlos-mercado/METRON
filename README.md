@@ -18,3 +18,11 @@ A workout tracking app built with React, TypeScript, and Vite.
 - **API:** Flask REST API
 - **Charts:** Recharts, react-activity-calendar
 - **Hosting:** Vercel, EC2
+
+## API authentication
+
+API requests use `src/api.ts` to obtain the signed-in user's Firebase ID token
+and attach it as a bearer token. The backend verifies the token and enforces
+user ownership. Deploy both projects together when enabling this requirement.
+
+Run the API client regression tests with `npm run test:api`.
