@@ -146,7 +146,7 @@ function StartWorkout(props: StartWorkoutProps) {
 
             <div className='cardContainer'>
                 <>
-                    <div className='carousel'>
+                    {!burgerMode && <div className='carousel'>
                         <div className='currentCard'>
                             <MovementCard
                                 key={`${workout.name}-${movementIdx}`}
@@ -156,7 +156,14 @@ function StartWorkout(props: StartWorkoutProps) {
                                 deleteCallback={deleteMovement}
                             />
                         </div>
-                    </div>
+                    </div>}
+
+                    {burgerMode && (
+                        <Burger
+                            workout={workout}
+                            updateCallback={handleReorder}
+                        />
+                    )}
 
                     <div className='nav'>
                         <button onClick={() => setMovementIdx(Math.max(movementIdx - 1, 0))}>{"←"}</button>
@@ -167,12 +174,6 @@ function StartWorkout(props: StartWorkoutProps) {
                 </>
             </div>
 
-            {burgerMode ?
-                <Burger
-                    workout={workout}
-                    updateCallback={handleReorder}
-                ></Burger> : <></>
-            }
             <button className="backButton" onClick={() => { navigate('/session-select') }}>back</button>
         </div>
     )

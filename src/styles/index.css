@@ -3,7 +3,13 @@
     src: local('Dazzle Unicase Bold'),
     url('./assets/dazzle-unicase-bold.otf') format('opentype');
 
-    /* Light theme (default) */
+    background-color: var(--bg-primary);
+    color: var(--text-on-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light theme */
+:root[data-theme="light"] {
     --bg-primary: #e9bb43;
     --bg-secondary: #f7f9fc;
     --color-primary: #4a8248;
@@ -21,19 +27,17 @@
     --card-shadow-dark: #3a6838;
     --card-shadow-light: #5a9858;
 
-    background-color: var(--bg-primary);
-    color: var(--text-on-bg);
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark theme */
+/* Dark theme (default) */
+:root,
 [data-theme="dark"] {
   --bg-primary: #1a1a2e;
   --bg-secondary: #16213e;
   --color-primary: #01081a;
-  --color-primary-hover: #3d6a3d;
-  --color-primary-dark: #1d4a1d;
-  --color-primary-light: #3d6a3d;
+  --color-primary-hover: #16213e;
+  --color-primary-dark: #000410;
+  --color-primary-light: #263858;
   --color-accent: #4a71d6;
   --color-accent-light: #c9a83a;
   --text-primary: #e0e0e0;
@@ -42,8 +46,8 @@
   --text-on-bg: #e0e0e0;
   --input-bg: #16213e;
   --input-border: #4a71d6;
-  --card-shadow-dark: #1d4a1d;
-  --card-shadow-light: #3d6a3d;
+  --card-shadow-dark: #000410;
+  --card-shadow-light: #101a30;
 }
 
 

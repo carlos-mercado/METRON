@@ -16,7 +16,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
     const [theme, setTheme] = useState<Theme>(() => {
         const saved = localStorage.getItem('metron-theme');
-        return (saved as Theme) || 'light';
+        return saved === 'light' ? 'light' : 'dark';
     });
 
     const [units, setUnits] = useState<Units>(() => {
