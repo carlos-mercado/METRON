@@ -12,6 +12,7 @@ import Settings from './Settings';
 import WorkoutTemplates from './Templates';
 import SessionSelect from './SessionSelect';
 import StartWorkout from './StartWorkout';
+import Nutrition from './Nutrition';
 
 interface AppProps { callback: Function; }
 
@@ -42,6 +43,7 @@ function App(props: AppProps)
                             <button className="statsButton" onClick={() => {
                                 navigate('/stats');
                             }}>📈</button>
+                            <button className="recordsButton" onClick={() => navigate('/nutrition')} style={{ color: 'var(--text-on-primary)' }}>Nutrition</button>
                         </div>
                     </>
                 } 
@@ -49,6 +51,7 @@ function App(props: AppProps)
                 <Route path="/create-workout/" element={<CreateWorkout/>} />
                 <Route path="/start" element={<StartWorkout/>} />
                 <Route path="/stats" element={<Stats/>} />
+                <Route path="/nutrition" element={<Nutrition/>} />
                 <Route path="/settings" element={<Settings callback={props.callback}/>} />
                 <Route path="/templates" element={<WorkoutTemplates/>} />
                 <Route path="/session-select" element={<SessionSelect/>} />

@@ -1,0 +1,30 @@
+.nutrition { width: min(640px, calc(100% - 32px)); margin: 24px auto; padding-bottom: 24px; font-family: system-ui, sans-serif; }
+.nutrition a { color: var(--text-secondary); }
+.nutritionHeading { display: flex; align-items: center; gap: 24px; }
+.nutritionBack { text-align: center; padding-bottom: 24px; }
+.nutrition h1 { font-size: 1.6rem; }
+.nutrition h2 { font-size: 1.1rem; margin-top: 0; }
+.nutritionDate { display: flex; align-items: center; gap: 12px; }
+.nutrition input, .nutrition select { box-sizing: border-box; width: 100%; margin: 6px 0 0; padding: 8px; min-height: 42px; height: auto; border: 1px solid var(--input-border); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); text-align: left; font: inherit; }
+.nutritionDate input { width: auto; }
+.nutritionTotals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+.nutritionTotals div { padding: 16px; border-radius: 12px; background: var(--bg-secondary); }
+.nutritionTotals strong { display: block; font-size: 1.4rem; }
+.nutritionTotals span { display: block; margin-top: 6px; text-transform: capitalize; }
+.nutritionNote, .nutrition small { font-size: .85rem; line-height: 1.5; }
+.nutritionPanel { margin-top: 20px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; }
+.nutritionForm { display: grid; gap: 16px; }
+.nutritionFields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; text-transform: capitalize; }
+.nutritionActions { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 8px 0; }
+.nutritionBarcode { display: grid; grid-template-columns: minmax(0, 200px) max-content; width: fit-content; max-width: 100%; align-items: end; gap: 12px; margin: 16px auto; }
+.nutritionBarcode label { display: block; min-width: 0; margin: 0; }
+.nutritionBarcode input { display: block; }
+.nutritionBarcode button { margin: 0; width: auto; white-space: nowrap; }
+.nutrition button { padding: 10px 14px; border: 1px solid var(--input-border); border-radius: 8px; background: var(--color-primary); color: var(--text-on-primary); font: inherit; cursor: pointer; min-height: 42px; }
+.nutrition button:disabled { opacity: .5; cursor: default; }
+.nutrition video { display: block; width: 100%; max-height: 260px; margin: 12px 0; border-radius: 8px; }
+.nutrition ul { list-style: none; padding: 0; margin: 0; }
+.nutrition li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--input-border); }
+.nutrition li:last-child { border: 0; }
+.nutrition li p { margin: 6px 0; font-size: .9rem; }
+.nutrition [role=alert] { padding: 12px; border: 1px solid var(--color-accent-light); border-radius: 8px; }

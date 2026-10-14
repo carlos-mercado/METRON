@@ -9,12 +9,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test:api": "node --test tests/api.test.cjs",
+    "test:nutrition": "node --test tests/nutrition.test.cjs",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@dnd-kit/react": "^0.4.0",
+    "@zxing/browser": "^0.2.1",
     "firebase": "^12.1.0",
     "gh-pages": "^6.3.0",
     "react": "^19.1.0",
