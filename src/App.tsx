@@ -43,7 +43,7 @@ function App(props: AppProps)
                             <button className="statsButton" onClick={() => {
                                 navigate('/stats');
                             }}>📈</button>
-                            <button className="recordsButton" onClick={() => navigate('/nutrition')} style={{ color: 'var(--text-on-primary)' }}>Nutrition</button>
+                            <button className="recordsButton" onClick={() => navigate('/nutrition')} aria-label="Nutrition" title="Nutrition" />
                         </div>
                     </>
                 } 
