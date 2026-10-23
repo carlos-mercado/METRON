@@ -1,7 +1,7 @@
 import { apiFetch } from './api';
 //MOVEMENTS COMPOSE WORKOUTS. NOT THE OTHER WAY AROUND
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from './Auth'
 
 import Loading from './Loading'
@@ -18,7 +18,48 @@ function SessionSelect({ onSelectWorkout }: SessionSelectProps)
     const navigate = useNavigate();
     const { userId } = useAuth();
     const [workouts, setWorkouts] = useState<Workout[]>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const carouselRef = useRef<HTMLDivElement>(null);
     const prioritizedWorkouts = groupWorkoutsByWeek(workouts);
+
+    function updateCarouselAppearance(carousel: HTMLDivElement) {
+        const center = carousel.scrollLeft + carousel.clientWidth / 2;
+        const cards = Array.from(carousel.children) as HTMLElement[];
+        let closest = 0;
+        let closestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+            const distance = Math.abs(card.offsetLeft + card.offsetWidth / 2 - center);
+            // Measure distance in cards so the effect stays consistent on mobile.
+            const steps = distance / (card.offsetWidth + 20);
+            card.style.setProperty('--session-opacity', String(Math.max(0.15, Math.exp(-steps * 0.8))));
+            card.style.setProperty('--session-blur', `${Math.min(6, steps * 2)}px`);
+            if (distance < closestDistance) {
+                closest = index;
+                closestDistance = distance;
+            }
+        });
+        setActiveIndex(closest);
+    }
+
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+        updateCarouselAppearance(carousel);
+        const observer = new ResizeObserver(() => updateCarouselAppearance(carousel));
+        observer.observe(carousel);
+        return () => observer.disconnect();
+    }, [workouts]);
+
+    function scrollToSession(index: number) {
+        const carousel = carouselRef.current;
+        const card = carousel?.children[index] as HTMLElement | undefined;
+        if (!carousel || !card) return;
+        carousel.scrollTo({
+            left: card.offsetLeft - (carousel.clientWidth - card.offsetWidth) / 2,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        });
+    }
 
     async function getWorkouts() {
         const params = new URLSearchParams({ id: userId ? String(userId) : '', });
@@ -80,13 +121,34 @@ function SessionSelect({ onSelectWorkout }: SessionSelectProps)
         <div className={`sessionSelect${workouts.length === 0 ? ' is-loading' : ''}`}>
             { workouts.length === 0 ? <div className="sessionSelect-loading"><Loading /></div> : <></> }
 
-            <div className='workouts'>
-                {prioritizedWorkouts.map(workout => 
+            <div className="sessionSelect-carousel" role="region" aria-roledescription="carousel" aria-label="Sessions"
+                ref={carouselRef}
+                onScroll={event => updateCarouselAppearance(event.currentTarget)}
+                onKeyDown={event => {
+                    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                    event.preventDefault();
+                    const index = Math.max(0, Math.min(prioritizedWorkouts.length - 1,
+                        activeIndex + (event.key === 'ArrowRight' ? 1 : -1)));
+                    (carouselRef.current?.children[index] as HTMLElement | undefined)?.focus({ preventScroll: true });
+                    scrollToSession(index);
+                }}
+            >
+                {prioritizedWorkouts.map((workout, index) =>
                     <button key={workout.name} className="sessionSelect-button" id={workout.name}
+                        aria-label={`${workout.name}, session ${index + 1} of ${prioritizedWorkouts.length}`}
+                        onFocus={() => scrollToSession(index)}
                         onClick={() => handleSelect(workout)}
                     >{workout.name}</button>
                 )}
             </div>
+
+            {prioritizedWorkouts.length > 0 && <div className="sessionSelect-controls">
+                <button type="button" aria-label="Previous session" disabled={activeIndex === 0}
+                    onClick={() => scrollToSession(activeIndex - 1)}>‹</button>
+                <span aria-live="polite" aria-atomic="true">{activeIndex + 1} / {prioritizedWorkouts.length}</span>
+                <button type="button" aria-label="Next session" disabled={activeIndex === prioritizedWorkouts.length - 1}
+                    onClick={() => scrollToSession(activeIndex + 1)}>›</button>
+            </div>}
 
             <button className="backButton" onClick={() => {navigate('/')}}>back</button>
         </div>

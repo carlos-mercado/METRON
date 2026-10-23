@@ -38,8 +38,61 @@ button {
     justify-content: center;
 }
 
-.sessionSelect:not(.is-loading) .workouts {
-    margin: 0;
+.sessionSelect-carousel {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 12px max(24px, calc((100% - 260px) / 2));
+}
+
+.sessionSelect-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.sessionSelect-carousel .sessionSelect-button {
+    flex: 0 0 min(260px, calc(100vw - 48px));
+    width: auto;
+    height: 180px;
+    padding: 24px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    color: var(--text-on-primary);
+    font-size: 1.5rem;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    opacity: var(--session-opacity, 1);
+    filter: blur(var(--session-blur, 0px));
+}
+
+.sessionSelect-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 12px;
+}
+
+.sessionSelect-controls button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.sessionSelect-controls button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.sessionSelect-carousel .sessionSelect-button:focus-visible,
+.sessionSelect-controls button:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
 }
 
 .sessionSelect:not(.is-loading) .backButton {
