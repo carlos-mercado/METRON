@@ -22,10 +22,32 @@ clearing browser storage removes them.
 Barcode lookup uses Open Food Facts. Review the returned values and their basis
 against the packaging, especially for liquids; missing nutrients must be entered
 manually. Camera scanning requires HTTPS, camera permission, and a browser with
-camera access. Scanning uses the native BarcodeDetector when the browser supports it, otherwise a bundled zxing-cpp WebAssembly decoder. Type the barcode when scanning is unavailable.
+camera access. Type the barcode when scanning is unavailable.
+
+Scanning uses the native `BarcodeDetector` when the browser supports it
+(e.g. Chrome on Android), otherwise the `barcode-detector` ponyfill's zxing-cpp
+WebAssembly decoder. The `.wasm` file is bundled and served by the app rather
+than fetched from a CDN, and is preloaded when the Nutrition page opens. Only
+grocery formats (EAN-13, EAN-8, UPC-A, UPC-E) are decoded, from an HD rear
+camera stream sampled every 100 ms.
+
 Product data is attributed to Open Food Facts under ODbL in the nutrition page.
 
 Run calculation and barcode response checks with `npm run test:nutrition`.
+
+### Testing the scanner on a phone
+
+Browsers hide the camera API on plain HTTP origins other than `localhost`, so
+`http://<lan-ip>:5173` will not work. Options:
+
+- **Vercel preview:** push a branch and open its preview URL. Add the branch
+  URL (`metron-git-<branch>-<account>.vercel.app`) to Firebase Console →
+  Authentication → Settings → Authorized domains, or sign-in fails with
+  `auth/unauthorized-domain`. Firebase does not accept wildcards.
+- **USB port forwarding (Android):** forward port 5173 from `chrome://inspect`
+  and open `http://localhost:5173` on the phone.
+- **Chrome flag (Android):** add the LAN URL to
+  `chrome://flags/#unsafely-treat-insecure-origin-as-secure`.
 
 ## Tech Stack
 
@@ -34,6 +56,7 @@ Run calculation and barcode response checks with `npm run test:nutrition`.
 - **Database:** Firebase Realtime Database
 - **API:** Flask REST API
 - **Charts:** Recharts, react-activity-calendar
+- **Nutrition:** Open Food Facts API, barcode-detector (zxing-cpp WebAssembly)
 - **Hosting:** Vercel, EC2
 
 ## API authentication
