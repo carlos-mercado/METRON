@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@dnd-kit/react": "^0.4.0",
-    "@zxing/browser": "^0.2.1",
+    "barcode-detector": "^3.2.5",
     "firebase": "^12.1.0",
     "gh-pages": "^6.3.0",
     "react": "^19.1.0",

@@ -4,8 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth';
 import { localDate, lookupBarcode, nutrients, totals, validFood } from './nutrition';
 import type { Food } from './nutrition';
+import zxingWasm from 'zxing-wasm/reader/zxing_reader.wasm?url';
 import './styles/Nutrition.css';
 import './styles/StartWorkout.css';
+
+type Detector = { detect(source: HTMLVideoElement): Promise<{ rawValue: string }[]> };
+// Grocery packaging only uses these symbologies; skipping the rest makes each frame much cheaper to decode.
+const formats = ['ean_13', 'ean_8', 'upc_a', 'upc_e'];
+let detector: Promise<Detector> | undefined;
+function loadDetector() {
+  detector ??= (async () => {
+    const Native = (window as { BarcodeDetector?: { new(options: { formats: string[] }): Detector; getSupportedFormats(): Promise<string[]> } }).BarcodeDetector;
+    if (Native && (await Native.getSupportedFormats().catch((): string[] => [])).includes('ean_13')) return new Native({ formats });
+    const { BarcodeDetector, prepareZXingModule } = await import('barcode-detector/ponyfill');
+    // Serve the decoder from this app rather than the package's default CDN.
+    await prepareZXingModule({ overrides: { locateFile: (path: string, prefix: string) => path.endsWith('.wasm') ? zxingWasm : prefix + path }, fireImmediately: true });
+    return new BarcodeDetector({ formats: formats as never });
+  })();
+  detector.catch(() => { detector = undefined; });
+  return detector;
+}
 
 const empty = { name: '', calories: '', protein: '', carbs: '', fat: '', quantity: '1', basis: 'serving' as Food['basis'] };
 
@@ -41,6 +59,8 @@ function NutritionLog({ userId }: { userId: string }) {
     } catch { setFoods([]); setError('Unable to read saved entries. Saving is disabled to protect your data.'); }
   }, [storageKey]);
   useEffect(() => () => { lookup.current?.abort(); }, []);
+  // Fetch the scanner ahead of time so pressing Scan barcode starts decoding immediately.
+  useEffect(() => { loadDetector().catch(() => {}); }, []);
 
   async function findFood(code = barcode) {
     lookup.current?.abort();
@@ -64,25 +84,36 @@ function NutritionLog({ userId }: { userId: string }) {
     if (!scanning) return;
     let cancelled = false;
     let stream: MediaStream | undefined;
-    let controls: { stop(): void } | undefined;
-    const stop = () => { controls?.stop(); stream?.getTracks().forEach(track => track.stop()); };
+    let timer: number | undefined;
+    const stop = () => { window.clearTimeout(timer); stream?.getTracks().forEach(track => track.stop()); };
     async function start() {
       try {
         if (!window.isSecureContext) throw new Error('Camera access requires HTTPS or localhost. Open the app using HTTPS.');
         if (!navigator.mediaDevices?.getUserMedia) throw new Error('Camera access is unavailable in this browser. Type the barcode below.');
-        const { BrowserMultiFormatReader } = await import('@zxing/browser');
-        if (cancelled) return;
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
-        if (cancelled || !video.current) { stop(); return; }
-        const reader = new BrowserMultiFormatReader();
-        controls = await reader.decodeFromStream(stream, video.current, (result, _error, scanner) => {
-          if (cancelled || !result) return;
-          const code = result.getText();
-          if (!/^\d{8,14}$/.test(code)) return;
-          cancelled = true;
-          scanner.stop(); stop(); setScanning(false); setBarcode(code); void findFood(code);
+        const detectorReady = loadDetector();
+        // Low default resolutions blur small barcodes, so ask for HD from the rear camera.
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false,
         });
-        if (cancelled) stop();
+        if (cancelled || !video.current) { stop(); return; }
+        const [track] = stream.getVideoTracks();
+        if ((track.getCapabilities?.() as { focusMode?: string[] } | undefined)?.focusMode?.includes('continuous'))
+          track.applyConstraints({ advanced: [{ focusMode: 'continuous' } as MediaTrackConstraintSet] }).catch(() => {});
+        video.current.srcObject = stream;
+        await video.current.play();
+        const detector = await detectorReady;
+        if (cancelled) { stop(); return; }
+        const scan = async () => {
+          if (cancelled || !video.current) return;
+          try {
+            if (video.current.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+              const code = (await detector.detect(video.current)).map(found => found.rawValue).find(value => /^\d{8,14}$/.test(value));
+              if (code && !cancelled) { cancelled = true; stop(); setScanning(false); setBarcode(code); void findFood(code); return; }
+            }
+          } catch { /* A frame can fail to decode while the camera adjusts; try the next one. */ }
+          if (!cancelled) timer = window.setTimeout(scan, 100);
+        };
+        void scan();
       } catch (err) {
         stop();
         if (!cancelled) {

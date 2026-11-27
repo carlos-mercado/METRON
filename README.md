@@ -22,7 +22,7 @@ clearing browser storage removes them.
 Barcode lookup uses Open Food Facts. Review the returned values and their basis
 against the packaging, especially for liquids; missing nutrients must be entered
 manually. Camera scanning requires HTTPS, camera permission, and a browser with
-camera access. Scanning uses ZXing rather than native BarcodeDetector support. Type the barcode when scanning is unavailable.
+camera access. Scanning uses the native BarcodeDetector when the browser supports it, otherwise a bundled zxing-cpp WebAssembly decoder. Type the barcode when scanning is unavailable.
 Product data is attributed to Open Food Facts under ODbL in the nutrition page.
 
 Run calculation and barcode response checks with `npm run test:nutrition`.
