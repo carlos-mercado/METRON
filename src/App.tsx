@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Link, Routes, Route, useNavigate } from 'react-router-dom'
 import { useTheme } from './Context';
 
 import alt_logo from './assets/alt_logo.svg';
@@ -24,9 +24,9 @@ function App(props: AppProps)
     return (
         <>
             <header className="mainHeader">
-                <a href="/">
+                <Link to="/">
                     <img id='logo' src={theme === 'light' ? alt_logo : alt_logo_dark} alt="Logo"/>
-                </a>
+                </Link>
             </header>
 
             <Routes>
