@@ -20,10 +20,18 @@ test('scales grams, milliliters and fractional servings without rounding each en
   assert.equal(sum.fat, 10.5);
   assert.equal(totals([]).calories, 0);
 });
+test('scales per-gram, per-milliliter and per-ounce values by the amount eaten', () => {
+  const { totals, validFood } = load();
+  for (const basis of ['g', 'ml', 'oz']) {
+    const item = { ...food, basis, quantity: 3, calories: 2, protein: 0.5 };
+    assert.equal(validFood(item), true);
+    assert.equal(totals([item]).calories, 6); assert.equal(totals([item]).protein, 1.5);
+  }
+});
 test('rejects invalid stored entries and accepts zero nutrient values', () => {
   const { validFood } = load();
   assert.equal(validFood(food), true);
-  for (const change of [{ quantity: 0 }, { quantity: Infinity }, { protein: -1 }, { calories: null }, { name: ' ' }, { basis: 'cup' }]) assert.equal(validFood({ ...food, ...change }), false);
+  for (const change of [{ quantity: 0 }, { quantity: Infinity }, { protein: -1 }, { calories: null }, { name: ' ' }, { basis: 'cup' }, { basis: 'toString' }]) assert.equal(validFood({ ...food, ...change }), false);
   assert.equal(validFood({ ...food, protein: 0 }), true);
 });
 test('uses local calendar components rather than UTC conversion', () => {

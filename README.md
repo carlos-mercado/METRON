@@ -14,7 +14,8 @@ A workout tracking app built with React, TypeScript, and Vite.
 ## Nutrition
 
 Open Nutrition from the home screen. Enter nutrition per serving, per 100 g,
-or per 100 ml, then enter the amount consumed. No goals or meal groups.
+per 100 ml, per 1 g, per 1 ml, or per 1 oz, then enter the amount consumed in
+that unit (servings, grams, milliliters, or ounces). No goals or meal groups.
 Entries are stored locally in this browser, scoped to the signed-in user and
 local calendar date. They do not sync with the Flask backend or other devices;
 clearing browser storage removes them.

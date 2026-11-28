@@ -1,14 +1,24 @@
 export const nutrients = ['calories', 'protein', 'carbs', 'fat'] as const;
 export type Nutrient = typeof nutrients[number];
 export type Food = Record<Nutrient, number> & {
-  id: string; name: string; quantity: number; basis: 'serving' | '100g' | '100ml';
+  id: string; name: string; quantity: number; basis: Basis;
 };
+// Nutrition values are entered per `per` units; the amount eaten is entered in `unit`.
+export const bases = {
+  serving: { label: 'Serving', per: 1, unit: 'servings', eaten: 'Servings eaten' },
+  '100g': { label: '100 g', per: 100, unit: 'g', eaten: 'Grams eaten' },
+  '100ml': { label: '100 ml', per: 100, unit: 'ml', eaten: 'Milliliters consumed' },
+  g: { label: '1 g', per: 1, unit: 'g', eaten: 'Grams eaten' },
+  ml: { label: '1 ml', per: 1, unit: 'ml', eaten: 'Milliliters consumed' },
+  oz: { label: '1 oz', per: 1, unit: 'oz', eaten: 'Ounces eaten' },
+} as const;
+export type Basis = keyof typeof bases;
 export function localDate(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 export function totals(foods: Food[]) {
   return foods.reduce((sum, food) => {
-    const multiplier = food.quantity / (food.basis === 'serving' ? 1 : 100);
+    const multiplier = food.quantity / bases[food.basis].per;
     for (const key of nutrients) sum[key] += food[key] * multiplier;
     return sum;
   }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
@@ -17,7 +27,7 @@ export function validFood(value: unknown): value is Food {
   if (!value || typeof value !== 'object') return false;
   const food = value as Food;
   return typeof food.id === 'string' && typeof food.name === 'string' && !!food.name.trim()
-    && ['serving', '100g', '100ml'].includes(food.basis)
+    && Object.hasOwn(bases, food.basis)
     && Number.isFinite(food.quantity) && food.quantity > 0
     && nutrients.every(key => Number.isFinite(food[key]) && food[key] >= 0);
 }

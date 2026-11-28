@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth';
-import { localDate, lookupBarcode, nutrients, totals, validFood } from './nutrition';
-import type { Food } from './nutrition';
+import { bases, localDate, lookupBarcode, nutrients, totals, validFood } from './nutrition';
+import type { Basis, Food } from './nutrition';
 import zxingWasm from 'zxing-wasm/reader/zxing_reader.wasm?url';
 import './styles/Nutrition.css';
 import './styles/StartWorkout.css';
@@ -25,7 +25,7 @@ function loadDetector() {
   return detector;
 }
 
-const empty = { name: '', calories: '', protein: '', carbs: '', fat: '', quantity: '1', basis: 'serving' as Food['basis'] };
+const empty = { name: '', calories: '', protein: '', carbs: '', fat: '', quantity: '1', basis: 'serving' as Basis };
 
 export default function Nutrition() {
   const { userId } = useAuth();
@@ -176,16 +176,16 @@ function NutritionLog({ userId }: { userId: string }) {
     <form className="nutritionPanel nutritionForm" onSubmit={save} noValidate>
       <h2>{editing ? 'Edit food' : 'Add food'}</h2>
       <label>Food name<input required value={draft.name} onChange={event => setDraft({ ...draft, name: event.target.value })} /></label>
-      <label>Nutrition values per<select value={draft.basis} onChange={event => setDraft({ ...draft, basis: event.target.value as Food['basis'], quantity: event.target.value === 'serving' ? '1' : '100' })}><option value="serving">Serving</option><option value="100g">100 g</option><option value="100ml">100 ml</option></select></label>
+      <label>Nutrition values per<select value={draft.basis} onChange={event => { const basis = event.target.value as Basis; setDraft({ ...draft, basis, quantity: String(bases[basis].per) }); }}>{Object.entries(bases).map(([value, { label }]) => <option key={value} value={value}>{label}</option>)}</select></label>
       <div className="nutritionFields">{nutrients.map(key => <label key={key}>{key === 'calories' ? 'Calories (kcal)' : `${key} (g)`}<input type="number" min="0" step="any" required value={draft[key]} onChange={event => setDraft({ ...draft, [key]: event.target.value })} /></label>)}</div>
-      <label>{draft.basis === 'serving' ? 'Servings eaten' : draft.basis === '100g' ? 'Grams eaten' : 'Milliliters consumed'}<input type="number" min="0.001" step="any" required value={draft.quantity} onChange={event => setDraft({ ...draft, quantity: event.target.value })} /></label>
+      <label>{bases[draft.basis].eaten}<input type="number" min="0.001" step="any" required value={draft.quantity} onChange={event => setDraft({ ...draft, quantity: event.target.value })} /></label>
       {saveError && <p role="alert">{saveError}</p>}
       {notice && <p role="status">{notice}</p>}
       <div className="nutritionActions"><button disabled={busy || scanning}>{editing ? 'Save changes' : 'Add food'}</button>{editing && <button type="button" onClick={() => { setEditing(null); setDraft(empty); }}>Cancel</button>}</div>
     </form>
     <section className="nutritionPanel"><h2>Food log</h2>{foods.length === 0 && <p>No foods logged for this day.</p>}
       <ul>{foods.map(food => { const amounts = totals([food]); return <li key={food.id}>
-        <div><strong>{food.name}</strong><p>{format(food.quantity)} {food.basis === 'serving' ? 'servings' : food.basis === '100g' ? 'g' : 'ml'} · {format(amounts.calories)} kcal</p><p>P {format(amounts.protein)} g · C {format(amounts.carbs)} g · F {format(amounts.fat)} g</p></div>
+        <div><strong>{food.name}</strong><p>{format(food.quantity)} {bases[food.basis].unit} · {format(amounts.calories)} kcal</p><p>P {format(amounts.protein)} g · C {format(amounts.carbs)} g · F {format(amounts.fat)} g</p></div>
         <div className="nutritionActions"><button disabled={busy || scanning} onClick={() => { setEditing(food.id); setDraft({ name: food.name, basis: food.basis, quantity: String(food.quantity), calories: String(food.calories), protein: String(food.protein), carbs: String(food.carbs), fat: String(food.fat) }); }}>Edit</button><button onClick={() => { if (persist(foods.filter(item => item.id !== food.id)) && editing === food.id) { setEditing(null); setDraft(empty); } }}>Delete</button></div>
       </li>; })}</ul>
     </section>
