@@ -113,6 +113,8 @@ function MovementCard({movement, updateCallback, appendCallback, deleteCallback}
                 onTouchStart={ handleHold }
                 onMouseUpCapture={ handleRelease }
                 onTouchEnd={ handleRelease }
+                // A swipe between cards is not a long press.
+                onTouchMove={ handleRelease }
             >
                 { mode == "Normal" && 
                     <p className='name'>{mov.name}</p>

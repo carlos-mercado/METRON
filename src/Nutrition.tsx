@@ -42,6 +42,7 @@ export default function Nutrition() {
   const { userId } = useAuth();
   return userId ? <NutritionLog key={userId} userId={userId} /> : <p>Please sign in to track nutrition.</p>;
 }
+
 function NutritionLog({ userId }: { userId: string }) {
   const navigate = useNavigate();
   const [date, setDate] = useState(localDate);
