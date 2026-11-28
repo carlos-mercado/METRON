@@ -1,5 +1,5 @@
 //import { getDatabase, ref, get, set } from 'firebase/database';
-import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import './styles/Login.css'
 import alt_logo from './assets/alt_logo2.svg';
 
@@ -14,7 +14,8 @@ function Login(_props : LoginProps)
         const provider =  new GoogleAuthProvider();
         const auth = getAuth();
         try {
-            await setPersistence(auth, browserLocalPersistence);
+            // Open the popup before any other await: Safari blocks popups that don't open
+            // directly from the tap. Firebase already persists sign-in across sessions by default.
             await signInWithPopup(auth, provider);
         } catch (err) {
             console.error('Login failed', err);
