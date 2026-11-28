@@ -14,6 +14,7 @@
 .nutritionNote, .nutrition small { font-size: .85rem; line-height: 1.5; }
 .nutritionPanel { margin-top: 20px; padding: 20px; background: var(--bg-secondary); border-radius: 12px; }
 .nutritionForm { display: grid; gap: 16px; }
+.nutritionAmount { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 7rem); gap: 12px; align-items: end; }
 .nutritionFields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; text-transform: capitalize; }
 .nutritionActions { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 8px 0; }
 .nutritionBarcode { display: grid; grid-template-columns: minmax(0, 200px) max-content; width: fit-content; max-width: 100%; align-items: end; gap: 12px; margin: 16px auto; }

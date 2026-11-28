@@ -14,8 +14,16 @@ A workout tracking app built with React, TypeScript, and Vite.
 ## Nutrition
 
 Open Nutrition from the home screen. Enter nutrition per serving, per 100 g,
-per 100 ml, per 1 g, per 1 ml, or per 1 oz, then enter the amount consumed in
-that unit (servings, grams, milliliters, or ounces). No goals or meal groups.
+per 100 ml, per 1 g, per 1 ml, per 1 oz, or per 1 fl oz, then the amount eaten
+in any unit of the same kind: g, oz, or lb for weight; ml, fl oz, cup, tbsp, or
+tsp for volume. Weight and volume never convert into each other.
+
+An optional serving size (the gram or milliliter figure on the label, e.g. 28
+for "1 oz (28 g)") links servings to weight or volume, so a per-serving label
+can be logged in grams and a per-100 g label in servings. Barcode lookups fill
+it from Open Food Facts when the product lists one and default to one serving.
+When exactly one of calories, protein, carbs, and fat is blank, it is estimated
+from the others (4 kcal/g protein and carbs, 9 kcal/g fat) and marked as such. No goals or meal groups.
 Entries are stored locally in this browser, scoped to the signed-in user and
 local calendar date. They do not sync with the Flask backend or other devices;
 clearing browser storage removes them.

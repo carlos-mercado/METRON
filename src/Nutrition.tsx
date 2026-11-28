@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './Auth';
-import { bases, localDate, lookupBarcode, nutrients, totals, validFood } from './nutrition';
-import type { Basis, Food } from './nutrition';
+import { bases, estimateMissing, localDate, lookupBarcode, nutrients, portions, totals, units, unitsFor, validFood } from './nutrition';
+import type { Basis, Food, Nutrient, Unit } from './nutrition';
 import zxingWasm from 'zxing-wasm/reader/zxing_reader.wasm?url';
 import './styles/Nutrition.css';
 import './styles/StartWorkout.css';
@@ -25,7 +25,18 @@ function loadDetector() {
   return detector;
 }
 
-const empty = { name: '', calories: '', protein: '', carbs: '', fat: '', quantity: '1', basis: 'serving' as Basis };
+// `auto` names the nutrient that was estimated rather than typed, so it can be recomputed or replaced.
+type Draft = Record<Nutrient | 'name' | 'quantity' | 'servingSize', string> & { basis: Basis; unit: Unit; servingUnit: 'g' | 'ml'; auto?: Nutrient };
+const empty: Draft = { name: '', calories: '', protein: '', carbs: '', fat: '', quantity: '1', unit: 'servings', basis: 'serving', servingSize: '', servingUnit: 'g' };
+const portion = (draft: Draft) => ({ basis: draft.basis, servingSize: Number(draft.servingSize) > 0 ? Number(draft.servingSize) : undefined, servingUnit: draft.servingUnit });
+// Keep the chosen unit for the amount eaten while it still converts; otherwise fall back to the basis's unit.
+function withPortion(draft: Draft): Draft {
+  return unitsFor(portion(draft)).includes(draft.unit) ? draft : { ...draft, unit: bases[draft.basis].unit, quantity: String(bases[draft.basis].per) };
+}
+function autofill(draft: Draft): Draft {
+  const estimate = estimateMissing(draft);
+  return estimate ? { ...draft, [estimate.key]: estimate.value, auto: estimate.key } : draft;
+}
 
 export default function Nutrition() {
   const { userId } = useAuth();
@@ -35,7 +46,7 @@ function NutritionLog({ userId }: { userId: string }) {
   const navigate = useNavigate();
   const [date, setDate] = useState(localDate);
   const [foods, setFoods] = useState<Food[]>([]);
-  const [draft, setDraft] = useState(empty);
+  const [draft, setDraft] = useState<Draft>(empty);
   const [editing, setEditing] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [saveError, setSaveError] = useState('');
@@ -70,7 +81,9 @@ function NutritionLog({ userId }: { userId: string }) {
     try {
       const food = await lookupBarcode(code.trim(), controller.signal);
       if (lookup.current !== controller) return;
-      setDraft({ ...empty, ...food, basis: '100g', quantity: '100' }); setEditing(null);
+      const found: Draft = { ...empty, ...food, basis: '100g', unit: 'g', quantity: '100' };
+      // With a serving size on file, default to one serving rather than 100 g.
+      setDraft(autofill(unitsFor(portion(found)).includes('servings') ? { ...found, unit: 'servings', quantity: '1' } : found)); setEditing(null);
       setNotice('Food found. Review the nutrition and amount eaten, then press Add food.');
     } catch (err) {
       if (lookup.current === controller) setError(controller.signal.aborted ? 'Lookup timed out. Try again or enter manually.' : (err as Error).message);
@@ -136,6 +149,14 @@ function NutritionLog({ userId }: { userId: string }) {
     try { localStorage.setItem(storageKey, JSON.stringify(next)); setFoods(next); setError(''); return true; }
     catch { setError('Unable to save. Browser storage may be full or disabled.'); return false; }
   }
+  function setNutrient(key: Nutrient, value: string) {
+    // Typing over the estimate keeps the typed value; changing another field recomputes the estimate.
+    const next: Draft = { ...draft, [key]: value, auto: undefined };
+    if (draft.auto === key) { setDraft(next); return; }
+    if (draft.auto) next[draft.auto] = '';
+    const filled = autofill(next);
+    setDraft(filled.auto === key ? next : filled);
+  }
   function save(event: FormEvent) {
     event.preventDefault();
     setSaveError(''); setNotice('');
@@ -147,9 +168,10 @@ function NutritionLog({ userId }: { userId: string }) {
     }
     const missing = [!draft.name.trim() ? 'food name' : '', ...nutrients.filter(key => !draft[key].trim())].filter(Boolean);
     if (missing.length) { setSaveError(`Enter ${missing.join(', ')} before adding food. For a barcode, press Look up to fill in the nutrition first.`); return; }
+    const servingSize = draft.servingSize.trim() ? Number(draft.servingSize) : undefined;
     const food: Food = { id: editing ?? '', name: draft.name.trim(), basis: draft.basis,
-      quantity: Number(draft.quantity), calories: Number(draft.calories), protein: Number(draft.protein), carbs: Number(draft.carbs), fat: Number(draft.fat) };
-    if (!validFood(food)) { setSaveError('Nutrition values must be zero or greater, and the amount eaten must be a positive number.'); return; }
+      quantity: Number(draft.quantity), unit: draft.unit, ...(servingSize === undefined ? {} : { servingSize, servingUnit: draft.servingUnit }), calories: Number(draft.calories), protein: Number(draft.protein), carbs: Number(draft.carbs), fat: Number(draft.fat) };
+    if (!validFood(food)) { setSaveError('Nutrition values must be zero or greater, and the amount eaten and serving size must be positive numbers.'); return; }
     // randomUUID is unavailable on some browsers and HTTP development hosts.
     food.id = editing ?? (typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint32Array(4)), part => part.toString(16).padStart(8, '0')).join(''));
     if (persist(editing ? foods.map(item => item.id === editing ? food : item) : [...foods, food])) {
@@ -176,17 +198,27 @@ function NutritionLog({ userId }: { userId: string }) {
     <form className="nutritionPanel nutritionForm" onSubmit={save} noValidate>
       <h2>{editing ? 'Edit food' : 'Add food'}</h2>
       <label>Food name<input required value={draft.name} onChange={event => setDraft({ ...draft, name: event.target.value })} /></label>
-      <label>Nutrition values per<select value={draft.basis} onChange={event => { const basis = event.target.value as Basis; setDraft({ ...draft, basis, quantity: String(bases[basis].per) }); }}>{Object.entries(bases).map(([value, { label }]) => <option key={value} value={value}>{label}</option>)}</select></label>
-      <div className="nutritionFields">{nutrients.map(key => <label key={key}>{key === 'calories' ? 'Calories (kcal)' : `${key} (g)`}<input type="number" min="0" step="any" required value={draft[key]} onChange={event => setDraft({ ...draft, [key]: event.target.value })} /></label>)}</div>
-      <label>{bases[draft.basis].eaten}<input type="number" min="0.001" step="any" required value={draft.quantity} onChange={event => setDraft({ ...draft, quantity: event.target.value })} /></label>
+      <label>Nutrition values per<select value={draft.basis} onChange={event => setDraft(withPortion({ ...draft, basis: event.target.value as Basis }))}>{Object.entries(bases).map(([value, { label }]) => <option key={value} value={value}>{label}</option>)}</select></label>
+      <div className="nutritionAmount">
+        <label>Serving size (optional)<input type="number" min="0" step="any" value={draft.servingSize} onChange={event => setDraft(withPortion({ ...draft, servingSize: event.target.value }))} placeholder="e.g. 28" /></label>
+        <label>Unit<select value={draft.servingUnit} onChange={event => setDraft(withPortion({ ...draft, servingUnit: event.target.value as Draft['servingUnit'] }))}><option value="g">g</option><option value="ml">ml</option></select></label>
+      </div>
+      <small>The gram or milliliter weight printed on the label, e.g. 28 for "Serving size 1 oz (28 g)". It lets you log this food in servings or by weight.</small>
+      <div className="nutritionFields">{nutrients.map(key => <label key={key}>{key === 'calories' ? 'Calories (kcal)' : `${key} (g)`}{draft.auto === key && <em> · estimated</em>}<input type="number" min="0" step="any" required value={draft[key]} onChange={event => setNutrient(key, event.target.value)} /></label>)}</div>
+      {draft.auto && <small>{draft.auto === 'calories' ? 'Calories' : `${draft.auto[0].toUpperCase()}${draft.auto.slice(1)}`} estimated from the other values (protein and carbs 4 kcal/g, fat 9 kcal/g). Labels round, so check it against the package.</small>}
+      <div className="nutritionAmount">
+        <label>Amount eaten<input type="number" min="0.001" step="any" required value={draft.quantity} onChange={event => setDraft({ ...draft, quantity: event.target.value })} /></label>
+        <label>Unit<select value={draft.unit} onChange={event => setDraft({ ...draft, unit: event.target.value as Unit })}>{unitsFor(portion(draft)).map(unit => <option key={unit} value={unit}>{units[unit].label}</option>)}</select></label>
+      </div>
+      {draft.unit !== bases[draft.basis].unit && Number(draft.quantity) > 0 && <small>Counts as {format(portions({ ...portion(draft), quantity: Number(draft.quantity), unit: draft.unit }) * bases[draft.basis].per)} {units[bases[draft.basis].unit].label}.</small>}
       {saveError && <p role="alert">{saveError}</p>}
       {notice && <p role="status">{notice}</p>}
       <div className="nutritionActions"><button disabled={busy || scanning}>{editing ? 'Save changes' : 'Add food'}</button>{editing && <button type="button" onClick={() => { setEditing(null); setDraft(empty); }}>Cancel</button>}</div>
     </form>
     <section className="nutritionPanel"><h2>Food log</h2>{foods.length === 0 && <p>No foods logged for this day.</p>}
       <ul>{foods.map(food => { const amounts = totals([food]); return <li key={food.id}>
-        <div><strong>{food.name}</strong><p>{format(food.quantity)} {bases[food.basis].unit} · {format(amounts.calories)} kcal</p><p>P {format(amounts.protein)} g · C {format(amounts.carbs)} g · F {format(amounts.fat)} g</p></div>
-        <div className="nutritionActions"><button disabled={busy || scanning} onClick={() => { setEditing(food.id); setDraft({ name: food.name, basis: food.basis, quantity: String(food.quantity), calories: String(food.calories), protein: String(food.protein), carbs: String(food.carbs), fat: String(food.fat) }); }}>Edit</button><button onClick={() => { if (persist(foods.filter(item => item.id !== food.id)) && editing === food.id) { setEditing(null); setDraft(empty); } }}>Delete</button></div>
+        <div><strong>{food.name}</strong><p>{format(food.quantity)} {units[food.unit ?? bases[food.basis].unit].label} · {format(amounts.calories)} kcal</p><p>P {format(amounts.protein)} g · C {format(amounts.carbs)} g · F {format(amounts.fat)} g</p></div>
+        <div className="nutritionActions"><button disabled={busy || scanning} onClick={() => { setEditing(food.id); setDraft({ name: food.name, basis: food.basis, quantity: String(food.quantity), unit: food.unit ?? bases[food.basis].unit, servingSize: food.servingSize ? String(food.servingSize) : '', servingUnit: food.servingUnit ?? 'g', calories: String(food.calories), protein: String(food.protein), carbs: String(food.carbs), fat: String(food.fat) }); }}>Edit</button><button onClick={() => { if (persist(foods.filter(item => item.id !== food.id)) && editing === food.id) { setEditing(null); setDraft(empty); } }}>Delete</button></div>
       </li>; })}</ul>
     </section>
   </main>
